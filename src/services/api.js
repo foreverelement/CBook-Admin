@@ -9,38 +9,24 @@ export async function queryActivities() {
   return request('/api/activities');
 }
 
-export async function queryRule(params) {
-  return request(`/api/rule?${stringify(params)}`);
+// 查询回收订单列表
+export async function queryRecycleOrders(params) {
+  return request.post('/tools/recover/order/list', params);
 }
 
-export async function removeRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'delete',
-    },
-  });
+// 查询回收订单详情
+export async function queryRecycleDetail(params) {
+  return request.post('/tools/recover/order/detail', params);
 }
 
-export async function addRule(params) {
-  return request('/api/rule', {
-    method: 'POST',
-    body: {
-      ...params,
-      method: 'post',
-    },
-  });
+// 更新回收订单详情
+export async function updateRecycleDetail(params) {
+  return request.post('/tools/recover/order/update', params);
 }
 
-export async function updateRule(params = {}) {
-  return request(`/api/rule?${stringify(params.query)}`, {
-    method: 'POST',
-    body: {
-      ...params.body,
-      method: 'update',
-    },
-  });
+// 拒收回收订单
+export async function updateRecycleDetailDeny(params) {
+  return request.post('/tools/recover/book/deny', params);
 }
 
 export async function fakeSubmitForm(params) {
@@ -103,8 +89,8 @@ export async function updateFakeList(params) {
   });
 }
 
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
+export async function accountLogin(params) {
+  return request('/tools/login', {
     method: 'POST',
     body: params,
   });

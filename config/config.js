@@ -72,13 +72,13 @@ export default {
   externals: {
     '@antv/data-set': 'DataSet',
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
+  proxy: {
+    '/api': {
+      target: 'https://www.muyin.com/serverapi/',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

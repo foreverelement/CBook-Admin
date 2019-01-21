@@ -1,9 +1,7 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
-import router from 'umi/router';
-import hash from 'hash.js';
-import { isAntdPro } from './utils';
 
+const serverUrl = '/api'; // https://www.muyin.com/serverapi';
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -22,64 +20,49 @@ const codeMessage = {
   504: '网关超时。',
 };
 
+const getToken = () =>
+  // eslint-disable-next-line
+  window.g_app._store.getState().login.token || localStorage.getItem('__TOKEN');
+
+const parseParams = (params = {}) => {
+  const result = Object.keys(params).map(key => {
+    if (params[key] === undefined) return '';
+    return `${key}=${encodeURIComponent(params[key])}`;
+  });
+  return result.join('&');
+};
+
+const logout = () => {
+  /* eslint-disable no-underscore-dangle */
+  window.g_app._store.dispatch({
+    type: 'login/logout',
+  });
+};
+
 const checkStatus = response => {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
-  notification.error({
-    message: `请求错误 ${response.status}: ${response.url}`,
-    description: errortext,
-  });
   const error = new Error(errortext);
   error.name = response.status;
   error.response = response;
   throw error;
 };
 
-const cachedSave = (response, hashcode) => {
-  /**
-   * Clone a response data and store it in sessionStorage
-   * Does not support data other than json, Cache only json
-   */
-  const contentType = response.headers.get('Content-Type');
-  if (contentType && contentType.match(/application\/json/i)) {
-    // All data is saved as text
-    response
-      .clone()
-      .text()
-      .then(content => {
-        sessionStorage.setItem(hashcode, content);
-        sessionStorage.setItem(`${hashcode}:timestamp`, Date.now());
-      });
-  }
-  return response;
-};
-
 /**
  * Requests a URL, returning a promise.
  *
  * @param  {string} url       The URL we want to request
- * @param  {object} [option] The options we want to pass to "fetch"
+ * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, option) {
-  const options = {
-    expirys: isAntdPro(),
-    ...option,
-  };
-  /**
-   * Produce fingerprints based on url and parameters
-   * Maybe url has the same parameters
-   */
-  const fingerprint = url + (options.body ? JSON.stringify(options.body) : '');
-  const hashcode = hash
-    .sha256()
-    .update(fingerprint)
-    .digest('hex');
-
+export default function request(url, options = {}) {
   const defaultOptions = {
-    credentials: 'include',
+    // credentials: 'include',
+    headers: {
+      token: getToken(),
+    },
   };
   const newOptions = { ...defaultOptions, ...options };
   if (
@@ -87,40 +70,37 @@ export default function request(url, option) {
     newOptions.method === 'PUT' ||
     newOptions.method === 'DELETE'
   ) {
-    if (!(newOptions.body instanceof FormData)) {
+    if (newOptions.body instanceof FormData) {
+      newOptions.headers = {
+        Accept: 'application/json',
+        ...newOptions.headers,
+      };
+    } else {
       newOptions.headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
-    } else {
-      // newOptions.body is FormData
-      newOptions.headers = {
-        Accept: 'application/json',
-        ...newOptions.headers,
-      };
     }
+  } else if (newOptions.method === 'GET' && newOptions.body) {
+    const params = parseParams(newOptions.body);
+    if (params) {
+      if (url.indexOf('?') > -1) {
+        /* eslint-disable-next-line */
+        url += `&${params}`;
+      } else {
+        /* eslint-disable-next-line */
+        url += `?${params}`;
+      }
+    }
+    delete newOptions.body;
   }
 
-  const expirys = options.expirys && 60;
-  // options.expirys !== false, return the cache,
-  if (options.expirys !== false) {
-    const cached = sessionStorage.getItem(hashcode);
-    const whenCached = sessionStorage.getItem(`${hashcode}:timestamp`);
-    if (cached !== null && whenCached !== null) {
-      const age = (Date.now() - whenCached) / 1000;
-      if (age < expirys) {
-        const response = new Response(new Blob([cached]));
-        return response.json();
-      }
-      sessionStorage.removeItem(hashcode);
-      sessionStorage.removeItem(`${hashcode}:timestamp`);
-    }
-  }
-  return fetch(url, newOptions)
+  const reqUrl = /^https?:\/\//.test(url) ? url : `${serverUrl}${url}`;
+
+  return fetch(reqUrl, newOptions)
     .then(checkStatus)
-    .then(response => cachedSave(response, hashcode))
     .then(response => {
       // DELETE and 204 do not return data by default
       // using .json will report an error.
@@ -129,27 +109,34 @@ export default function request(url, option) {
       }
       return response.json();
     })
+    .then(response => {
+      if (response.code === 0) {
+        return response.datas;
+      }
+      if (response.code === 98) {
+        // token过期
+        logout();
+      } else {
+        notification.error({
+          message: `提示信息`,
+          description: response.msg,
+        });
+      }
+      return undefined;
+    })
     .catch(e => {
       const status = e.name;
       if (status === 401) {
-        // @HACK
-        /* eslint-disable no-underscore-dangle */
-        window.g_app._store.dispatch({
-          type: 'login/logout',
+        logout();
+      } else {
+        notification.error({
+          message: `请求错误 ${status}: ${url}`,
+          description: e.message || e.stack,
         });
-        return;
-      }
-      // environment should not be used
-      if (status === 403) {
-        router.push('/exception/403');
-        return;
-      }
-      if (status <= 504 && status >= 500) {
-        router.push('/exception/500');
-        return;
-      }
-      if (status >= 404 && status < 422) {
-        router.push('/exception/404');
       }
     });
 }
+
+request.get = (url, body) => request(url, { body, method: 'GET' });
+
+request.post = (url, body) => request(url, { body, method: 'POST' });

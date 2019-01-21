@@ -64,7 +64,11 @@ class BasicLayout extends React.PureComponent {
       route: { routes, authority },
     } = this.props;
     dispatch({
-      type: 'user/fetchCurrent',
+      type: 'user/getCurrent',
+      payload: {
+        name: '星月君',
+        avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
+      },
     });
     dispatch({
       type: 'setting/getSetting',
