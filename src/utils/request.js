@@ -1,7 +1,7 @@
 import fetch from 'dva/fetch';
 import { notification } from 'antd';
 
-const serverUrl = '/api'; // https://www.muyin.com/serverapi';
+const serverUrl = process.env.NODE_ENV !== 'production' ? '/api' : 'https://www.muyin.com/serverapi';
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
