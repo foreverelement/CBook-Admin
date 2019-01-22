@@ -1,4 +1,15 @@
 @import '~antd/lib/style/themes/default.less';
 
 .linkGroup {
+  button {
+    margin-bottom: 10px;
+  }
+
+  button:not(:last-child) {
+    margin-right: 25px;
+
+    @media (max-width: 375px) {
+      margin-right: 10px;
+    }
+  }
 }

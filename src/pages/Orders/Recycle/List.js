@@ -1,6 +1,7 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
-import Link from 'umi/link';
+// import Link from 'umi/link';
+import router from 'umi/router';
 import { Row, Col, Card, Form, Input, Select, Button, Badge } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -78,7 +79,7 @@ const columns = [
       return <Badge status={orderStatusMap[val].style} text={orderStatusMap[val].text} />;
     },
   },
-  {
+  /* {
     title: '揽件地址',
     dataIndex: 'orderAddress',
     render: (text, record) => (
@@ -92,7 +93,7 @@ const columns = [
     render: (text, record) => (
       <Link to={`/orders/recycle/detail/${record.orderCode}`}>查看详情</Link>
     ),
-  },
+  }, */
 ];
 
 const showTableTotal = total => `共${total}条数据`;
@@ -149,6 +150,13 @@ class List extends PureComponent {
     const { orderCode, status } = this.state;
     this.fetchOrders(orderCode, status, pagination);
   };
+
+  handleRow = row => ({
+    // eslint-disable-next-line
+    onClick: event => {
+      router.push(`/orders/recycle/detail/${row.orderCode}`);
+    },
+  });
 
   fetchOrders(orderCode, status, offset) {
     const { dispatch } = this.props;
@@ -234,18 +242,24 @@ class List extends PureComponent {
     return (
       <PageHeaderWrapper title="回收订单列表">
         <Card>
-          <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
+          <Fragment>
+            <div className={styles.tableListForm}>
+              { this.renderForm() }
+            </div>
             <StandardTable
               rowKey="orderCode"
+              size="middle"
+              rowClassName={styles.orderTableRow}
               selectedRows={[]}
               showAlert={false}
               rowSelection={null}
+              scroll={{x: 970}}
               loading={loading}
               data={data}
               columns={columns}
+              onRow={this.handleRow}
             />
-          </div>
+          </Fragment>
         </Card>
       </PageHeaderWrapper>
     );

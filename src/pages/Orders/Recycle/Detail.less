@@ -18,3 +18,14 @@
 .descItem {
   margin-bottom: 1px;
 }
+
+.listItem {
+  @media (max-width: 680px) {
+    display: block;
+
+    :global(.ant-list-item-action) {
+      margin-left: 116px;
+      margin-top: 10px;
+    }
+  }
+}

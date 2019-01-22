@@ -194,12 +194,12 @@ const UpdateForm = Form.create()(props => {
       </FormItem>
       <FormItem key="bookStatus" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书状态">
         {form.getFieldDecorator('bookStatus', {
-          initialValue: BOOK_STATUS_MAP[data.bookStatus],
+          initialValue: data.bookStatus,
         })(
           <Select placeholder="请选择" style={{ width: '120px' }}>
-            <Option value="1000">待审核</Option>
-            <Option value="1001">验收通过</Option>
-            <Option value="2001">验收不通过</Option>
+            <Option value={1000}>待审核</Option>
+            <Option value={1001}>验收通过</Option>
+            <Option value={2001}>验收不通过</Option>
           </Select>
         )}
       </FormItem>
@@ -481,7 +481,7 @@ class RecycleDetail extends Component {
             dataSource={order.bookInfos}
             renderItem={(item, index) => (
               <List.Item
-                className="custom-list-item"
+                className={styles.listItem}
                 actions={[
                   <a onClick={this.handlePrint}>打印条码</a>,
                   <MoreBtn current={item} index={index} onClick={this.handleBookItem} />,

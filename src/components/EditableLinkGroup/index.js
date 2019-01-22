@@ -5,8 +5,6 @@ import { Button, Icon } from 'antd';
 import styles from './index.less';
 import CustomIcon from '@/icons';
 
-// TODO: 添加逻辑
-
 class EditableLinkGroup extends PureComponent {
   static propTypes = {
     links: PropTypes.array,
@@ -27,11 +25,10 @@ class EditableLinkGroup extends PureComponent {
             type="primary"
             ghost
             onClick={() => router.push(link.href)}
-            style={{ marginRight: 25 }}
           >
             {createElement(link.custom ? CustomIcon : Icon, {
               type: link.icon,
-              style: { fontSize: 24, verticalAlign: 'top' },
+              style: { fontSize: 18 },
             })}
             {link.title}
           </Button>
