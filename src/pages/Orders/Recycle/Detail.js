@@ -278,6 +278,7 @@ const BarcodeForm = memo(props => {
       title="打印条码"
       visible={visible}
       bodyStyle={{textAlign: 'center'}}
+      okText="打印"
       onOk={handlePrint}
       onCancel={() => handleModalVisible(false)}
     >
