@@ -7,7 +7,7 @@ export default class HeaderDropdown extends PureComponent {
   render() {
     const { overlayClassName, ...props } = this.props;
     return (
-      <Dropdown overlayClassName={classNames(styles.container, overlayClassName)} {...props} />
+      <Dropdown overlayClassName={classNames(styles.container, overlayClassName)} trigger={['click','hover']} {...props} />
     );
   }
 }

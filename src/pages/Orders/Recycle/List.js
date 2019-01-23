@@ -47,24 +47,6 @@ const columns = [
     dataIndex: 'orderCode',
   },
   {
-    title: '预期收入',
-    dataIndex: 'expectIncome',
-    sorter: (a, b) => a.expectIncome - b.expectIncome,
-  },
-  {
-    title: '实际收入',
-    dataIndex: 'actualIncome',
-    sorter: (a, b) => a.actualIncome - b.actualIncome,
-  },
-  {
-    title: '取件时间',
-    dataIndex: 'appointment',
-  },
-  {
-    title: '下单时间',
-    dataIndex: 'createTime',
-  },
-  {
     title: '下单人',
     dataIndex: 'orderName',
   },
@@ -78,6 +60,24 @@ const columns = [
     render(val) {
       return <Badge status={orderStatusMap[val].style} text={orderStatusMap[val].text} />;
     },
+  },
+  {
+    title: '预期收入',
+    dataIndex: 'expectIncome',
+    sorter: (a, b) => a.expectIncome - b.expectIncome,
+  },
+  {
+    title: '实际收入',
+    dataIndex: 'actualIncome',
+    sorter: (a, b) => a.actualIncome - b.actualIncome,
+  },
+  {
+    title: '揽件时间',
+    dataIndex: 'appointment',
+  },
+  {
+    title: '下单时间',
+    dataIndex: 'createTime',
   },
   /* {
     title: '揽件地址',
@@ -95,6 +95,12 @@ const columns = [
     ),
   }, */
 ];
+
+const getOrderStatusList = () =>
+  Object.keys(orderStatusMap).map(status => ({
+    text: orderStatusMap[status].text,
+    value: +status,
+  }));
 
 const showTableTotal = total => `共${total}条数据`;
 const PAGE_SIZE = 10;
@@ -116,10 +122,7 @@ class List extends PureComponent {
       status: 0,
     };
 
-    this.orderStautsList = Object.keys(orderStatusMap).map(e => ({
-      text: orderStatusMap[e].text,
-      value: e,
-    }));
+    this.orderStautsList = getOrderStatusList();
   }
 
   componentDidMount() {
@@ -184,15 +187,15 @@ class List extends PureComponent {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.handleSearch}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="搜索订单">
+            <FormItem label="搜索订单" className="nowrap">
               {getFieldDecorator('orderCode')(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="订单状态">
+            <FormItem label="订单状态" className="nowrap">
               {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value={0} key={0}>

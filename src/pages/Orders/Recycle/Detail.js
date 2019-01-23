@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, Fragment } from 'react';
+import React, { Component, PureComponent, Fragment, memo } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import {
@@ -19,6 +19,8 @@ import {
   Modal,
   notification,
 } from 'antd';
+import Barcode from 'react-barcode';
+import ReactToPrint from 'react-to-print';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './Detail.less';
@@ -60,8 +62,13 @@ const orderStatusMap = {
 const BOOK_STATUS_MAP = {
   1000: '待审核',
   1001: '验收通过',
-  2001: '验收不通过',
 };
+
+const getOrderStatusList = () =>
+  Object.keys(orderStatusMap).map(status => ({
+    text: orderStatusMap[status].text,
+    value: +status,
+  }));
 
 @Form.create()
 class RejectForm extends PureComponent {
@@ -132,17 +139,18 @@ class RejectForm extends PureComponent {
       <Modal
         destroyOnClose
         title="填写原因"
+        width={450}
         visible={visible}
         onOk={okHandle}
         onCancel={() => handleModalVisible(false)}
       >
-        <FormItem key="reason" wrapperCol={{ span: 16, offset: 4 }}>
+        <FormItem key="reason">
           {form.getFieldDecorator('reason', {
             rules: [{ required: true, message: '拒收原因不能为空！' }],
           })(<TextArea rows={4} placeholder="请填写拒收原因" />)}
         </FormItem>
         {isDeny && (
-          <FormItem key="file" wrapperCol={{ span: 16, offset: 4 }}>
+          <FormItem key="file">
             {form.getFieldDecorator('file', {
               rules: [{ required: true, message: '请上传图片！' }],
             })(
@@ -152,6 +160,54 @@ class RejectForm extends PureComponent {
             )}
           </FormItem>
         )}
+      </Modal>
+    );
+  }
+}
+
+@Form.create()
+class UpdateOrderStatusForm extends PureComponent {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      orderStatusList: getOrderStatusList(),
+    }
+  }
+
+  render() {
+    const { orderStatusList } = this.state;
+    const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
+    const okHandle = () => {
+      form.validateFields((err, fieldsValue) => {
+        if (err) return;
+        handleUpdate(fieldsValue);
+        handleModalVisible(false);
+      });
+    };
+    return (
+      <Modal
+        destroyOnClose
+        title="修改订单状态"
+        visible={visible}
+        onOk={okHandle}
+        onCancel={() => handleModalVisible(false)}
+      >
+        <FormItem key="orderStatus" className="nowrap" label="订单状态">
+          {form.getFieldDecorator('orderStatus', {
+            initialValue: data.orderStatus,
+          })(
+            <Select placeholder="请选择" style={{ width: '120px' }}>
+              {
+                orderStatusList.map(status => (
+                  <Option key={status.value} value={status.value}>
+                    {status.text}
+                  </Option>
+                ))
+              }
+            </Select>
+          )}
+        </FormItem>
       </Modal>
     );
   }
@@ -199,10 +255,41 @@ const UpdateForm = Form.create()(props => {
           <Select placeholder="请选择" style={{ width: '120px' }}>
             <Option value={1000}>待审核</Option>
             <Option value={1001}>验收通过</Option>
-            <Option value={2001}>验收不通过</Option>
           </Select>
         )}
       </FormItem>
+    </Modal>
+  );
+});
+
+const BarcodeForm = memo(props => {
+  let barcodeRef = null;
+  let printRef = null;
+  const { visible, handleModalVisible, value } = props;
+  const handlePrint = () => {
+    if (printRef) {
+      printRef.handlePrint();
+    }
+  };
+  return (
+    value &&
+    <Modal
+      destroyOnClose
+      title="打印条码"
+      visible={visible}
+      bodyStyle={{textAlign: 'center'}}
+      onOk={handlePrint}
+      onCancel={() => handleModalVisible(false)}
+    >
+      <ReactToPrint
+        trigger={() => <Fragment />}
+        content={() => barcodeRef}
+        ref={el => {printRef = el}}
+      />
+      <Barcode
+        value={value}
+        ref={el => {barcodeRef = el}}
+      />
     </Modal>
   );
 });
@@ -219,6 +306,7 @@ const ListItemDesc = ({ author, press, expectIncome, actualIncome, bookStatus })
 
 const MoreBtn = props => (
   <Dropdown
+    trigger={['hover','click']}
     overlay={
       <Menu onClick={({ key }) => props.onClick(key, props.current, props.index)}>
         <Menu.Item key="edit">修改内容</Menu.Item>
@@ -244,6 +332,8 @@ class RecycleDetail extends Component {
     this.state = {
       modalVisible: false,
       updateModalVisible: false,
+      orderStatusModalVisible: false,
+      printModalVisible: false,
       bookAllPassed: false,
       isDeny: false,
       selectRow: {},
@@ -276,14 +366,22 @@ class RecycleDetail extends Component {
     });
   };
 
+  handleOrderStatusModalVisible = bool => {
+    this.setState({
+      orderStatusModalVisible: bool,
+    });
+  };
+
   handleUpdateModalVisible = bool => {
     this.setState({
       updateModalVisible: bool,
     });
   };
 
-  handlePrint = e => {
-    e.preventDefault();
+  handlePrintModalVisible = bool => {
+    this.setState({
+      printModalVisible: bool,
+    });
   };
 
   handleReject = fields => {
@@ -316,6 +414,10 @@ class RecycleDetail extends Component {
     this.updateOrder({ bookList: newBookInfos, orderCode: this.orderCode, status }, false, true);
   };
 
+  handleOrderStatusUpdate = fields => {
+    this.updateOrderStatus(fields.orderStatus);
+  };
+
   handleBookItem = (key, currentItem, index) => {
     this.bookIndex = index;
     this.setState({ selectRow: currentItem }, () => {
@@ -330,6 +432,12 @@ class RecycleDetail extends Component {
       }
     });
   };
+
+  handlePrint(currentItem) {
+    this.setState({ selectRow: currentItem }, () => {
+      this.handlePrintModalVisible(true);
+    });
+  }
 
   updateOrderStatus(status) {
     const {
@@ -407,7 +515,11 @@ class RecycleDetail extends Component {
       loading,
     } = this.props;
 
-    const { modalVisible, updateModalVisible, selectRow, isDeny, bookAllPassed } = this.state;
+    const { modalVisible, updateModalVisible, orderStatusModalVisible, printModalVisible, selectRow, isDeny, bookAllPassed } = this.state;
+    const updateOrderStatusMethods = {
+      handleUpdate: this.handleOrderStatusUpdate,
+      handleModalVisible: this.handleOrderStatusModalVisible,
+    };
     const parentMethods = {
       handleReject: this.handleReject,
       handleDeny: this.handleDeny,
@@ -417,21 +529,24 @@ class RecycleDetail extends Component {
       handleUpdate: this.handleUpdate,
       handleModalVisible: this.handleUpdateModalVisible,
     };
+    const printMethods = {
+      handleModalVisible: this.handlePrintModalVisible,
+    };
 
     let orderActions = null;
 
-    if (order.orderStatus === 1000) {
-      orderActions = (
-        <Fragment>
-          <Button type="primary" icon="check-circle" onClick={() => this.handleOrder('check')}>
-            验收订单并快递下单
-          </Button>
-          <Button type="danger" icon="close-circle" onClick={() => this.doReject(false)}>
-            验收不通过
-          </Button>
-        </Fragment>
-      );
-    }
+    // if (order.orderStatus === 1000) {
+    //   orderActions = (
+    //     <Fragment>
+    //       <Button type="primary" icon="check-circle" onClick={() => this.handleOrder('check')}>
+    //         验收订单并快递下单
+    //       </Button>
+    //       <Button type="danger" icon="close-circle" onClick={() => this.doReject(false)}>
+    //         验收不通过
+    //       </Button>
+    //     </Fragment>
+    //   );
+    // }
 
     if (bookAllPassed) {
       orderActions = (
@@ -450,19 +565,33 @@ class RecycleDetail extends Component {
           </a>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="订单号">{order.orderCode}</Description>
-            <Description term="预计收入">{order.expectIncome}</Description>
-            <Description term="实际收入">{order.actualIncome}</Description>
-            <Description term="下单时间">{order.appointment}</Description>
             <Description term="下单人">{order.orderName}</Description>
             <Description term="手机号">{order.orderMobile}</Description>
             <Description term="订单状态">
               {order.orderStatus && (
-                <Badge
-                  status={orderStatusMap[order.orderStatus].style}
-                  text={orderStatusMap[order.orderStatus].text}
-                />
+                <Fragment>
+                  <Badge
+                    status={orderStatusMap[order.orderStatus].style}
+                    text={orderStatusMap[order.orderStatus].text}
+                    style={{marginBottom: 3, marginRight: 8}}
+                  />
+                  <Button
+                    type="primary"
+                    size="small"
+                    ghost
+                    onClick={() => {
+                      this.handleOrderStatusModalVisible(true);
+                    }}
+                  >
+                    修改状态
+                  </Button>
+                </Fragment>
               )}
             </Description>
+            <Description term="预计收入">{order.expectIncome}</Description>
+            <Description term="实际收入">{order.actualIncome}</Description>
+            <Description term="揽件时间">{order.appointment}</Description>
+            <Description term="下单时间">{order.createTime}</Description>
             <Description term="揽件地址">
               {order.orderProvince
                 ? `${order.orderProvince}${order.orderCity}${order.orderRegion}${
@@ -483,7 +612,7 @@ class RecycleDetail extends Component {
               <List.Item
                 className={styles.listItem}
                 actions={[
-                  <a onClick={this.handlePrint}>打印条码</a>,
+                  <a onClick={() => this.handlePrint(item)}>打印条码</a>,
                   <MoreBtn current={item} index={index} onClick={this.handleBookItem} />,
                 ]}
               >
@@ -496,8 +625,10 @@ class RecycleDetail extends Component {
             )}
           />
         </Card>
+        <UpdateOrderStatusForm data={order} {...updateOrderStatusMethods} visible={orderStatusModalVisible} />
         <RejectForm {...parentMethods} isDeny={isDeny} visible={modalVisible} />
         <UpdateForm data={selectRow} {...updateMethods} visible={updateModalVisible} />
+        <BarcodeForm {...printMethods} value={selectRow.bookCode} visible={printModalVisible} />
       </PageHeaderWrapper>
     );
   }

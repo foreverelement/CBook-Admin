@@ -32,6 +32,33 @@ ol {
   list-style: none;
 }
 
-.ant-table-scroll > .ant-table-body {
-  overflow: auto !important;
+.ant-table-scroll {
+  > .ant-table-body {
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+
+    td {
+      white-space: nowrap;
+    }
+  }
+}
+
+.ant-form-item {
+  &.nowrap {
+    display: flex;
+
+    > .ant-form-item-label {
+      width: auto;
+      line-height: 32px;
+      padding-right: 8px;
+    }
+
+    .ant-form-item-control {
+      line-height: 32px;
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
 }
