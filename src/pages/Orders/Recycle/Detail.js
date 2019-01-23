@@ -190,14 +190,15 @@ class UpdateOrderStatusForm extends PureComponent {
         destroyOnClose
         title="修改订单状态"
         visible={visible}
+        width={400}
         onOk={okHandle}
         onCancel={() => handleModalVisible(false)}
       >
-        <FormItem key="orderStatus" className="nowrap" label="订单状态">
+        <FormItem key="orderStatus" className="nowrap" label="订单状态" labelCol={{offset: 3}}>
           {form.getFieldDecorator('orderStatus', {
             initialValue: data.orderStatus,
           })(
-            <Select placeholder="请选择" style={{ width: '120px' }}>
+            <Select placeholder="请选择" style={{ width: '180px' }}>
               {
                 orderStatusList.map(status => (
                   <Option key={status.value} value={status.value}>
