@@ -102,7 +102,7 @@ export default {
           .split('/')
           .map(a => a.replace(/([A-Z])/g, '-$1'))
           .map(a => a.toLowerCase());
-        return `${arr.join('-')}-${localName}`.replace(/--/g, '-');
+        return `antd-pro${arr.join('-')}-${localName}`.replace(/--/g, '-');
       }
       return localName;
     },
