@@ -61,7 +61,8 @@ const orderStatusMap = {
 };
 const BOOK_STATUS_MAP = {
   1000: '待审核',
-  1001: '验收通过',
+  1001: '审核通过',
+  2001: '审核不通过'
 };
 
 const getOrderStatusList = () =>
@@ -74,6 +75,7 @@ const getOrderStatusList = () =>
 class RejectForm extends PureComponent {
   state = {
     fileList: [],
+    loading: false,
   };
 
   handleDenyUpdate = fieldsValue => {
@@ -87,23 +89,32 @@ class RejectForm extends PureComponent {
     if (fileList.length > 0) {
       formData.append('file', fileList[0]);
     }
-    handleDeny(formData);
+    return handleDeny(formData);
   };
 
   render() {
     const { visible, form, handleReject, isDeny, handleModalVisible } = this.props;
-    const { fileList } = this.state;
+    const { fileList, loading } = this.state;
+    const resetForm = () => {
+      form.resetFields();
+      this.setState({ fileList: [], loading: false });
+      handleModalVisible(false);
+    };
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
         if (err) return;
-        form.resetFields();
-        this.setState({ fileList: [] });
+        this.setState({
+          loading: true
+        });
         if (isDeny) {
-          this.handleDenyUpdate(fieldsValue);
+          this.handleDenyUpdate(fieldsValue).then(() => {
+            resetForm();
+          });
         } else {
-          handleReject(fieldsValue);
+          handleReject(fieldsValue).then(() => {
+            resetForm();
+          });
         }
-        handleModalVisible(false);
       });
     };
 
@@ -142,6 +153,7 @@ class RejectForm extends PureComponent {
         width={450}
         visible={visible}
         onOk={okHandle}
+        confirmLoading={loading}
         onCancel={() => handleModalVisible(false)}
       >
         <FormItem key="reason">
@@ -172,17 +184,21 @@ class UpdateOrderStatusForm extends PureComponent {
 
     this.state = {
       orderStatusList: getOrderStatusList(),
+      loading: false,
     }
   }
 
   render() {
-    const { orderStatusList } = this.state;
+    const { orderStatusList, loading } = this.state;
     const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
         if (err) return;
-        handleUpdate(fieldsValue);
-        handleModalVisible(false);
+        this.setState({ loading: true });
+        handleUpdate(fieldsValue).then(() => {
+          this.setState({ loading: false });
+          handleModalVisible(false);
+        });
       });
     };
     return (
@@ -191,6 +207,7 @@ class UpdateOrderStatusForm extends PureComponent {
         title="修改订单状态"
         visible={visible}
         width={400}
+        confirmLoading={loading}
         onOk={okHandle}
         onCancel={() => handleModalVisible(false)}
       >
@@ -214,54 +231,73 @@ class UpdateOrderStatusForm extends PureComponent {
   }
 }
 
-const UpdateForm = Form.create()(props => {
-  const { visible, form, handleUpdate, handleModalVisible, data } = props;
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
+@Form.create()
+class UpdateForm extends PureComponent {
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+    }
+  }
+
+  render() {
+    const { loading } = this.state;
+    const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
+    const resetForm = () => {
       form.resetFields();
-      handleUpdate(fieldsValue);
+      this.setState({ loading: false });
       handleModalVisible(false);
-    });
-  };
-  return (
-    <Modal
-      destroyOnClose
-      title="修改内容"
-      visible={visible}
-      onOk={okHandle}
-      onCancel={() => handleModalVisible(false)}
-    >
-      <FormItem key="name" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="书名">
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '书名不能为空！' }],
-          initialValue: data.name,
-        })(<Input placeholder="请填写" />)}
-      </FormItem>
-      <FormItem
-        key="expectIncome"
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 15 }}
-        label="预计价格"
+    };
+    const okHandle = () => {
+      form.validateFields((err, fieldsValue) => {
+        if (err) return;
+        this.setState({ loading: true });
+        handleUpdate(fieldsValue).then(() => {
+          resetForm();
+        });
+      });
+    };
+    return (
+      <Modal
+        destroyOnClose
+        title="修改内容"
+        visible={visible}
+        confirmLoading={loading}
+        onOk={okHandle}
+        onCancel={() => handleModalVisible(false)}
       >
-        {form.getFieldDecorator('expectIncome', {
-          rules: [{ required: true, message: '书名不能为空！' }],
-          initialValue: data.expectIncome,
-        })(<InputNumber min={0} placeholder="请填写" />)}
-      </FormItem>
-      <FormItem key="bookStatus" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书状态">
-        {form.getFieldDecorator('bookStatus', {
-          initialValue: data.bookStatus,
-        })(
-          <Select placeholder="请选择" style={{ width: '120px' }}>
-            <Option value={1000}>待审核</Option>
-            <Option value={1001}>验收通过</Option>
-          </Select>
-        )}
-      </FormItem>
-    </Modal>
-  );
-});
+        <FormItem key="name" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="书名">
+          {form.getFieldDecorator('name', {
+            rules: [{ required: true, message: '书名不能为空！' }],
+            initialValue: data.name,
+          })(<Input placeholder="请填写"/>)}
+        </FormItem>
+        <FormItem
+          key="expectIncome"
+          labelCol={{ span: 5 }}
+          wrapperCol={{ span: 15 }}
+          label="预计价格"
+        >
+          {form.getFieldDecorator('expectIncome', {
+            rules: [{ required: true, message: '书名不能为空！' }],
+            initialValue: data.expectIncome,
+          })(<InputNumber min={0} placeholder="请填写"/>)}
+        </FormItem>
+        <FormItem key="bookStatus" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书状态">
+          {form.getFieldDecorator('bookStatus', {
+            initialValue: data.bookStatus,
+          })(
+            <Select placeholder="请选择" style={{ width: '120px' }}>
+              <Option value={1000}>待审核</Option>
+              <Option value={1001}>验收通过</Option>
+            </Select>
+          )}
+        </FormItem>
+      </Modal>
+    );
+  }
+}
 
 const BarcodeForm = memo(props => {
   let barcodeRef = null;
@@ -387,14 +423,14 @@ class RecycleDetail extends Component {
   };
 
   handleReject = fields => {
-    this.updateOrder({ ...fields, orderCode: this.orderCode, status: 2001 }); // 审核不通过
+    return this.updateOrder({ ...fields, orderCode: this.orderCode, status: 2001 }); // 审核不通过
   };
 
   handleDeny = fields => {
     const { selectRow } = this.state;
     fields.append('orderCode', this.orderCode);
     fields.append('bookCode', selectRow.bookCode);
-    this.updateOrder(fields, true); // 拒收图书
+    return this.updateOrder(fields, true); // 拒收图书
   };
 
   doReject = isDeny => {
@@ -413,11 +449,11 @@ class RecycleDetail extends Component {
       }
       return bookInfo;
     });
-    this.updateOrder({ bookList: newBookInfos, orderCode: this.orderCode, status }, false, true);
+    return this.updateOrder({ bookList: newBookInfos, orderCode: this.orderCode, status }, false, true);
   };
 
   handleOrderStatusUpdate = fields => {
-    this.updateOrderStatus(fields.orderStatus);
+    return this.updateOrderStatus(fields.orderStatus);
   };
 
   handleBookItem = (key, currentItem, index) => {
@@ -446,7 +482,7 @@ class RecycleDetail extends Component {
       recycleDetail: { order },
     } = this.props;
     const { bookInfos } = order;
-    this.updateOrder({ bookList: bookInfos, orderCode: this.orderCode, status });
+    return this.updateOrder({ bookList: bookInfos, orderCode: this.orderCode, status });
   }
 
   checkOrderStatus(status) {
@@ -493,7 +529,7 @@ class RecycleDetail extends Component {
 
   updateOrder(payload, isDeny, autoCheck) {
     const { dispatch } = this.props;
-    dispatch({
+    return dispatch({
       type: 'recycleDetail/update',
       payload,
       isDeny,
