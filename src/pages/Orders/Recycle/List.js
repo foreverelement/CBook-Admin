@@ -65,11 +65,17 @@ const columns = [
     title: '预期收入',
     dataIndex: 'expectIncome',
     sorter: (a, b) => a.expectIncome - b.expectIncome,
+    render(val) {
+      return `￥${val}`;
+    },
   },
   {
     title: '实际收入',
     dataIndex: 'actualIncome',
     sorter: (a, b) => a.actualIncome - b.actualIncome,
+    render(val) {
+      return `￥${val}`;
+    },
   },
   {
     title: '揽件时间',

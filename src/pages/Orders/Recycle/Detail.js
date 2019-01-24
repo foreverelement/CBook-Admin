@@ -590,8 +590,8 @@ class RecycleDetail extends Component {
                 </Fragment>
               )}
             </Description>
-            <Description term="预计收入">{order.expectIncome}</Description>
-            <Description term="实际收入">{order.actualIncome}</Description>
+            <Description term="预计收入">￥{order.expectIncome}</Description>
+            <Description term="实际收入">￥{order.actualIncome}</Description>
             <Description term="揽件时间">{order.appointment}</Description>
             <Description term="下单时间">{order.createTime}</Description>
             <Description term="揽件地址">
