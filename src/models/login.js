@@ -9,7 +9,7 @@ export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+    currentAuthority: 'guest',
   },
 
   effects: {
@@ -18,7 +18,7 @@ export default {
       if (response === undefined) return;
       yield put({
         type: 'changeLoginStatus',
-        payload: response,
+        payload: {...response, currentAuthority: 'user'},
       });
       // Login successfully
       if (response.token) {
@@ -51,7 +51,6 @@ export default {
       yield put({
         type: 'changeLoginStatus',
         payload: {
-          status: false,
           currentAuthority: 'guest',
         },
       });
@@ -70,7 +69,7 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority('user');
+      setAuthority(payload.currentAuthority);
       return {
         ...state,
         token: payload.token,
