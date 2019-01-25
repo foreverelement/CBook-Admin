@@ -154,7 +154,7 @@ class RejectForm extends PureComponent {
         visible={visible}
         onOk={okHandle}
         confirmLoading={loading}
-        onCancel={() => handleModalVisible(false)}
+        onCancel={() => resetForm()}
       >
         <FormItem key="reason">
           {form.getFieldDecorator('reason', {
