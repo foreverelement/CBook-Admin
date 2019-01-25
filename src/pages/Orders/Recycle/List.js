@@ -66,7 +66,7 @@ const columns = [
     dataIndex: 'expectIncome',
     sorter: (a, b) => a.expectIncome - b.expectIncome,
     render(val) {
-      return `￥${val}`;
+      return `￥${val.toFixed(2)}`;
     },
   },
   {
@@ -74,7 +74,7 @@ const columns = [
     dataIndex: 'actualIncome',
     sorter: (a, b) => a.actualIncome - b.actualIncome,
     render(val) {
-      return `￥${val}`;
+      return `￥${val.toFixed(2)}`;
     },
   },
   {
