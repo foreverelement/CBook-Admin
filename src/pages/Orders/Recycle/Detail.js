@@ -71,6 +71,8 @@ const getOrderStatusList = () =>
     value: +status,
   }));
 
+const toFixed = val => typeof val === 'number' ? val.toFixed(2) : val;
+
 @Form.create()
 class RejectForm extends PureComponent {
   state = {
@@ -336,8 +338,8 @@ const ListItemDesc = ({ author, press, expectIncome, actualIncome, bookStatus })
   <Fragment>
     <div className={styles.descItem}>作者：{author}</div>
     <div className={styles.descItem}>出版社：{press}</div>
-    <div className={styles.descItem}>预计价格：{expectIncome.toFixed(2)}</div>
-    <div className={styles.descItem}>实际价格：{actualIncome.toFixed(2)}</div>
+    <div className={styles.descItem}>预计价格：{toFixed(expectIncome)}</div>
+    <div className={styles.descItem}>实际价格：{toFixed(actualIncome)}</div>
     <div className={styles.descItem}>图书状态：{BOOK_STATUS_MAP[bookStatus]}</div>
   </Fragment>
 );
@@ -626,8 +628,8 @@ class RecycleDetail extends Component {
                 </Fragment>
               )}
             </Description>
-            <Description term="预计收入">￥{order.expectIncome.toFixed(2)}</Description>
-            <Description term="实际收入">￥{order.actualIncome.toFixed(2)}</Description>
+            <Description term="预计收入">￥{toFixed(order.expectIncome)}</Description>
+            <Description term="实际收入">￥{toFixed(order.actualIncome)}</Description>
             <Description term="揽件时间">{order.appointment}</Description>
             <Description term="下单时间">{order.createTime}</Description>
             <Description term="揽件地址">
