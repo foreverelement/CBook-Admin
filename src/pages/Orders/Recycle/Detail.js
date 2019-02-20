@@ -24,6 +24,7 @@ import ReactToPrint from 'react-to-print';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './Detail.less';
+import printIcon from '../../../assets/print_icon.png';
 
 const { Item: FormItem } = Form;
 const { TextArea } = Input;
@@ -302,7 +303,7 @@ class UpdateForm extends PureComponent {
 }
 
 const BarcodeForm = memo(props => {
-  let barcodeRef = null;
+  let prentContent = null;
   let printRef = null;
   const { visible, handleModalVisible, value } = props;
   const handlePrint = () => {
@@ -323,13 +324,21 @@ const BarcodeForm = memo(props => {
     >
       <ReactToPrint
         trigger={() => <Fragment />}
-        content={() => barcodeRef}
+        content={() => prentContent}
         ref={el => {printRef = el}}
       />
-      <Barcode
-        value={value}
-        ref={el => {barcodeRef = el}}
-      />
+      <div className={styles.printWrapper} ref={el => {prentContent = el}}>
+        <Barcode
+          value={value}
+        />
+        <div className={styles.printFooter}>
+          <img src={printIcon} alt="" />
+          <div className={styles.printFooterText}>
+            <p>关注：<strong>"星月童书绘本"</strong></p> {/*eslint-disable-line*/}
+            <p>公众号获取更多信息</p>
+          </div>
+        </div>
+      </div>
     </Modal>
   );
 });
