@@ -325,6 +325,7 @@ const BarcodeForm = memo(props => {
       <ReactToPrint
         trigger={() => <Fragment />}
         content={() => prentContent}
+        bodyClass={styles.printBody}
         ref={el => {printRef = el}}
       />
       <div className={styles.printWrapper} ref={el => {prentContent = el}}>
