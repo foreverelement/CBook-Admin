@@ -329,7 +329,7 @@ const BarcodeForm = memo(props => {
         ref={el => {printRef = el}}
       />
       <div className={styles.printWrapper} ref={el => {prentContent = el}}>
-        <Barcode value={value} />
+        <Barcode font="Arial" value={value} />
         <div className={styles.printFooter}>
           <img src={printIcon} alt="" />
           <div className={styles.printFooterText}>
