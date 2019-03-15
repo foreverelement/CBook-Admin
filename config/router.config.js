@@ -53,6 +53,17 @@ export default [
             hideInMenu: true,
             component: './Orders/Recycle/Detail',
           },
+          {
+            path: '/orders/buy/list',
+            name: 'buy-list',
+            component: './Orders/Buy/List',
+          },
+          {
+            path: '/orders/buy/detail/:orderCode',
+            name: 'buy-detail',
+            hideInMenu: true,
+            component: './Orders/Buy/Detail',
+          },
         ],
       },
       {

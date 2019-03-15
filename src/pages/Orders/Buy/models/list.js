@@ -1,7 +1,7 @@
-import { queryRecycleOrders } from '@/services/api';
+import { queryBuyOrders } from '@/services/api';
 
 export default {
-  namespace: 'recycle',
+  namespace: 'buyOrder',
 
   state: {
     data: {
@@ -12,7 +12,7 @@ export default {
 
   effects: {
     *fetchOrders({ payload }, { call, put }) {
-      const response = yield call(queryRecycleOrders, payload);
+      const response = yield call(queryBuyOrders, payload);
       if (!response) return;
       yield put({
         type: 'save',

@@ -29,6 +29,21 @@ export async function updateRecycleDetailDeny(params) {
   return request.post('/tools/recover/book/deny', params);
 }
 
+// 查询买书订单列表
+export async function queryBuyOrders(params) {
+  return request.post('/tools/buy/order/list', params);
+}
+
+// 更新买书订单状态
+export async function updateBuyOrderDetail(params) {
+  return request.post('/tools/buy/order/update', params);
+}
+
+// 加载买书订单快递信息
+export async function fetchBuyOrderExpress (params) {
+  return request.post('/tools/buy/order/express/info', params);
+}
+
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',

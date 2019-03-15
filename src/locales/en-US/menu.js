@@ -14,6 +14,8 @@ export default {
   'menu.orders': 'Order Manager',
   'menu.orders.recycle-list': 'Recycle Order List',
   'menu.orders.recycle-detail': 'Recycle Order Detail',
+  'menu.orders.buy-list': 'Buy Order List',
+  'menu.orders.buy-detail': 'Order Detail',
   'menu.list.basiclist': 'Basic List',
   'menu.list.cardlist': 'Card List',
   'menu.list.searchlist': 'Search List',

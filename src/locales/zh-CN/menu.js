@@ -14,6 +14,8 @@ export default {
   'menu.orders': '订单管理',
   'menu.orders.recycle-list': '回收订单列表',
   'menu.orders.recycle-detail': '回收详情',
+  'menu.orders.buy-list': '买书订单列表',
+  'menu.orders.buy-detail': '订单详情',
   'menu.list.basiclist': '标准列表',
   'menu.list.cardlist': '卡片列表',
   'menu.list.searchlist': '搜索列表',

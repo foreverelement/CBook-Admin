@@ -13,7 +13,7 @@ const links = [
   },
   {
     title: '买书订单管理',
-    href: '/orders/sales/list',
+    href: '/orders/buy/list',
     icon: 'order',
     custom: true,
   },
