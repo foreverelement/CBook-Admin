@@ -1,4 +1,4 @@
-import { updateBuyOrderDetail, fetchBuyOrderExpress } from '@/services/api';
+import { queryBuyOrderDetail, updateBuyOrderDetail, fetchBuyOrderExpress } from '@/services/api';
 
 export default {
   namespace: 'buyDetail',
@@ -35,11 +35,9 @@ export default {
   },
 
   effects: {
-    *fetch({ payload, callback }, { put, select }) {
-      const response = yield select(state =>
-        state.buyOrder.data.list.find(order => order.orderCode === payload.orderCode)
-      );
-      if (!response) return;
+    *fetch({ payload, callback }, { call, put }) {
+      const response = yield call(queryBuyOrderDetail, payload);
+      if (response === undefined) return;
       yield put({
         type: 'save',
         payload: response,
@@ -58,8 +56,7 @@ export default {
     },
     *fetchPrintData({ payload, callback }, { call, put }) {
       const response = yield call(fetchBuyOrderExpress, payload)
-      if (callback) callback();
-      if (!response) return;
+      if (response === undefined) return;
       yield put({
         type: 'saveExpress',
         payload: response,

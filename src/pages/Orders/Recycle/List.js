@@ -41,6 +41,8 @@ const orderStatusMap = {
   },
 };
 
+const getOrderStatus = key => orderStatusMap[key] || {}
+
 const columns = [
   {
     title: '订单号',
@@ -58,7 +60,7 @@ const columns = [
     title: '订单状态',
     dataIndex: 'orderStatus',
     render(val) {
-      return <Badge status={orderStatusMap[val].style} text={orderStatusMap[val].text} />;
+      return <Badge status={getOrderStatus(val).style} text={getOrderStatus(val).text} />;
     },
   },
   {

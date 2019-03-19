@@ -11,12 +11,6 @@ import styles from './List.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const orderStatusMap = {
-  0: { text: '待付款',  style: 'processing' },
-  1: { text: '待发货',  style: 'processing' },
-  2: { text: '待收货',  style: 'processing' },
-  3: { text: '已完成',  style: 'success' },
-  10: { text: '交易关闭',  style: 'error' },
-
   1000: { text: '待付款', style: 'processing' },
   1001: { text: '付款完成，待发货', style: 'processing'},
   1002: { text: '物流发货', style: 'processing' },
@@ -24,6 +18,8 @@ const orderStatusMap = {
   2000: { text: '订单取消', style: 'warning' },
   2001: { text: '超时订单关闭', style: 'error' }
 };
+
+const getOrderStatus = key => orderStatusMap[key] || {}
 
 const columns = [
   {
@@ -42,7 +38,7 @@ const columns = [
     title: '订单状态',
     dataIndex: 'orderStatus',
     render(val) {
-      return <Badge status={orderStatusMap[val].style} text={orderStatusMap[val].text} />;
+      return <Badge status={getOrderStatus(val).style} text={getOrderStatus(val).text} />;
     },
   },
   {
@@ -80,7 +76,7 @@ class List extends PureComponent {
 
     this.state = {
       orderCode: '',
-      filter: [],
+      status: '',
       offset: 1,
       limit: PAGE_SIZE,
     };
@@ -97,24 +93,24 @@ class List extends PureComponent {
 
     const { form } = this.props;
     const formValues = form.getFieldsValue();
-    const { orderCode = '', filter = [] } = formValues;
-    this.fetchOrders(orderCode, filter, 1);
+    const { orderCode, status } = formValues;
+    this.fetchOrders(orderCode, status, 1);
   };
 
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-    this.fetchOrders('', [], 1);
+    this.fetchOrders('', '', 1);
   };
 
   handleRefresh = () => {
-    const { orderCode, filter, offset } = this.state;
-    this.fetchOrders(orderCode, filter, offset);
+    const { orderCode, status, offset } = this.state;
+    this.fetchOrders(orderCode, status, offset);
   };
 
   handlePageChange = pagination => {
-    const { orderCode, filter } = this.state;
-    this.fetchOrders(orderCode, filter, pagination);
+    const { orderCode, status } = this.state;
+    this.fetchOrders(orderCode, status, pagination);
   };
 
   handleRow = row => ({
@@ -124,25 +120,43 @@ class List extends PureComponent {
     },
   });
 
-  fetchOrders(orderCode, filter, offset) {
+  fetchOrders(orderCode, status, offset) {
     const { dispatch } = this.props;
     const { limit } = this.state;
 
-    this.setState({
-      orderCode,
-      filter,
-      offset,
-    });
-
-    dispatch({
-      type: 'buyOrder/fetchOrders',
-      payload: {
+    if (orderCode || status) {
+      let filter = [];
+      if (status) {
+        filter = [{key: 'orderStatus', values: [status]}]
+      }
+      this.setState({
         orderCode,
+        status,
         offset,
-        limit,
-        filter,
-      },
-    });
+      });
+      dispatch({
+        type: 'buyOrder/searchOrders',
+        payload: {
+          orderCode,
+          offset,
+          limit,
+          filter,
+        },
+      });
+    } else {
+      this.setState({
+        orderCode: '',
+        status: '',
+        offset,
+      });
+      dispatch({
+        type: 'buyOrder/fetchOrders',
+        payload: {
+          offset,
+          limit,
+        },
+      });
+    }
   }
 
   renderForm() {

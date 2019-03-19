@@ -37,6 +37,8 @@ const BOOK_STATUS_MAP = {
   2001: '审核不通过'
 };
 
+const getOrderStatus = key => orderStatusMap[key] || {}
+
 const getOrderStatusList = () =>
   Object.keys(orderStatusMap).map(status => ({
     text: orderStatusMap[status].text,
@@ -233,8 +235,6 @@ class buyDetail extends Component {
       printLoading
     } = this.props;
 
-    order.orderStatus = 1000;
-
     const { orderStatusModalVisible, printModalVisible } = this.state;
     const updateOrderStatusMethods = {
       handleUpdate: this.handleOrderStatusUpdate,
@@ -260,8 +260,8 @@ class buyDetail extends Component {
                 order.orderStatus !== undefined &&
                   <Fragment>
                     <Badge
-                      status={orderStatusMap[order.orderStatus].style}
-                      text={orderStatusMap[order.orderStatus].text}
+                      status={getOrderStatus(order.orderStatus).style}
+                      text={getOrderStatus(order.orderStatus).text}
                       style={{marginBottom: 3, marginRight: 8}}
                     />
                     <Button
@@ -274,20 +274,23 @@ class buyDetail extends Component {
                     >
                       修改状态
                     </Button>
-                    <Button
-                      type="primary"
-                      size="small"
-                      ghost
-                      style={{
-                        marginLeft: 8
-                      }}
-                      loading={printLoading}
-                      onClick={() => {
-                        this.handlePrint();
-                      }}
-                    >
-                      打印快递面单
-                    </Button>
+                    {
+                      order.orderStatus === 1002 &&
+                      <Button
+                        type="primary"
+                        size="small"
+                        ghost
+                        style={{
+                          marginLeft: 8
+                        }}
+                        loading={printLoading}
+                        onClick={() => {
+                          this.handlePrint();
+                        }}
+                      >
+                        打印快递面单
+                      </Button>
+                    }
                   </Fragment>
               }
             </Description>

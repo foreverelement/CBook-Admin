@@ -1,14 +1,6 @@
 import { stringify } from 'qs';
 import request from '@/utils/request';
 
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
-}
-
-export async function queryActivities() {
-  return request('/api/activities');
-}
-
 // 查询回收订单列表
 export async function queryRecycleOrders(params) {
   return request.post('/tools/recover/order/list', params);
@@ -32,6 +24,16 @@ export async function updateRecycleDetailDeny(params) {
 // 查询买书订单列表
 export async function queryBuyOrders(params) {
   return request.post('/tools/buy/order/list', params);
+}
+
+// 搜索买书订单列表
+export async function searchBuyOrders(params) {
+  return request.post('/tools/buy/order/search', params);
+}
+
+// 查询买书订单详情
+export async function queryBuyOrderDetail(params) {
+  return request.post('/tools/buy/order/detail', params);
 }
 
 // 更新买书订单状态

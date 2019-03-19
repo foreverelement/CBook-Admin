@@ -126,14 +126,13 @@ export default ({ data }) => (
           <td style={{padding: 0}}>
             <table className="no_border">
               <tbody>
-              <tr>
-                <td style={{verticalAlign: 'middle', padding: 0}} width="113.4" height="55">
-                </td>
-                <td style={{verticalAlign: 'middle', padding: 0}} height="55">&nbsp;</td>
-                <td style={{verticalAlign: 'middle', padding: 0, textAlign: 'center'}} height="55" width="257">
-                  <Barcode font="Arial" fontSize={14} width={1.2} margin={0} height={22} value={data.logisticCode} />
-                </td>
-              </tr>
+                <tr>
+                  <td style={{verticalAlign: 'middle', padding: 0}} width="113.4" height="55" />
+                  <td style={{verticalAlign: 'middle', padding: 0}} height="55">&nbsp;</td>
+                  <td style={{verticalAlign: 'middle', padding: 0, textAlign: 'center'}} height="55" width="257">
+                    <Barcode font="Arial" fontSize={14} width={1.2} margin={0} height={22} value={data.logisticCode} />
+                  </td>
+                </tr>
               </tbody>
             </table>
           </td>

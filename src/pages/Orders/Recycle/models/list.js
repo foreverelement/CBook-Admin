@@ -13,21 +13,24 @@ export default {
   effects: {
     *fetchOrders({ payload }, { call, put }) {
       const response = yield call(queryRecycleOrders, payload);
-      if (!response) return;
+      if (response === undefined) return;
       yield put({
         type: 'save',
-        payload: response,
+        payload: {
+          data: response,
+          current: payload.offset
+        },
       });
     },
   },
 
   reducers: {
-    save(state, { payload }) {
+    save(state, { payload: {data, current} }) {
       return {
         ...state,
         data: {
-          list: payload.Items,
-          pagination: { total: payload.Total },
+          list: data.Items,
+          pagination: { total: data.Total, current },
         },
       };
     },

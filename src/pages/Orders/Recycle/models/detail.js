@@ -10,7 +10,7 @@ export default {
   effects: {
     *fetch({ payload, callback }, { call, put }) {
       const response = yield call(queryRecycleDetail, payload);
-      if (!response) return;
+      if (response === undefined) return;
       yield put({
         type: 'save',
         payload: response,
