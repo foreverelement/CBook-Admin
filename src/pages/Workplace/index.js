@@ -17,9 +17,14 @@ const links = [
     icon: 'order',
     custom: true,
   },
+  {
+    title: '图书管理',
+    href: '/books/list',
+    icon: 'book'
+  },
 ];
 
-const Workplace = memo(() => (
+const Index = memo(() => (
   <PageHeaderWrapper>
     <Row>
       <Col span={24}>
@@ -31,4 +36,4 @@ const Workplace = memo(() => (
   </PageHeaderWrapper>
 ));
 
-export default Workplace;
+export default Index;

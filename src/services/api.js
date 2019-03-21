@@ -46,6 +46,21 @@ export async function fetchBuyOrderExpress (params) {
   return request.post('/tools/buy/order/express/info', params);
 }
 
+// 加载图书列表
+export async function queryBookList (params) {
+  return request.post('/tools/book/list', params);
+}
+
+// 加载图书详情
+export async function queryBookDetail (params) {
+  return request.post('/tools/book/detail', params);
+}
+
+// 修改图书信息
+export async function updateBook (params) {
+  return request.post('/tools/book/update', params);
+}
+
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',

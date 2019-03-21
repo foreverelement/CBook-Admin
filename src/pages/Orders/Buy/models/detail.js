@@ -5,33 +5,7 @@ export default {
 
   state: {
     order: {},
-    express: {
-      "markDestination": "300- 03-03 26 ",
-      "logisticCode": "73110463138319",
-      "shipperCode": "ZTO",
-      "packageName": "沪西 ",
-      "orderCode": "Tue Mar 12 19:28:06 CST 2019",
-      "goodsName": "星月童书书本回收",
-      "payType": "寄付现结",
-      "quantity": "1",
-      "weight": "2kg",
-      "receiverData": {
-        "name": "唐国华",
-        "mobile": "13671887113",
-        "province": "上海",
-        "city": "上海市",
-        "region": "长宁区",
-        "address": "甘溪路100弄33号201室"
-      },
-      "senderData": {
-        "name": "feng",
-        "mobile": "18502120206",
-        "province": "上海市",
-        "city": "上海市",
-        "region": "长宁区",
-        "address": "甘溪路100弄33号201室"
-      }
-    },
+    express: {},
   },
 
   effects: {

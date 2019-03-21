@@ -17,20 +17,13 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      // dashboard
-      { path: '/', redirect: '/dashboard/workplace' },
-      { path: '/dashboard', redirect: '/dashboard/workplace' },
+      // workplace
+      { path: '/', redirect: '/workplace' },
       {
-        path: '/dashboard',
-        name: 'dashboard',
+        path: '/workplace',
+        name: 'workplace',
         icon: 'dashboard',
-        routes: [
-          {
-            path: '/dashboard/workplace',
-            name: 'workplace',
-            component: './Dashboard/Workplace',
-          },
-        ],
+        component: './Workplace/index'
       },
       // orders
       {
@@ -65,6 +58,25 @@ export default [
             component: './Orders/Buy/Detail',
           },
         ],
+      },
+      // books
+      {
+        path: '/books',
+        name: 'books',
+        icon: 'book',
+        routes: [
+          {
+            path: '/books/list',
+            name: 'books-list',
+            component: './Books/List'
+          },
+          {
+            path: '/books/detail/:bookCode',
+            name: 'books-detail',
+            hideInMenu: true,
+            component: './Books/Detail'
+          }
+        ]
       },
       {
         component: '404',
