@@ -87,21 +87,6 @@ const columns = [
     title: '下单时间',
     dataIndex: 'createTime',
   },
-  /* {
-    title: '揽件地址',
-    dataIndex: 'orderAddress',
-    render: (text, record) => (
-      <Fragment>
-        {`${record.orderProvince}${record.orderCity}${record.orderRegion}${record.orderAddress}`}
-      </Fragment>
-    ),
-  },
-  {
-    title: '操作',
-    render: (text, record) => (
-      <Link to={`/orders/recycle/detail/${record.orderCode}`}>查看详情</Link>
-    ),
-  }, */
 ];
 
 const getOrderStatusList = () =>

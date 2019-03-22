@@ -346,8 +346,8 @@ const ListItemDesc = ({ author, press, expectIncome, actualIncome, bookStatus })
   <Fragment>
     <div className={styles.descItem}>作者：{author}</div>
     <div className={styles.descItem}>出版社：{press}</div>
-    <div className={styles.descItem}>预计价格：{toFixed(expectIncome)}</div>
-    <div className={styles.descItem}>实际价格：{toFixed(actualIncome)}</div>
+    <div className={styles.descItem}>预计价格：￥{toFixed(expectIncome)}</div>
+    <div className={styles.descItem}>实际价格：￥{toFixed(actualIncome)}</div>
     <div className={styles.descItem}>图书状态：{BOOK_STATUS_MAP[bookStatus]}</div>
   </Fragment>
 );
