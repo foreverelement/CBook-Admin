@@ -11,6 +11,7 @@ import {
   Card,
   Icon,
   Modal,
+  Spin,
   notification,
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
@@ -64,7 +65,7 @@ class UpdateForm extends PureComponent {
             initialValue: data.author,
           })(<Input placeholder="请填写" />)}
         </FormItem>
-        <FormItem key="press" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="作者">
+        <FormItem key="press" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="出版社">
           {form.getFieldDecorator('press', {
             initialValue: data.press,
           })(<Input placeholder="请填写" />)}
@@ -172,7 +173,8 @@ class BookDetail extends Component {
 
   render() {
     const {
-      bookDetail: { data }
+      bookDetail: { data },
+      loading
     } = this.props;
 
     const { updateModalVisible } = this.state;
@@ -206,6 +208,7 @@ class BookDetail extends Component {
             <Description term="星币价格">￥{toFixed(data.starPrice)}</Description>
             <Description term="发布时间">{data.publishDate}</Description>
           </DescriptionList>
+          <Spin className={styles.spinner} spinning={loading} />
         </Card>
         <UpdateForm data={data} {...updateMethods} visible={updateModalVisible} />
       </PageHeaderWrapper>

@@ -274,7 +274,7 @@ class UpdateForm extends PureComponent {
           {form.getFieldDecorator('name', {
             rules: [{ required: true, message: '书名不能为空！' }],
             initialValue: data.name,
-          })(<Input placeholder="请填写"/>)}
+          })(<Input placeholder="请填写" />)}
         </FormItem>
         <FormItem
           key="expectIncome"
@@ -285,7 +285,7 @@ class UpdateForm extends PureComponent {
           {form.getFieldDecorator('expectIncome', {
             rules: [{ required: true, message: '书名不能为空！' }],
             initialValue: data.expectIncome,
-          })(<InputNumber min={0} placeholder="请填写"/>)}
+          })(<InputNumber min={0} placeholder="请填写" />)}
         </FormItem>
         <FormItem key="bookStatus" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书状态">
           {form.getFieldDecorator('bookStatus', {

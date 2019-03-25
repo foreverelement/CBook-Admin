@@ -78,6 +78,25 @@ export default [
           }
         ]
       },
+      // goods
+      {
+        path: '/goods',
+        name: 'goods',
+        icon: 'book',
+        routes: [
+          {
+            path: '/goods/list',
+            name: 'goods-list',
+            component: './Goods/List'
+          },
+          {
+            path: '/goods/detail/:goodsId',
+            name: 'goods-detail',
+            hideInMenu: true,
+            component: './Goods/Detail'
+          }
+        ]
+      },
       {
         component: '404',
       },

@@ -58,6 +58,34 @@
 .spinner {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 20%;
   transform: translate(-50%, -50%);
+}
+
+.smallImg {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin-top: 10px;
+}
+
+.imageItem {
+  width: 200px;
+  height: auto;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+}
+
+.break {
+  margin-bottom: 15px;
+
+  > div:first-child {
+    display: block;
+  }
+}
+
+.picFormItem {
+  :global(.ant-form-item-children) {
+    display: flex;
+  }
 }

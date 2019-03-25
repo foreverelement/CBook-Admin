@@ -61,6 +61,21 @@ export async function updateBook (params) {
   return request.post('/tools/book/update', params);
 }
 
+// 加载商品列表
+export async function queryGoodsList (params) {
+  return request.post('/tools/sales/list', params);
+}
+
+// 加载商品详情
+export async function queryGoodDetail (params) {
+  return request.post('/tools/sales/goods/detail', params);
+}
+
+// 修改商品信息
+export async function updateGood (params) {
+  return request.post('/tools/sales/goods/update', params);
+}
+
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',
