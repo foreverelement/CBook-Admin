@@ -19,7 +19,7 @@ export default {
     },
     *update({ payload, callback }, { call, put, select }) {
       const response = yield call(updateGood, payload);
-      const data = yield select(state => state.bookDetail.data);
+      const data = yield select(state => state.goodDetail.data);
       if (response === undefined) return;
       yield put({
         type: 'save',

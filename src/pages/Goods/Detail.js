@@ -1,4 +1,4 @@
-import React, { Component, Fragment, PureComponent } from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import Grid from '@/components/Grid';
 import styles from './Detail.less';
 
 const { Item: FormItem } = Form;
@@ -64,53 +65,28 @@ CheckTag.propTypes = {
 
 
 @Form.create()
-class UpdateForm extends PureComponent {
+class UpdateForm extends Component {
   state = {
     loading: false,
+    loaded: false,
     imags: [],
     tags: [],
     ageType: [],
     languageType: [],
   };
 
-  // static getDerivedStateFromProps(props, state) {
-  //   const { data: { imags, tags, ageType, languageType } } = props;
-  //   if (
-  //     state.imags.length > 0
-  //     || (state.tags.length > 0 && state.tags.length !== tags.length)
-  //     || (state.ageType.length > 0 && state.ageType.length !== ageType.length)
-  //     || (state.languageType.length > 0 && state.languageType.length !== languageType.length)
-  //   ) {
-  //     return {
-  //       imags: state.imags,
-  //       tags: state.tags,
-  //       ageType: state.ageType,
-  //       languageType: state.languageType,
-  //     }
-  //   }
-  //
-  //   return {
-  //     imags,
-  //     tags,
-  //     ageType,
-  //     languageType
-  //   }
-  // }
-
-  componentWillReceiveProps(nextProps) {
-    const { data: { imags, tags, ageType, languageType } } = nextProps;
-    // if (
-    //   this.state.imags.length === 0
-    //   || this.state.tags.length === 0
-    //   || this.state.ageType.length === 0
-    //   || this.state.languageType.length === 0
-    // )
-    this.setState({
-      imags,
-      tags,
-      ageType,
-      languageType,
-    })
+  static getDerivedStateFromProps(props, state) {
+    const { loaded, data: { imags, tags, ageType, languageType } } = props;
+    if (loaded !== state.loaded) {
+      return {
+        loaded,
+        imags,
+        tags,
+        ageType,
+        languageType,
+      }
+    }
+    return null;
   }
 
   getFinalFieldsValue(fieldsValue) {
@@ -190,214 +166,274 @@ class UpdateForm extends PureComponent {
 
   handleReset() {
     this.setState({
-      imags: [],
-      tags: [],
-      ageType: [],
-      languageType: [],
+      loaded: false,
+    })
+  }
+
+  handleSubmit() {
+    const { form, handleUpdate, handleModalVisible } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      const newFieldsValue = this.getFinalFieldsValue(fieldsValue);
+      this.setState({ loading: true });
+      handleUpdate(newFieldsValue).then(() => {
+        this.setState({ loading: false });
+        handleModalVisible(false);
+      })
     });
   }
 
   render() {
     const { loading, imags } = this.state;
-    const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
-    const okHandle = () => {
-      form.validateFields((err, fieldsValue) => {
-        if (err) return;
-        const newFieldsValue = this.getFinalFieldsValue(fieldsValue);
-        this.setState({ loading: true });
-        handleUpdate(newFieldsValue).then(() => {
-          this.setState({ loading: false });
-          handleModalVisible(false);
-        })
-      });
-    };
+    const { visible, form, handleModalVisible, data } = this.props;
+
     return (
       <Modal
         destroyOnClose
         title="修改商品信息"
+        width={900}
         visible={visible}
         confirmLoading={loading}
-        onOk={okHandle}
+        onOk={() => this.handleSubmit()}
         onCancel={() => handleModalVisible(false)}
         afterClose={() => this.handleReset()}
       >
-        <FormItem key="name" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="书名">
-          {form.getFieldDecorator('name', {
-            initialValue: data.name,
-          })(<Input placeholder="请填写" />)}
-        </FormItem>
-        <FormItem key="author" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="作者">
-          {form.getFieldDecorator('author', {
-            initialValue: data.author,
-          })(<Input placeholder="请填写" />)}
-        </FormItem>
-        <FormItem key="press" labelCol={{ span: 6 }} wrapperCol={{ span: 15 }} label="出版社">
-          {form.getFieldDecorator('press', {
-            initialValue: data.press,
-          })(<Input placeholder="请填写" />)}
-        </FormItem>
-        <FormItem
-          key="costPrice"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="售卖价格"
-        >
-          {form.getFieldDecorator('costPrice', {
-            initialValue: data.costPrice,
-          })(<InputNumber min={0} placeholder="请填写" />)}
-        </FormItem>
-        <FormItem
-          key="starPrice"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="星币价格"
-        >
-          {form.getFieldDecorator('starPrice', {
-            initialValue: data.starPrice,
-          })(<InputNumber min={0} placeholder="请填写" />)}
-        </FormItem>
-        <FormItem
-          key="doubanScore"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="豆瓣评分"
-        >
-          {form.getFieldDecorator('doubanScore', {
-            initialValue: data.doubanScore,
-          })(<InputNumber min={0} placeholder="请填写" />)}
-        </FormItem>
-        <FormItem
-          key="smallImageUrl"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="商品图片"
-        >
-          {form.getFieldDecorator('smallImageUrl', {
-            initialValue: data.smallImageUrl,
-          })(<Input placeholder="请填写" />)}
-        </FormItem>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="name"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="书名"
+            >
+              {form.getFieldDecorator('name', {
+                initialValue: data.name,
+              })(<Input placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+          <Grid.Item>
+            <FormItem
+              key="costPrice"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="售卖价格"
+            >
+              {form.getFieldDecorator('costPrice', {
+                initialValue: data.costPrice,
+              })(<InputNumber min={0} placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="author"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="作者"
+            >
+              {form.getFieldDecorator('author', {
+                initialValue: data.author,
+              })(<Input placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+          <Grid.Item>
+            <FormItem
+              key="starPrice"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="星币价格"
+            >
+              {form.getFieldDecorator('starPrice', {
+                initialValue: data.starPrice,
+              })(<InputNumber min={0} placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="press"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="出版社"
+            >
+              {form.getFieldDecorator('press', {
+                initialValue: data.press,
+              })(<Input placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+          <Grid.Item>
+            <FormItem
+              key="doubanScore"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="豆瓣评分"
+            >
+              {form.getFieldDecorator('doubanScore', {
+                initialValue: data.doubanScore,
+              })(<InputNumber min={0} placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="smallImageUrl"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="商品图片"
+            >
+              {form.getFieldDecorator('smallImageUrl', {
+                initialValue: data.smallImageUrl,
+              })(<Input placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+          <Grid.Item>
+            <FormItem
+              key="publishDate"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="发行日期"
+            >
+              {form.getFieldDecorator('publishDate', {
+                initialValue: moment(data.publishDate, 'YYYY-MM-DD'),
+              })(<DatePicker />)}
+            </FormItem>
+          </Grid.Item>
+        </Grid>
         {
           imags.map((item, i) =>
-            <FormItem
-              key={item + i}
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 15 }}
-              label={`插画${i+1}`}
-              className={styles.picFormItem}
-            >
-              {
-                form.getFieldDecorator(`imags${i}`, {
-                  initialValue: item,
-                })(<Input placeholder="请填写" />)
-              }
-              <span style={{marginLeft: 5}}>
-                {
-                  i < imags.length - 1 ?
-                    <Button shape="circle" icon="minus" style={{verticalAlign: 'top'}} onClick={() => this.handleReduce(i)} />
-                    :
-                    <Button shape="circle" icon="plus" style={{verticalAlign: 'top'}} onClick={() => this.handleAdd(i)} />
-                }
-              </span>
-            </FormItem>
+            <Grid col={6} gutter={0} key={`${item}${i}`}>
+              <Grid.Item>
+                <FormItem
+                  labelCol={{ span: 6 }}
+                  wrapperCol={{ span: 18 }}
+                  label={`插画${i+1}`}
+                  className={styles.picFormItem}
+                >
+                  {
+                    form.getFieldDecorator(`imags${i}`, {
+                      initialValue: item,
+                    })(<Input placeholder="请填写" />)
+                  }
+                  <span style={{marginLeft: 5}}>
+                    {
+                      i < imags.length - 1 ?
+                        <Button shape="circle" icon="minus" style={{verticalAlign: 'top'}} onClick={() => this.handleReduce(i)} />
+                        :
+                        <Button shape="circle" icon="plus" style={{verticalAlign: 'top'}} onClick={() => this.handleAdd(i)} />
+                    }
+                  </span>
+                </FormItem>
+              </Grid.Item>
+            </Grid>
           )
         }
-        <FormItem
-          key="publishDate"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="发行日期"
-        >
-          {form.getFieldDecorator('publishDate', {
-            initialValue: moment(data.publishDate, 'YYYY-MM-DD'),
-          })(<DatePicker />)}
-        </FormItem>
-        <FormItem
-          key="authorBrief"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="作者简介"
-        >
-          {form.getFieldDecorator('authorBrief', {
-            initialValue: data.authorBrief,
-          })(<TextArea style={{height: 120}} placeholder="请填写" />)}
-        </FormItem>
-        <FormItem
-          key="contentBrief"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="内容简介"
-        >
-          {form.getFieldDecorator('contentBrief', {
-            initialValue: data.contentBrief,
-          })(<TextArea style={{height: 120}} placeholder="请填写" />)}
-        </FormItem>
-        <FormItem
-          key="tags"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="标签分类"
-        >
-          <Fragment>
-            {
-              tagTypes.map(item =>
-                <CheckTag
-                  checked={data.tags.includes(item)}
-                  key={item}
-                  onChange={this.handleTagChange}
-                >
-                  {item}
-                </CheckTag>)
-            }
-          </Fragment>
-        </FormItem>
-        <FormItem
-          key="ageType"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="年龄分类"
-        >
-          <Fragment>
-            {
-              ageTypes.map(item =>
-                <CheckTag
-                  checked={data.ageType.includes(item)}
-                  key={item}
-                  onChange={this.handleAgeChange}
-                >
-                  {item}
-                </CheckTag>)
-            }
-          </Fragment>
-        </FormItem>
-        <FormItem
-          key="languageType"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="语言分类"
-        >
-          <Fragment>
-            {
-              languageTypes.map(item =>
-                <CheckTag
-                  checked={data.languageType.includes(item)}
-                  key={item}
-                  onChange={this.handleLangChange}
-                >
-                  {item}
-                </CheckTag>)
-            }
-          </Fragment>
-        </FormItem>
-        <FormItem
-          key="status"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 15 }}
-          label="是否上架该商品"
-        >
-          {form.getFieldDecorator('status', {
-            initialValue: !!data.status,
-          })(<Checkbox />)}
-        </FormItem>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="authorBrief"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="作者简介"
+            >
+              {form.getFieldDecorator('authorBrief', {
+                initialValue: data.authorBrief,
+              })(<TextArea style={{height: 120}} placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+          <Grid.Item>
+            <FormItem
+              key="contentBrief"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="内容简介"
+            >
+              {form.getFieldDecorator('contentBrief', {
+                initialValue: data.contentBrief,
+              })(<TextArea style={{height: 120}} placeholder="请填写" />)}
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="tags"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="标签分类"
+            >
+              {
+                tagTypes.map(item =>
+                  <CheckTag
+                    checked={data.tags.includes(item)}
+                    key={item}
+                    onChange={this.handleTagChange}
+                  >
+                    {item}
+                  </CheckTag>)
+              }
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="ageType"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="年龄分类"
+            >
+              {
+                ageTypes.map(item =>
+                  <CheckTag
+                    checked={data.ageType.includes(item)}
+                    key={item}
+                    onChange={this.handleAgeChange}
+                  >
+                    {item}
+                  </CheckTag>)
+              }
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="languageType"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              label="语言分类"
+            >
+              {
+                languageTypes.map(item =>
+                  <CheckTag
+                    checked={data.languageType.includes(item)}
+                    key={item}
+                    onChange={this.handleLangChange}
+                  >
+                    {item}
+                  </CheckTag>)
+              }
+            </FormItem>
+          </Grid.Item>
+        </Grid>
+        <Grid col={6} gutter={0}>
+          <Grid.Item>
+            <FormItem
+              key="status"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 18 }}
+              style={{marginBottom: 0}}
+              label="是否上架该商品"
+            >
+              {form.getFieldDecorator('status', {
+                initialValue: !!data.status,
+              })(<Checkbox />)}
+            </FormItem>
+          </Grid.Item>
+        </Grid>
       </Modal>
     );
   }
@@ -427,7 +463,7 @@ class GoodDetail extends Component {
     } = this.props;
 
     this.goodsId = goodsId;
-    this.fetchOrder(this.goodsId);
+    this.fetchGood(this.goodsId);
   }
 
   handleUpdateModalVisible = bool => {
@@ -437,13 +473,13 @@ class GoodDetail extends Component {
   };
 
   handleUpdate = fields => {
-    return this.updateOrder({
+    return this.updateGood({
       ...fields,
       goodsId: this.goodsId
     });
   };
 
-  fetchOrder(goodsId) {
+  fetchGood(goodsId) {
     const { dispatch } = this.props;
 
     return dispatch({
@@ -454,7 +490,7 @@ class GoodDetail extends Component {
     })
   }
 
-  updateOrder(payload) {
+  updateGood(payload) {
     const { dispatch } = this.props;
     return dispatch({
       type: 'goodDetail/update',
@@ -499,7 +535,7 @@ class GoodDetail extends Component {
             <Icon type="left" />
             返回商品列表
           </a>
-          <DescriptionList size="large" style={{ marginBottom: 10 }}>
+          <DescriptionList size="large" style={{ marginBottom: 20 }}>
             <Description term="商品名称">{data.name}</Description>
             <Description term="商品ID">{data.goodsId}</Description>
             <Description term="isbn">{data.isbn}</Description>
@@ -530,18 +566,27 @@ class GoodDetail extends Component {
             </Description>
           </DescriptionList>
           <DescriptionList size="large" col={1} style={{ marginBottom: 32 }}>
-            <Description term="作者简介" style={{marginBottom: 10}}>{data.authorBrief}</Description>
-            <Description term="商品简介" style={{marginBottom: 10}}>{data.contentBrief}</Description>
+            <Description term="作者简介" style={{marginBottom: 10}}>
+              {data.authorBrief}
+            </Description>
+            <Description term="商品简介" style={{marginBottom: 10}}>
+              {data.contentBrief}
+            </Description>
             <Description term="商品图片" className={styles.break}>
-              <img className={styles.smallImg} src={data.smallImageUrl} alt="商品图片" />
+              <img
+                className={styles.smallImg}
+                src={data.smallImageUrl}
+                alt="商品图片"
+                onClick={() => window.open(data.smallImageUrl)}
+              />
             </Description>
             <Description term="插画" className={styles.break}>
               {
-                data.imags.map(img =>
+                data.imags.map((img, i) =>
                   img &&
                   <img
                     className={styles.imageItem}
-                    key={img}
+                    key={`${img}${i}`}
                     src={img}
                     alt="商品插画"
                     onClick={() => window.open(img)}
@@ -552,7 +597,7 @@ class GoodDetail extends Component {
           </DescriptionList>
           <Spin className={styles.spinner} spinning={loading} />
         </Card>
-        <UpdateForm data={data} {...updateMethods} visible={updateModalVisible} />
+        <UpdateForm data={data} {...updateMethods} loaded={!loading} visible={updateModalVisible} />
       </PageHeaderWrapper>
     );
   }
