@@ -550,21 +550,23 @@ class GoodDetail extends Component {
             <Description term="星币抵扣">￥{toFixed(data.starDeduction)}</Description>
             <Description term="库存">{data.stockNumber}</Description>
             <Description term="豆瓣评分">{data.doubanScore}</Description>
-            <Description term="发布时间">{data.publishDate}</Description>
+            <Description term="标签分类">
+              {data.tags.map(item =>
+                item && <Tag key={item}>{item}</Tag>
+              )}
+            </Description>
             <Description term="年龄分类">
               {data.ageType.map(item =>
-                <Tag key={item}>{item}</Tag>
+                item && <Tag key={item}>{item}</Tag>
               )}
             </Description>
             <Description term="语言分类">
               {data.languageType.map(item =>
-                <Tag key={item}>{item}</Tag>
+                item && <Tag key={item}>{item}</Tag>
               )}
             </Description>
-            <Description term="标签">
-              {data.tags.map(item =>
-                <Tag key={item}>{item}</Tag>
-              )}
+            <Description term="发布时间">
+              {data.publishDate}
             </Description>
           </DescriptionList>
           <DescriptionList size="large" col={1} style={{ marginBottom: 32 }}>
