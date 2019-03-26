@@ -12,6 +12,7 @@ import {
   Icon,
   Modal,
   Spin,
+  Select,
   notification,
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
@@ -20,6 +21,14 @@ import styles from './Detail.less';
 
 const { Item: FormItem } = Form;
 const { Description } = DescriptionList;
+const { Option } = Select;
+
+const statusMap = {
+  1001: '入库',
+  1002: '上架',
+  1003: '卖出',
+  2000: '作废',
+};
 
 const toFixed = val => typeof val === 'number' ? val.toFixed(2) : val;
 
@@ -30,11 +39,12 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       loading: false,
+      statusList: Object.keys(statusMap).map(key => ({text: statusMap[key], value: Number(key)})),
     }
   }
 
   render() {
-    const { loading } = this.state;
+    const { loading, statusList } = this.state;
     const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
@@ -99,6 +109,22 @@ class UpdateForm extends PureComponent {
           {form.getFieldDecorator('publishDate', {
             initialValue: moment(data.publishDate, 'YYYY-MM-DD'),
           })(<DatePicker />)}
+        </FormItem>
+        <FormItem key="status" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书状态">
+          {form.getFieldDecorator('status', {
+            initialValue: data.status,
+          })(
+            <Select placeholder="请选择" style={{ width: '100px' }}>
+              <Option value="">请选择</Option>
+              {
+                statusList.map(status => (
+                  <Option key={status.value} value={status.value}>
+                    {status.text}
+                  </Option>
+                ))
+              }
+            </Select>
+          )}
         </FormItem>
       </Modal>
     );
@@ -199,14 +225,17 @@ class BookDetail extends Component {
           </a>
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="图书名称">{data.name}</Description>
-            <Description term="编码">{data.bookCode}</Description>
-            <Description term="isbn">{data.isbn}</Description>
             <Description term="作者">{data.author}</Description>
             <Description term="出版社">{data.press}</Description>
+            <Description term="编码">{data.bookCode}</Description>
+            <Description term="isbn">{data.isbn}</Description>
+            <Description term="shopId">{data.shopId}</Description>
+            <Description term="书盒编号">{data.bookstack}</Description>
             <Description term="价格">￥{toFixed(data.price)}</Description>
             <Description term="销售价格">￥{toFixed(data.sellPrice)}</Description>
             <Description term="星币价格">￥{toFixed(data.starPrice)}</Description>
             <Description term="发布时间">{data.publishDate}</Description>
+            <Description term="图书状态">{statusMap[data.status]}</Description>
           </DescriptionList>
           <Spin className={styles.spinner} spinning={loading} />
         </Card>

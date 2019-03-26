@@ -15,7 +15,7 @@ import {
   notification,
   Spin,
   Tag,
-  Checkbox,
+  Checkbox
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -84,7 +84,7 @@ class UpdateForm extends Component {
         tags,
         ageType,
         languageType,
-      }
+      };
     }
     return null;
   }
@@ -274,7 +274,7 @@ class UpdateForm extends Component {
             >
               {form.getFieldDecorator('doubanScore', {
                 initialValue: data.doubanScore,
-              })(<InputNumber min={0} placeholder="请填写" />)}
+              })(<InputNumber min={0} max={5} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
         </Grid>
