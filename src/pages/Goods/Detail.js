@@ -322,9 +322,9 @@ class UpdateForm extends Component {
                   <span style={{marginLeft: 5}}>
                     {
                       i < imags.length - 1 ?
-                        <Button shape="circle" icon="minus" style={{verticalAlign: 'top'}} onClick={() => this.handleReduce(i)} />
+                        <Button shape="circle" size="small" icon="minus" style={{verticalAlign: 'text-bottom'}} onClick={() => this.handleReduce(i)} />
                         :
-                        <Button shape="circle" icon="plus" style={{verticalAlign: 'top'}} onClick={() => this.handleAdd(i)} />
+                        <Button shape="circle" size="small" icon="plus" style={{verticalAlign: 'text-bottom'}} onClick={() => this.handleAdd(i)} />
                     }
                   </span>
                 </FormItem>
