@@ -96,7 +96,9 @@ class UpdateForm extends Component {
     // eslint-disable-next-line
     for (let key in fieldsValue) {
       if (/^imags[\d+]$/.test(key)) {
-        imagGroup.push(fieldsValue[key]);
+        if (fieldsValue[key]) {
+          imagGroup.push(fieldsValue[key]);
+        }
         delete fieldsValue[key]; // eslint-disable-line
       }
     }
