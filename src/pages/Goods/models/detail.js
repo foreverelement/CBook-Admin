@@ -18,12 +18,15 @@ export default {
       if (callback) callback();
     },
     *update({ payload, callback }, { call, put, select }) {
-      const response = yield call(updateGood, payload);
+      const response = yield call(updateGood, {
+        ...payload,
+        imags: payload.imags.join('|'),
+      });
       const data = yield select(state => state.goodDetail.data);
       if (response === undefined) return;
       yield put({
         type: 'save',
-        payload: {...data, ...payload, imags: payload.imags.split('|')},
+        payload: {...data, ...payload},
       });
       if (callback) callback();
     },

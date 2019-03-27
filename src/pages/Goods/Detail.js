@@ -92,19 +92,19 @@ class UpdateForm extends Component {
 
   getFinalFieldsValue(fieldsValue) {
     const { tags, ageType, languageType } = this.state;
-    const imagGroup = [];
+    const imags = [];
 
     // eslint-disable-next-line
     for (let key in fieldsValue) {
       if (/^imags[\d+]$/.test(key)) {
         if (fieldsValue[key]) {
-          imagGroup.push(fieldsValue[key]);
+          imags.push(fieldsValue[key]);
         }
         delete fieldsValue[key]; // eslint-disable-line
       }
     }
     Object.assign(fieldsValue, {
-      imags: imagGroup.join('|'),
+      imags,
       tags,
       ageType,
       languageType,
