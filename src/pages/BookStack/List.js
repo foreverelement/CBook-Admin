@@ -61,13 +61,6 @@ const BarcodeForm = memo(props => {
       />
       <div className={styles.printWrapper} ref={el => {prentContent = el}}>
         <Barcode font="Arial" value={value} />
-        <div className={styles.printFooter}>
-          <img src={printIcon} alt="" />
-          <div className={styles.printFooterText}>
-            <p>关注：<strong>"星月童书绘本"</strong></p> {/*eslint-disable-line*/}
-            <p>公众号获取更多信息</p>
-          </div>
-        </div>
       </div>
     </Modal>
   );
