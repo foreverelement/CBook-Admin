@@ -22,6 +22,7 @@ export default {
   'menu.goods': '商品管理',
   'menu.goods.goods-list': '商品列表',
   'menu.goods.goods-detail': '商品详情',
+  'menu.bookstack': '书盒列表',
   'menu.list.basiclist': '标准列表',
   'menu.list.cardlist': '卡片列表',
   'menu.list.searchlist': '搜索列表',

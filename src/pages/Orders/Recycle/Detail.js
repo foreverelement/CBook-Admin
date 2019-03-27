@@ -24,7 +24,7 @@ import ReactToPrint from 'react-to-print';
 import DescriptionList from '@/components/DescriptionList';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './Detail.less';
-import printIcon from '../../../assets/print_icon.png';
+import printIcon from '@/assets/print_icon.png';
 
 const { Item: FormItem } = Form;
 const { TextArea } = Input;

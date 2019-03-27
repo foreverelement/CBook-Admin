@@ -76,6 +76,11 @@ export async function updateGood (params) {
   return request.post('/tools/sales/goods/update', params);
 }
 
+// 加载书盒列表
+export async function queryBookStack (params) {
+  return request.post('/tools/book/cell/list', params);
+}
+
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',

@@ -82,7 +82,7 @@ export default [
       {
         path: '/goods',
         name: 'goods',
-        icon: 'book',
+        icon: 'shopping',
         routes: [
           {
             path: '/goods/list',
@@ -96,6 +96,12 @@ export default [
             component: './Goods/Detail'
           }
         ]
+      },
+      {
+        path: '/bookstack',
+        name: 'bookstack',
+        icon: 'inbox',
+        component: './BookStack/List'
       },
       {
         component: '404',

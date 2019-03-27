@@ -1,0 +1,61 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.tableListForm {
+  :global {
+    .ant-form-item {
+      margin-bottom: 24px;
+      margin-right: 0;
+    }
+  }
+  .submitButtons {
+    display: block;
+    white-space: nowrap;
+    margin-bottom: 24px;
+  }
+}
+
+@media screen and (min-width: @screen-lg) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 24px;
+  }
+}
+
+.printWrapper {
+  display: inline-block;
+  padding: 10px;
+}
+
+.printFooter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+}
+
+.printFooterText {
+  p {
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    font-family: Arial;
+
+    strong {
+      font-weight: normal;
+    }
+  }
+}
+
+.printBody {
+  transform: scale(.55);
+  transform-origin: 50% 0;
+  display: flex;
+  justify-content: center;
+}

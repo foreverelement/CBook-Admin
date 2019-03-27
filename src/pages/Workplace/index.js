@@ -27,6 +27,11 @@ const links = [
     href: '/goods/list',
     icon: 'book'
   },
+  {
+    title: '书盒列表',
+    href: '/bookstack',
+    icon: 'book'
+  },
 ];
 
 const Index = memo(() => (

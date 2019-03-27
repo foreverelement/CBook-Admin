@@ -15,6 +15,7 @@ import {
   notification,
   Spin,
   Tag,
+  Badge,
   Checkbox
 } from 'antd';
 import DescriptionList from '@/components/DescriptionList';
@@ -108,7 +109,6 @@ class UpdateForm extends Component {
       ageType,
       languageType,
       publishDate: fieldsValue.publishDate.format('YYYY-MM-DD'),
-      status: fieldsValue.status ? 1 : 0,
     });
     return fieldsValue;
   }
@@ -431,7 +431,7 @@ class UpdateForm extends Component {
               label="是否上架该商品"
             >
               {form.getFieldDecorator('status', {
-                initialValue: !!data.status,
+                initialValue: data.status,
               })(<Checkbox />)}
             </FormItem>
           </Grid.Item>
@@ -567,6 +567,12 @@ class GoodDetail extends Component {
             </Description>
             <Description term="发布时间">
               {data.publishDate}
+            </Description>
+            <Description term="上下架状态">
+              <Badge
+                status={data.status ? 'success' : 'warning'}
+                text={data.status ? '已上架' : '已下架'}
+              />
             </Description>
           </DescriptionList>
           <DescriptionList size="large" col={1} style={{ marginBottom: 32 }}>

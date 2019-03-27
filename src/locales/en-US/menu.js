@@ -22,6 +22,7 @@ export default {
   'menu.goods': 'Good Manager',
   'menu.goods.goods-list': 'Good List',
   'menu.goods.goods-detail': 'Good Detail',
+  'menu.bookstack': 'Book Stack',
   'menu.list.basiclist': 'Basic List',
   'menu.list.cardlist': 'Card List',
   'menu.list.searchlist': 'Search List',

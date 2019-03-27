@@ -1,96 +1,142 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, memo, PureComponent } from 'react';
 import { connect } from 'dva';
-// import Link from 'umi/link';
-import router from 'umi/router';
-import { Row, Col, Card, Form, Input, Select, Button, Badge } from 'antd';
+import { Row, Col, Card, Form, Input, Select, Button, Modal } from 'antd';
+import Barcode from 'react-barcode';
+import ReactToPrint from 'react-to-print';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import styles from './List.less';
+import printIcon from '@/assets/print_icon.png';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const filterMap = [
   {
     key: 'name',
-    text: '图书名称'
+    text: '名称'
   },
   {
-    key: 'isbn',
-    text: 'isbn'
+    key: 'location',
+    text: '位置'
   },
   {
-    key: 'bookCode',
-    text: '图书编码'
-  },
-];
-const columns = [
-  {
-    title: '名称',
-    dataIndex: 'name',
+    key: 'caseCode',
+    text: 'caseCode'
   },
   {
-    title: '编码',
-    dataIndex: 'bookCode',
-  },
-  {
-    title: 'isbn',
-    dataIndex: 'isbn',
-  },
-  {
-    title: '作者',
-    dataIndex: 'author',
-  },
-  {
-    title: '出版社',
-    dataIndex: 'press',
-  },
-  {
-    title: '价格',
-    dataIndex: 'price',
-    sorter: (a, b) => a.price - b.price,
-    render(val) {
-      return `￥${val.toFixed(2)}`;
-    },
-  },
-  {
-    title: '销售价格',
-    dataIndex: 'sellPrice',
-    sorter: (a, b) => a.sellPrice - b.sellPrice,
-    render(val) {
-      return `￥${val.toFixed(2)}`;
-    },
-  },
-  {
-    title: '星币价格',
-    dataIndex: 'starPrice',
-    sorter: (a, b) => a.starPrice - b.starPrice,
-    render(val) {
-      return `￥${val.toFixed(2)}`;
-    },
+    key: 'cellCode',
+    text: 'cellCode'
   },
 ];
 
 const showTableTotal = total => `共${total}条数据`;
 const PAGE_SIZE = 10;
 
+const BarcodeForm = memo(props => {
+  let prentContent = null;
+  let printRef = null;
+  const { visible, handleModalVisible, value } = props;
+  const handlePrint = () => {
+    if (printRef) {
+      printRef.handlePrint();
+    }
+  };
+  return (
+    value &&
+    <Modal
+      destroyOnClose
+      title="打印条码"
+      visible={visible}
+      bodyStyle={{textAlign: 'center'}}
+      okText="打印"
+      onOk={handlePrint}
+      onCancel={() => handleModalVisible(false)}
+    >
+      <ReactToPrint
+        trigger={() => <Fragment />}
+        content={() => prentContent}
+        bodyClass={styles.printBody}
+        ref={el => {printRef = el}}
+      />
+      <div className={styles.printWrapper} ref={el => {prentContent = el}}>
+        <Barcode font="Arial" value={value} />
+        <div className={styles.printFooter}>
+          <img src={printIcon} alt="" />
+          <div className={styles.printFooterText}>
+            <p>关注：<strong>"星月童书绘本"</strong></p> {/*eslint-disable-line*/}
+            <p>公众号获取更多信息</p>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+});
+
 /* eslint react/no-multi-comp:0 */
-@connect(({ bookList, loading }) => ({
-  bookList,
-  loading: loading.models.bookList,
+@connect(({ bookStack, loading }) => ({
+  bookStack,
+  loading: loading.models.bookStack,
 }))
 @Form.create()
 class List extends PureComponent {
-  constructor(props) {
-    super(props);
+  state = {
+    searchKey: '',
+    searchValue: '',
+    printCode: '',
+    printModalVisible: false,
+    offset: 1,
+    limit: PAGE_SIZE,
+  };
 
-    this.state = {
-      searchKey: '',
-      searchValue: '',
-      offset: 1,
-      limit: PAGE_SIZE,
-    };
-  }
+  columns = [
+    {
+      title: 'id',
+      dataIndex: 'id',
+    },
+    {
+      title: '名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '位置',
+      dataIndex: 'location',
+    },
+    {
+      title: 'caseCode',
+      dataIndex: 'caseCode',
+      render: (text) =>
+        <Fragment>
+          <span>{text}</span>
+          <Button
+            type="primary"
+            size="small"
+            style={{marginLeft: 8}}
+            ghost
+            onClick={() => this.handlePrintCode(text)}
+          >
+            打印
+          </Button>
+        </Fragment>
+    },
+    {
+      title: 'cellCode',
+      dataIndex: 'cellCode',
+      render: (text) =>
+        <Fragment>
+          <span>{text}</span>
+          <Button
+            type="primary"
+            size="small"
+            style={{marginLeft: 8}}
+            ghost
+            onClick={() => this.handlePrintCode(text)}
+          >
+            打印
+          </Button>
+        </Fragment>
+    },
+  ];
 
   componentDidMount() {
     this.handleRefresh();
@@ -121,12 +167,19 @@ class List extends PureComponent {
     this.fetchOrders(searchKey, searchValue, pagination);
   };
 
-  handleRow = row => ({
-    // eslint-disable-next-line
-    onClick: event => {
-      router.push(`/books/detail/${row.bookCode}`);
-    },
-  });
+  handlePrintModalVisible = bool => {
+    this.setState({
+      printModalVisible: bool,
+    });
+  };
+
+  handlePrintCode(code) {
+    this.setState({
+      printCode: code,
+    }, () => {
+      this.handlePrintModalVisible(true);
+    });
+  }
 
   fetchOrders(searchKey, searchValue, offset) {
     const { dispatch } = this.props;
@@ -138,12 +191,11 @@ class List extends PureComponent {
       searchValue
     });
     dispatch({
-      type: 'bookList/fetchBooks',
+      type: 'bookStack/fetch',
       payload: {
         offset,
         limit,
         filter: !searchKey && !searchValue ? [] : [{key: searchKey, values: [searchValue]}],
-        sort: []
       },
     });
   }
@@ -156,7 +208,7 @@ class List extends PureComponent {
       <Form onSubmit={this.handleSearch}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="搜索图书" className="nowrap">
+            <FormItem label="搜索书盒" className="nowrap">
               {getFieldDecorator('searchValue')(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
@@ -196,9 +248,11 @@ class List extends PureComponent {
 
   render() {
     const {
-      bookList: { data },
+      bookStack: { data },
       loading,
     } = this.props;
+
+    const { printCode, printModalVisible } = this.state;
 
     data.pagination = {
       ...data.pagination,
@@ -208,28 +262,31 @@ class List extends PureComponent {
       showSizeChanger: false,
     };
 
+    const printMethods = {
+      handleModalVisible: this.handlePrintModalVisible,
+    };
+
     return (
-      <PageHeaderWrapper title="图书列表">
+      <PageHeaderWrapper title="书盒列表">
         <Card>
           <Fragment>
             <div className={styles.tableListForm}>
               { this.renderForm() }
             </div>
             <StandardTable
-              rowKey="bookCode"
+              rowKey="id"
               size="middle"
-              rowClassName={styles.orderTableRow}
               selectedRows={[]}
               showAlert={false}
               rowSelection={null}
               scroll={{x: 970}}
               loading={loading}
               data={data}
-              columns={columns}
-              onRow={this.handleRow}
+              columns={this.columns}
             />
           </Fragment>
         </Card>
+        <BarcodeForm {...printMethods} value={printCode} visible={printModalVisible} />
       </PageHeaderWrapper>
     );
   }
