@@ -432,7 +432,7 @@ class UpdateForm extends Component {
             >
               {form.getFieldDecorator('status', {
                 initialValue: data.status,
-              })(<Checkbox />)}
+              })(<Checkbox checked={data.status} />)}
             </FormItem>
           </Grid.Item>
         </Grid>

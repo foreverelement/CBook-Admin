@@ -25,12 +25,12 @@ const links = [
   {
     title: '商品管理',
     href: '/goods/list',
-    icon: 'book'
+    icon: 'shopping'
   },
   {
     title: '书盒列表',
     href: '/bookstack',
-    icon: 'book'
+    icon: 'inbox'
   },
 ];
 
