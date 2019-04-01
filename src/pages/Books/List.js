@@ -1,6 +1,5 @@
 import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
-// import Link from 'umi/link';
 import router from 'umi/router';
 import { Row, Col, Card, Form, Input, Select, Button, Badge } from 'antd';
 import StandardTable from '@/components/StandardTable';
@@ -10,6 +9,12 @@ import styles from './List.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const statusMap = {
+  1001: '图书入库',
+  1002: '图书上架',
+  1003: '图书卖出',
+  2000: '图书作废'
+};
 const filterMap = [
   {
     key: 'name',
@@ -22,6 +27,10 @@ const filterMap = [
   {
     key: 'bookCode',
     text: '图书编码'
+  },
+  {
+    key: 'status',
+    text: '图书状态'
   },
 ];
 const columns = [
@@ -40,6 +49,13 @@ const columns = [
   {
     title: '作者',
     dataIndex: 'author',
+  },
+  {
+    title: '图书状态',
+    dataIndex: 'status',
+    render(val) {
+      return statusMap[val];
+    }
   },
   {
     title: '出版社',
@@ -156,11 +172,6 @@ class List extends PureComponent {
       <Form onSubmit={this.handleSearch}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="搜索图书" className="nowrap">
-              {getFieldDecorator('searchValue')(<Input placeholder="请输入" allowClear />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
             <FormItem label="筛选条件" className="nowrap">
               {getFieldDecorator('searchKey')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -174,6 +185,11 @@ class List extends PureComponent {
                   ))}
                 </Select>
               )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="搜索图书" className="nowrap">
+              {getFieldDecorator('searchValue')(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

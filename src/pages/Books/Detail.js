@@ -80,6 +80,11 @@ class UpdateForm extends PureComponent {
             initialValue: data.press,
           })(<Input placeholder="请填写" />)}
         </FormItem>
+        <FormItem key="bookDesc" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书描述">
+          {form.getFieldDecorator('bookDesc', {
+            initialValue: data.bookDesc,
+          })(<Input placeholder="请填写" />)}
+        </FormItem>
         <FormItem
           key="sellPrice"
           labelCol={{ span: 5 }}
@@ -236,6 +241,7 @@ class BookDetail extends Component {
             <Description term="星币价格">￥{toFixed(data.starPrice)}</Description>
             <Description term="发布时间">{data.publishDate}</Description>
             <Description term="图书状态">{statusMap[data.status]}</Description>
+            <Description term="图书描述">{data.bookDesc}</Description>
           </DescriptionList>
           <Spin className={styles.spinner} spinning={loading} />
         </Card>
