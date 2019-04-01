@@ -9,6 +9,14 @@ import styles from './List.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const statusMap = [{
+  value: 1000,
+  text: '已上架',
+},
+{
+  value: 1001,
+  text: '未上架'
+}];
 const filterMap = [
   {
     key: 'name',
@@ -21,11 +29,7 @@ const filterMap = [
   {
     key: 'bookCode',
     text: '商品编码'
-  },
-  {
-    key: 'status',
-    text: '商品状态'
-  },
+  }
 ];
 const columns = [
   {
@@ -101,7 +105,8 @@ class List extends PureComponent {
     super(props);
 
     this.state = {
-      searchKey: '',
+      searchKey: 'name',
+      searchStatus: '',
       searchValue: '',
       offset: 1,
       limit: PAGE_SIZE,
@@ -117,24 +122,24 @@ class List extends PureComponent {
 
     const { form } = this.props;
     const formValues = form.getFieldsValue();
-    const { searchKey, searchValue } = formValues;
-    this.fetchOrders(searchKey, searchValue, 1);
+    const { searchKey, searchStatus, searchValue } = formValues;
+    this.fetchOrders(searchKey, searchStatus, searchValue, 1);
   };
 
   handleFormReset = () => {
     const { form } = this.props;
     form.resetFields();
-    this.fetchOrders('', '', 1);
+    this.fetchOrders('name','', '', 1);
   };
 
   handleRefresh = () => {
-    const { searchKey, searchValue, offset } = this.state;
-    this.fetchOrders(searchKey, searchValue, offset);
+    const { searchKey, searchStatus, searchValue, offset } = this.state;
+    this.fetchOrders(searchKey, searchStatus, searchValue, offset);
   };
 
   handlePageChange = pagination => {
-    const { searchKey, searchValue } = this.state;
-    this.fetchOrders(searchKey, searchValue, pagination);
+    const { searchKey, searchStatus, searchValue } = this.state;
+    this.fetchOrders(searchKey, searchStatus, searchValue, pagination);
   };
 
   handleRow = row => ({
@@ -144,13 +149,19 @@ class List extends PureComponent {
     },
   });
 
-  fetchOrders(searchKey, searchValue, offset) {
+  fetchOrders(searchKey, searchStatus, searchValue, offset) {
     const { dispatch } = this.props;
     const { limit } = this.state;
+    const filter = !searchValue ? [] : [{key: searchKey, values: [searchValue]}];
+
+    if (searchStatus) {
+      filter.push({ key: 'status', values: [searchStatus] });
+    }
 
     this.setState({
       offset,
       searchKey,
+      searchStatus,
       searchValue
     });
     dispatch({
@@ -158,7 +169,7 @@ class List extends PureComponent {
       payload: {
         offset,
         limit,
-        filter: !searchKey && !searchValue ? [] : [{key: searchKey, values: [searchValue]}],
+        filter,
         sort: []
       },
     });
@@ -168,16 +179,18 @@ class List extends PureComponent {
     const {
       form: { getFieldDecorator },
     } = this.props;
+
+    const { searchKey } = this.state;
+
     return (
       <Form onSubmit={this.handleSearch}>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+        <Row gutter={{ md: 4, lg: 12, xl: 24 }}>
+          <Col md={6} sm={24}>
             <FormItem label="筛选条件" className="nowrap">
-              {getFieldDecorator('searchKey')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value={0} key={0}>
-                    全部
-                  </Option>
+              {getFieldDecorator('searchKey', {
+                initialValue: searchKey
+              })(
+                <Select placeholder="请选择">
                   {filterMap.map(item => (
                     <Option value={item.key} key={item.key}>
                       {item.text}
@@ -187,12 +200,26 @@ class List extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
+            <FormItem label="上架状态" className="nowrap">
+              {getFieldDecorator('searchStatus')(
+                <Select placeholder="请选择">
+                  <Option value={0} key={0}>全部</Option>
+                  {statusMap.map(item => (
+                    <Option value={item.value} key={item.value}>
+                      {item.text}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={24}>
             <FormItem label="搜索商品" className="nowrap">
               {getFieldDecorator('searchValue')(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询
