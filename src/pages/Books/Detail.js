@@ -39,12 +39,12 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       loading: false,
-      statusList: Object.keys(statusMap).map(key => ({text: statusMap[key], value: Number(key)})),
-    }
+    };
+    this.statusList = Object.keys(statusMap).map(key => ({text: statusMap[key], value: Number(key)}));
   }
 
   render() {
-    const { loading, statusList } = this.state;
+    const { loading } = this.state;
     const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
@@ -122,7 +122,7 @@ class UpdateForm extends PureComponent {
             <Select placeholder="请选择" style={{ width: '100px' }}>
               <Option value="">请选择</Option>
               {
-                statusList.map(status => (
+                this.statusList.map(status => (
                   <Option key={status.value} value={status.value}>
                     {status.text}
                   </Option>

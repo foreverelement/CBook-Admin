@@ -195,7 +195,7 @@ class List extends PureComponent {
             </FormItem>
           </Col>
           <Col md={6} sm={24}>
-            <FormItem label="上架状态" className="nowrap">
+            <FormItem label="图书状态" className="nowrap">
               {getFieldDecorator('searchStatus')(
                 <Select placeholder="请选择">
                   <Option value={0} key={0}>全部</Option>

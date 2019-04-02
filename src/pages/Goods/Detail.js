@@ -30,9 +30,9 @@ const { Description } = DescriptionList;
 
 const toFixed = val => typeof val === 'number' ? val.toFixed(2) : val;
 
-const tagTypes = ['课外阅读', '亲子关系', '历史文学'];
+const tagTypes = ['科普/百科', '儿童文学', '婴儿读物', '励志/成长', '少儿英语', '幼儿启蒙', '智力开发'];
 const languageTypes = ['中文', '中文注音', '英文', '中英文'];
-const ageTypes = ['0-2岁', '3-5岁', '6-8岁', '8岁以上'];
+const ageTypes = ['0-2岁', '3-6岁', '7-10岁', '7-14岁'];
 
 class CheckTag extends PureComponent {
   constructor(props) {

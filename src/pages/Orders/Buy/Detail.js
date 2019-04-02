@@ -53,13 +53,13 @@ class UpdateOrderStatusForm extends PureComponent {
     super(props);
 
     this.state = {
-      orderStatusList: getOrderStatusList(),
       loading: false,
-    }
+    };
+    this.orderStatusList = getOrderStatusList();
   }
 
   render() {
-    const { orderStatusList, loading } = this.state;
+    const { loading } = this.state;
     const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
@@ -87,7 +87,7 @@ class UpdateOrderStatusForm extends PureComponent {
           })(
             <Select placeholder="请选择" style={{ width: '180px' }}>
               {
-                orderStatusList.map(status => (
+                this.orderStatusList.map(status => (
                   <Option key={status.value} value={status.value}>
                     {status.text}
                   </Option>

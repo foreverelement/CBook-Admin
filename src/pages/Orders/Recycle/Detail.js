@@ -63,7 +63,8 @@ const orderStatusMap = {
 const BOOK_STATUS_MAP = {
   1000: '待审核',
   1001: '审核通过',
-  2001: '审核不通过'
+  2001: '审核不通过',
+  1002: '书费到账'
 };
 
 const getOrderStatusList = () =>
@@ -186,13 +187,13 @@ class UpdateOrderStatusForm extends PureComponent {
     super(props);
 
     this.state = {
-      orderStatusList: getOrderStatusList(),
       loading: false,
-    }
+    };
+    this.orderStatusList = getOrderStatusList();
   }
 
   render() {
-    const { orderStatusList, loading } = this.state;
+    const { loading } = this.state;
     const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
@@ -220,7 +221,7 @@ class UpdateOrderStatusForm extends PureComponent {
           })(
             <Select placeholder="请选择" style={{ width: '180px' }}>
               {
-                orderStatusList.map(status => (
+                this.orderStatusList.map(status => (
                   <Option key={status.value} value={status.value}>
                     {status.text}
                   </Option>
@@ -241,7 +242,8 @@ class UpdateForm extends PureComponent {
 
     this.state = {
       loading: false,
-    }
+    };
+    this.bookStatusList = Object.keys(BOOK_STATUS_MAP).map(key => ({key: Number(key), text: BOOK_STATUS_MAP[key]}));
   }
 
   render() {
@@ -292,8 +294,11 @@ class UpdateForm extends PureComponent {
             initialValue: data.bookStatus,
           })(
             <Select placeholder="请选择" style={{ width: '120px' }}>
-              <Option value={1000}>待审核</Option>
-              <Option value={1001}>验收通过</Option>
+              {
+                this.bookStatusList.map(item =>
+                  <Option value={item.key} key={item.key}>{item.text}</Option>
+                )
+              }
             </Select>
           )}
         </FormItem>
