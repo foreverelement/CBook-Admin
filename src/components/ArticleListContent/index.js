@@ -1,7 +1,7 @@
-import React from 'react';
-import moment from 'moment';
-import { Avatar } from 'antd';
-import styles from './index.less';
+import React from 'react'
+import moment from 'moment'
+import { Avatar } from 'antd'
+import styles from './index.less'
 
 const ArticleListContent = ({ data: { content, updatedAt, avatar, owner, href } }) => (
   <div className={styles.listContent}>
@@ -12,6 +12,6 @@ const ArticleListContent = ({ data: { content, updatedAt, avatar, owner, href } 
       <em>{moment(updatedAt).format('YYYY-MM-DD HH:mm')}</em>
     </div>
   </div>
-);
+)
 
-export default ArticleListContent;
+export default ArticleListContent

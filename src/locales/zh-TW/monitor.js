@@ -14,5 +14,5 @@ export default {
   'app.monitor.waiting-for-implementation': 'Waiting for implementation',
   'app.monitor.popular-searches': '熱門搜索',
   'app.monitor.resource-surplus': '資源剩余',
-  'app.monitor.fund-surplus': '補貼資金剩余',
-};
+  'app.monitor.fund-surplus': '補貼資金剩余'
+}

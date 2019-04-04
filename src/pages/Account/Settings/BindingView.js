@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Icon, List } from 'antd';
+import React, { Component, Fragment } from 'react'
+import { formatMessage, FormattedMessage } from 'umi/locale'
+import { Icon, List } from 'antd'
 
 class BindingView extends Component {
   getData = () => [
@@ -10,9 +10,9 @@ class BindingView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.binding.bind" defaultMessage="Bind" />
-        </a>,
+        </a>
       ],
-      avatar: <Icon type="taobao" className="taobao" />,
+      avatar: <Icon type="taobao" className="taobao" />
     },
     {
       title: formatMessage({ id: 'app.settings.binding.alipay' }, {}),
@@ -20,9 +20,9 @@ class BindingView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.binding.bind" defaultMessage="Bind" />
-        </a>,
+        </a>
       ],
-      avatar: <Icon type="alipay" className="alipay" />,
+      avatar: <Icon type="alipay" className="alipay" />
     },
     {
       title: formatMessage({ id: 'app.settings.binding.dingding' }, {}),
@@ -30,11 +30,11 @@ class BindingView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.binding.bind" defaultMessage="Bind" />
-        </a>,
+        </a>
       ],
-      avatar: <Icon type="dingding" className="dingding" />,
-    },
-  ];
+      avatar: <Icon type="dingding" className="dingding" />
+    }
+  ]
 
   render() {
     return (
@@ -53,8 +53,8 @@ class BindingView extends Component {
           )}
         />
       </Fragment>
-    );
+    )
   }
 }
 
-export default BindingView;
+export default BindingView

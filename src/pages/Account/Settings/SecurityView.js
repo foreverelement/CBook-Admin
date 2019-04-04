@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { List } from 'antd';
+import React, { Component, Fragment } from 'react'
+import { formatMessage, FormattedMessage } from 'umi/locale'
+import { List } from 'antd'
 // import { getTimeDistance } from '@/utils/utils';
 
 const passwordStrength = {
@@ -19,8 +19,8 @@ const passwordStrength = {
       <FormattedMessage id="app.settings.security.weak" defaultMessage="Weak" />
       Weak
     </font>
-  ),
-};
+  )
+}
 
 class SecurityView extends Component {
   getData = () => [
@@ -35,8 +35,8 @@ class SecurityView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
-        </a>,
-      ],
+        </a>
+      ]
     },
     {
       title: formatMessage({ id: 'app.settings.security.phone' }, {}),
@@ -47,8 +47,8 @@ class SecurityView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
-        </a>,
-      ],
+        </a>
+      ]
     },
     {
       title: formatMessage({ id: 'app.settings.security.question' }, {}),
@@ -56,8 +56,8 @@ class SecurityView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.security.set" defaultMessage="Set" />
-        </a>,
-      ],
+        </a>
+      ]
     },
     {
       title: formatMessage({ id: 'app.settings.security.email' }, {}),
@@ -68,8 +68,8 @@ class SecurityView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.security.modify" defaultMessage="Modify" />
-        </a>,
-      ],
+        </a>
+      ]
     },
     {
       title: formatMessage({ id: 'app.settings.security.mfa' }, {}),
@@ -77,10 +77,10 @@ class SecurityView extends Component {
       actions: [
         <a>
           <FormattedMessage id="app.settings.security.bind" defaultMessage="Bind" />
-        </a>,
-      ],
-    },
-  ];
+        </a>
+      ]
+    }
+  ]
 
   render() {
     return (
@@ -95,8 +95,8 @@ class SecurityView extends Component {
           )}
         />
       </Fragment>
-    );
+    )
   }
 }
 
-export default SecurityView;
+export default SecurityView

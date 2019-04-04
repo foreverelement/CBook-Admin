@@ -7,7 +7,7 @@ module.exports = {
   autoHideHeader: false, // auto hide header
   fixSiderbar: true, // !/iPhone|iPod|Android/i.test(window.navigator.userAgent), // sticky siderbar
   menu: {
-    disableLocal: false,
+    disableLocal: false
   },
-  title: '星月童书',
-};
+  title: '星月童书'
+}

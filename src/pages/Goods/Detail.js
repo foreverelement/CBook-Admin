@@ -1,8 +1,8 @@
-import React, { Component, PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'dva';
-import router from 'umi/router';
-import moment from 'moment';
+import React, { Component, PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'dva'
+import router from 'umi/router'
+import moment from 'moment'
 import {
   Form,
   Input,
@@ -17,53 +17,60 @@ import {
   Tag,
   Badge,
   Checkbox
-} from 'antd';
-import DescriptionList from '@/components/DescriptionList';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import Grid from '@/components/Grid';
-import styles from './Detail.less';
+} from 'antd'
+import DescriptionList from '@/components/DescriptionList'
+import PageHeaderWrapper from '@/components/PageHeaderWrapper'
+import Grid from '@/components/Grid'
+import styles from './Detail.less'
 
-const { Item: FormItem } = Form;
-const { CheckableTag } = Tag;
-const { TextArea } = Input;
-const { Description } = DescriptionList;
+const { Item: FormItem } = Form
+const { CheckableTag } = Tag
+const { TextArea } = Input
+const { Description } = DescriptionList
 
-const toFixed = val => typeof val === 'number' ? val.toFixed(2) : val;
+const toFixed = val => (typeof val === 'number' ? val.toFixed(2) : val)
 
-const tagTypes = ['科普/百科', '儿童文学', '婴儿读物', '励志/成长', '少儿英语', '幼儿启蒙', '智力开发'];
-const languageTypes = ['中文', '中文注音', '英文', '中英文'];
-const ageTypes = ['0-2岁', '3-6岁', '7-10岁', '7-14岁'];
+const tagTypes = [
+  '科普/百科',
+  '儿童文学',
+  '婴儿读物',
+  '励志/成长',
+  '少儿英语',
+  '幼儿启蒙',
+  '智力开发'
+]
+const languageTypes = ['中文', '中文注音', '英文', '中英文']
+const ageTypes = ['0-2岁', '3-6岁', '7-10岁', '11-14岁']
 
 class CheckTag extends PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
 
-    const { checked } = this.props;
+    const { checked } = this.props
     this.state = {
       checked
-    };
+    }
   }
 
   handleChange = checked => {
-    const { onChange, children } = this.props;
-    this.setState({ checked });
-    onChange(checked, children);
-  };
+    const { onChange, children } = this.props
+    this.setState({ checked })
+    onChange(checked, children)
+  }
 
   render() {
-    const { checked } = this.state;
-    return <CheckableTag {...this.props} checked={checked} onChange={this.handleChange} />;
+    const { checked } = this.state
+    return <CheckableTag {...this.props} checked={checked} onChange={this.handleChange} />
   }
 }
 
 CheckTag.defaultProps = {
-  onChange: () => {},
-};
+  onChange: () => {}
+}
 
 CheckTag.propTypes = {
-  onChange: PropTypes.func,
-};
-
+  onChange: PropTypes.func
+}
 
 @Form.create()
 class UpdateForm extends Component {
@@ -73,34 +80,37 @@ class UpdateForm extends Component {
     imags: [],
     tags: [],
     ageType: [],
-    languageType: [],
-  };
+    languageType: []
+  }
 
   static getDerivedStateFromProps(props, state) {
-    const { loaded, data: { imags, tags, ageType, languageType } } = props;
+    const {
+      loaded,
+      data: { imags, tags, ageType, languageType }
+    } = props
     if (loaded !== state.loaded) {
       return {
         loaded,
         imags,
         tags,
         ageType,
-        languageType,
-      };
+        languageType
+      }
     }
-    return null;
+    return null
   }
 
   getFinalFieldsValue(fieldsValue) {
-    const { tags, ageType, languageType } = this.state;
-    const imags = [];
+    const { tags, ageType, languageType } = this.state
+    const imags = []
 
     // eslint-disable-next-line
     for (let key in fieldsValue) {
       if (/^imags[\d+]$/.test(key)) {
         if (fieldsValue[key]) {
-          imags.push(fieldsValue[key]);
+          imags.push(fieldsValue[key])
         }
-        delete fieldsValue[key]; // eslint-disable-line
+        delete fieldsValue[key] // eslint-disable-line
       }
     }
     Object.assign(fieldsValue, {
@@ -108,13 +118,13 @@ class UpdateForm extends Component {
       tags,
       ageType,
       languageType,
-      publishDate: fieldsValue.publishDate.format('YYYY-MM-DD'),
-    });
-    return fieldsValue;
+      publishDate: fieldsValue.publishDate.format('YYYY-MM-DD')
+    })
+    return fieldsValue
   }
 
   handleTagChange = (checked, text) => {
-    const { tags } = this.state;
+    const { tags } = this.state
     if (checked) {
       this.setState({
         tags: [...tags, text]
@@ -124,10 +134,10 @@ class UpdateForm extends Component {
         tags: tags.filter(item => item !== text)
       })
     }
-  };
+  }
 
   handleLangChange = (checked, text) => {
-    const { languageType } = this.state;
+    const { languageType } = this.state
     if (checked) {
       this.setState({
         languageType: [...languageType, text]
@@ -137,10 +147,10 @@ class UpdateForm extends Component {
         languageType: languageType.filter(item => item !== text)
       })
     }
-  };
+  }
 
   handleAgeChange = (checked, text) => {
-    const { ageType } = this.state;
+    const { ageType } = this.state
     if (checked) {
       this.setState({
         ageType: [...ageType, text]
@@ -150,44 +160,44 @@ class UpdateForm extends Component {
         ageType: ageType.filter(item => item !== text)
       })
     }
-  };
+  }
 
   handleReduce(index) {
-    const { imags } = this.state;
+    const { imags } = this.state
     this.setState({
-      imags: imags.filter((item, i) => index !== i),
+      imags: imags.filter((item, i) => index !== i)
     })
   }
 
   handleAdd() {
-    const { imags } = this.state;
+    const { imags } = this.state
     this.setState({
-      imags: [...imags, ''],
+      imags: [...imags, '']
     })
   }
 
   handleReset() {
     this.setState({
-      loaded: false,
+      loaded: false
     })
   }
 
   handleSubmit() {
-    const { form, handleUpdate, handleModalVisible } = this.props;
+    const { form, handleUpdate, handleModalVisible } = this.props
     form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      const newFieldsValue = this.getFinalFieldsValue(fieldsValue);
-      this.setState({ loading: true });
+      if (err) return
+      const newFieldsValue = this.getFinalFieldsValue(fieldsValue)
+      this.setState({ loading: true })
       handleUpdate(newFieldsValue).then(() => {
-        this.setState({ loading: false });
-        handleModalVisible(false);
+        this.setState({ loading: false })
+        handleModalVisible(false)
       })
-    });
+    })
   }
 
   render() {
-    const { loading, imags } = this.state;
-    const { visible, form, handleModalVisible, data } = this.props;
+    const { loading, imags } = this.state
+    const { visible, form, handleModalVisible, data } = this.props
 
     return (
       <Modal
@@ -202,14 +212,9 @@ class UpdateForm extends Component {
       >
         <Grid col={6} gutter={0}>
           <Grid.Item>
-            <FormItem
-              key="name"
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
-              label="书名"
-            >
+            <FormItem key="name" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="书名">
               {form.getFieldDecorator('name', {
-                initialValue: data.name,
+                initialValue: data.name
               })(<Input placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
@@ -221,21 +226,16 @@ class UpdateForm extends Component {
               label="售卖价格"
             >
               {form.getFieldDecorator('costPrice', {
-                initialValue: data.costPrice,
+                initialValue: data.costPrice
               })(<InputNumber min={0} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
         </Grid>
         <Grid col={6} gutter={0}>
           <Grid.Item>
-            <FormItem
-              key="author"
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
-              label="作者"
-            >
+            <FormItem key="author" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="作者">
               {form.getFieldDecorator('author', {
-                initialValue: data.author,
+                initialValue: data.author
               })(<Input placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
@@ -247,21 +247,16 @@ class UpdateForm extends Component {
               label="星币价格"
             >
               {form.getFieldDecorator('starPrice', {
-                initialValue: data.starPrice,
+                initialValue: data.starPrice
               })(<InputNumber min={0} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
         </Grid>
         <Grid col={6} gutter={0}>
           <Grid.Item>
-            <FormItem
-              key="press"
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
-              label="出版社"
-            >
+            <FormItem key="press" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="出版社">
               {form.getFieldDecorator('press', {
-                initialValue: data.press,
+                initialValue: data.press
               })(<Input placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
@@ -273,7 +268,7 @@ class UpdateForm extends Component {
               label="豆瓣评分"
             >
               {form.getFieldDecorator('doubanScore', {
-                initialValue: data.doubanScore,
+                initialValue: data.doubanScore
               })(<InputNumber min={0} max={5} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
@@ -287,7 +282,7 @@ class UpdateForm extends Component {
               label="商品图片"
             >
               {form.getFieldDecorator('smallImageUrl', {
-                initialValue: data.smallImageUrl,
+                initialValue: data.smallImageUrl
               })(<Input placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
@@ -299,39 +294,46 @@ class UpdateForm extends Component {
               label="发行日期"
             >
               {form.getFieldDecorator('publishDate', {
-                initialValue: moment(data.publishDate, 'YYYY-MM-DD'),
+                initialValue: moment(data.publishDate, 'YYYY-MM-DD')
               })(<DatePicker />)}
             </FormItem>
           </Grid.Item>
         </Grid>
-        {
-          imags.map((item, i) =>
-            <Grid col={6} gutter={0} key={`${item}${i}`}>
-              <Grid.Item>
-                <FormItem
-                  labelCol={{ span: 6 }}
-                  wrapperCol={{ span: 18 }}
-                  label={`插画${i+1}`}
-                  className={styles.picFormItem}
-                >
-                  {
-                    form.getFieldDecorator(`imags${i}`, {
-                      initialValue: item,
-                    })(<Input placeholder="请填写" />)
-                  }
-                  <span style={{marginLeft: 5}}>
-                    {
-                      i < imags.length - 1 ?
-                        <Button shape="circle" size="small" icon="minus" style={{verticalAlign: 'text-bottom'}} onClick={() => this.handleReduce(i)} />
-                        :
-                        <Button shape="circle" size="small" icon="plus" style={{verticalAlign: 'text-bottom'}} onClick={() => this.handleAdd(i)} />
-                    }
-                  </span>
-                </FormItem>
-              </Grid.Item>
-            </Grid>
-          )
-        }
+        {imags.map((item, i) => (
+          <Grid col={6} gutter={0} key={`${item}${i}`}>
+            <Grid.Item>
+              <FormItem
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 18 }}
+                label={`插画${i + 1}`}
+                className={styles.picFormItem}
+              >
+                {form.getFieldDecorator(`imags${i}`, {
+                  initialValue: item
+                })(<Input placeholder="请填写" />)}
+                <span style={{ marginLeft: 5 }}>
+                  {i < imags.length - 1 ? (
+                    <Button
+                      shape="circle"
+                      size="small"
+                      icon="minus"
+                      style={{ verticalAlign: 'text-bottom' }}
+                      onClick={() => this.handleReduce(i)}
+                    />
+                  ) : (
+                    <Button
+                      shape="circle"
+                      size="small"
+                      icon="plus"
+                      style={{ verticalAlign: 'text-bottom' }}
+                      onClick={() => this.handleAdd(i)}
+                    />
+                  )}
+                </span>
+              </FormItem>
+            </Grid.Item>
+          </Grid>
+        ))}
         <Grid col={6} gutter={0}>
           <Grid.Item>
             <FormItem
@@ -341,8 +343,8 @@ class UpdateForm extends Component {
               label="作者简介"
             >
               {form.getFieldDecorator('authorBrief', {
-                initialValue: data.authorBrief,
-              })(<TextArea style={{height: 120}} placeholder="请填写" />)}
+                initialValue: data.authorBrief
+              })(<TextArea style={{ height: 120 }} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
           <Grid.Item>
@@ -353,29 +355,23 @@ class UpdateForm extends Component {
               label="内容简介"
             >
               {form.getFieldDecorator('contentBrief', {
-                initialValue: data.contentBrief,
-              })(<TextArea style={{height: 120}} placeholder="请填写" />)}
+                initialValue: data.contentBrief
+              })(<TextArea style={{ height: 120 }} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
         </Grid>
         <Grid col={6} gutter={0}>
           <Grid.Item>
-            <FormItem
-              key="tags"
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
-              label="标签分类"
-            >
-              {
-                tagTypes.map(item =>
-                  <CheckTag
-                    checked={data.tags.includes(item)}
-                    key={item}
-                    onChange={this.handleTagChange}
-                  >
-                    {item}
-                  </CheckTag>)
-              }
+            <FormItem key="tags" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} label="标签分类">
+              {tagTypes.map(item => (
+                <CheckTag
+                  checked={data.tags.includes(item)}
+                  key={item}
+                  onChange={this.handleTagChange}
+                >
+                  {item}
+                </CheckTag>
+              ))}
             </FormItem>
           </Grid.Item>
         </Grid>
@@ -387,16 +383,15 @@ class UpdateForm extends Component {
               wrapperCol={{ span: 18 }}
               label="年龄分类"
             >
-              {
-                ageTypes.map(item =>
-                  <CheckTag
-                    checked={data.ageType.includes(item)}
-                    key={item}
-                    onChange={this.handleAgeChange}
-                  >
-                    {item}
-                  </CheckTag>)
-              }
+              {ageTypes.map(item => (
+                <CheckTag
+                  checked={data.ageType.includes(item)}
+                  key={item}
+                  onChange={this.handleAgeChange}
+                >
+                  {item}
+                </CheckTag>
+              ))}
             </FormItem>
           </Grid.Item>
         </Grid>
@@ -408,16 +403,15 @@ class UpdateForm extends Component {
               wrapperCol={{ span: 18 }}
               label="语言分类"
             >
-              {
-                languageTypes.map(item =>
-                  <CheckTag
-                    checked={data.languageType.includes(item)}
-                    key={item}
-                    onChange={this.handleLangChange}
-                  >
-                    {item}
-                  </CheckTag>)
-              }
+              {languageTypes.map(item => (
+                <CheckTag
+                  checked={data.languageType.includes(item)}
+                  key={item}
+                  onChange={this.handleLangChange}
+                >
+                  {item}
+                </CheckTag>
+              ))}
             </FormItem>
           </Grid.Item>
         </Grid>
@@ -427,17 +421,17 @@ class UpdateForm extends Component {
               key="status"
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
-              style={{marginBottom: 0}}
+              style={{ marginBottom: 0 }}
               label="是否上架该商品"
             >
               {form.getFieldDecorator('status', {
-                initialValue: data.status,
+                initialValue: data.status
               })(<Checkbox defaultChecked={data.status} />)}
             </FormItem>
           </Grid.Item>
         </Grid>
       </Modal>
-    );
+    )
   }
 }
 
@@ -448,80 +442,80 @@ class UpdateForm extends Component {
 }))
 class GoodDetail extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      updateModalVisible: false,
-    };
+      updateModalVisible: false
+    }
 
-    this.goodsId = null;
+    this.goodsId = null
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { goodsId },
-      },
-    } = this.props;
+        params: { goodsId }
+      }
+    } = this.props
 
-    this.goodsId = goodsId;
-    this.fetchGood(this.goodsId);
+    this.goodsId = goodsId
+    this.fetchGood(this.goodsId)
   }
 
   handleUpdateModalVisible = bool => {
     this.setState({
-      updateModalVisible: bool,
-    });
-  };
+      updateModalVisible: bool
+    })
+  }
 
   handleUpdate = fields => {
     return this.updateGood({
       ...fields,
       goodsId: this.goodsId
-    });
-  };
+    })
+  }
 
   fetchGood(goodsId) {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
 
     return dispatch({
       type: 'goodDetail/fetch',
       payload: {
-        goodsId,
+        goodsId
       }
     })
   }
 
   updateGood(payload) {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     return dispatch({
       type: 'goodDetail/update',
       payload,
       callback: () => {
         notification.success({
           message: '提示信息',
-          description: '更新成功！',
-        });
-      },
-    });
+          description: '更新成功！'
+        })
+      }
+    })
   }
 
   render() {
     const {
       goodDetail: { data },
       loading
-    } = this.props;
+    } = this.props
 
-    data.ageType = data.ageType || [];
-    data.languageType = data.languageType || [];
-    data.tags = data.tags || [];
-    data.imags = data.imags || [];
+    data.ageType = data.ageType || []
+    data.languageType = data.languageType || []
+    data.tags = data.tags || []
+    data.imags = data.imags || []
 
-    const { updateModalVisible } = this.state;
+    const { updateModalVisible } = this.state
     const updateMethods = {
       handleUpdate: this.handleUpdate,
-      handleModalVisible: this.handleUpdateModalVisible,
-    };
+      handleModalVisible: this.handleUpdateModalVisible
+    }
 
     return (
       <PageHeaderWrapper
@@ -551,23 +545,15 @@ class GoodDetail extends Component {
             <Description term="库存">{data.stockNumber}</Description>
             <Description term="豆瓣评分">{data.doubanScore}</Description>
             <Description term="标签分类">
-              {data.tags.map(item =>
-                item && <Tag key={item}>{item}</Tag>
-              )}
+              {data.tags.map(item => item && <Tag key={item}>{item}</Tag>)}
             </Description>
             <Description term="年龄分类">
-              {data.ageType.map(item =>
-                item && <Tag key={item}>{item}</Tag>
-              )}
+              {data.ageType.map(item => item && <Tag key={item}>{item}</Tag>)}
             </Description>
             <Description term="语言分类">
-              {data.languageType.map(item =>
-                item && <Tag key={item}>{item}</Tag>
-              )}
+              {data.languageType.map(item => item && <Tag key={item}>{item}</Tag>)}
             </Description>
-            <Description term="发布时间">
-              {data.publishDate}
-            </Description>
+            <Description term="发布时间">{data.publishDate}</Description>
             <Description term="上下架状态">
               <Badge
                 status={data.status ? 'success' : 'warning'}
@@ -576,10 +562,10 @@ class GoodDetail extends Component {
             </Description>
           </DescriptionList>
           <DescriptionList size="large" col={1} style={{ marginBottom: 32 }}>
-            <Description term="作者简介" style={{marginBottom: 10}}>
+            <Description term="作者简介" style={{ marginBottom: 10 }}>
               {data.authorBrief}
             </Description>
-            <Description term="商品简介" style={{marginBottom: 10}}>
+            <Description term="商品简介" style={{ marginBottom: 10 }}>
               {data.contentBrief}
             </Description>
             <Description term="商品图片" className={styles.break}>
@@ -591,26 +577,26 @@ class GoodDetail extends Component {
               />
             </Description>
             <Description term="插画" className={styles.break}>
-              {
-                data.imags.map((img, i) =>
-                  img &&
-                  <img
-                    className={styles.imageItem}
-                    key={`${img}${i}`}
-                    src={img}
-                    alt="商品插画"
-                    onClick={() => window.open(img)}
-                  />
-                )
-              }
+              {data.imags.map(
+                (img, i) =>
+                  img && (
+                    <img
+                      className={styles.imageItem}
+                      key={`${img}${i}`}
+                      src={img}
+                      alt="商品插画"
+                      onClick={() => window.open(img)}
+                    />
+                  )
+              )}
             </Description>
           </DescriptionList>
           <Spin className={styles.spinner} spinning={loading} />
         </Card>
         <UpdateForm data={data} {...updateMethods} loaded={!loading} visible={updateModalVisible} />
       </PageHeaderWrapper>
-    );
+    )
   }
 }
 
-export default GoodDetail;
+export default GoodDetail

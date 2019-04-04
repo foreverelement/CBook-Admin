@@ -34,5 +34,5 @@ export default {
   'validation.title.required': '请输入标题',
   'validation.date.required': '请选择起止日期',
   'validation.goal.required': '请输入目标描述',
-  'validation.standard.required': '请输入衡量标准',
-};
+  'validation.standard.required': '请输入衡量标准'
+}

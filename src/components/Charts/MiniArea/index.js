@@ -1,7 +1,7 @@
-import React from 'react';
-import { Chart, Axis, Tooltip, Geom } from 'bizcharts';
-import autoHeight from '../autoHeight';
-import styles from '../index.less';
+import React from 'react'
+import { Chart, Axis, Tooltip, Geom } from 'bizcharts'
+import autoHeight from '../autoHeight'
+import styles from '../index.less'
 
 @autoHeight()
 class MiniArea extends React.PureComponent {
@@ -17,32 +17,32 @@ class MiniArea extends React.PureComponent {
       line,
       xAxis,
       yAxis,
-      animate = true,
-    } = this.props;
+      animate = true
+    } = this.props
 
-    const padding = [36, 5, 30, 5];
+    const padding = [36, 5, 30, 5]
 
     const scaleProps = {
       x: {
         type: 'cat',
         range: [0, 1],
-        ...scale.x,
+        ...scale.x
       },
       y: {
         min: 0,
-        ...scale.y,
-      },
-    };
+        ...scale.y
+      }
+    }
 
     const tooltip = [
       'x*y',
       (x, y) => ({
         name: x,
-        value: y,
-      }),
-    ];
+        value: y
+      })
+    ]
 
-    const chartHeight = height + 54;
+    const chartHeight = height + 54
 
     return (
       <div className={styles.miniChart} style={{ height }}>
@@ -82,7 +82,7 @@ class MiniArea extends React.PureComponent {
                 tooltip={tooltip}
                 shape="smooth"
                 style={{
-                  fillOpacity: 1,
+                  fillOpacity: 1
                 }}
               />
               {line ? (
@@ -101,8 +101,8 @@ class MiniArea extends React.PureComponent {
           )}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default MiniArea;
+export default MiniArea

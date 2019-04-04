@@ -1,14 +1,14 @@
-import React, { PureComponent } from 'react';
-import { FormattedMessage, formatMessage } from 'umi/locale';
-import { Menu, Icon, Avatar, Tooltip } from 'antd';
-import HeaderSearch from '../HeaderSearch';
-import HeaderDropdown from '../HeaderDropdown';
-import SelectLang from '../SelectLang';
-import styles from './index.less';
+import React, { PureComponent } from 'react'
+import { FormattedMessage, formatMessage } from 'umi/locale'
+import { Menu, Icon, Avatar, Tooltip } from 'antd'
+import HeaderSearch from '../HeaderSearch'
+import HeaderDropdown from '../HeaderDropdown'
+import SelectLang from '../SelectLang'
+import styles from './index.less'
 
 export default class GlobalHeaderRight extends PureComponent {
   render() {
-    const { currentUser, onMenuClick, theme } = this.props;
+    const { currentUser, onMenuClick, theme } = this.props
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
         <Menu.Item key="userCenter">
@@ -25,10 +25,10 @@ export default class GlobalHeaderRight extends PureComponent {
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
         </Menu.Item>
       </Menu>
-    );
-    let className = styles.right;
+    )
+    let className = styles.right
     if (theme === 'dark') {
-      className = `${styles.right}  ${styles.dark}`;
+      className = `${styles.right}  ${styles.dark}`
     }
     return (
       <div className={className}>
@@ -38,13 +38,13 @@ export default class GlobalHeaderRight extends PureComponent {
           dataSource={[
             formatMessage({ id: 'component.globalHeader.search.example1' }),
             formatMessage({ id: 'component.globalHeader.search.example2' }),
-            formatMessage({ id: 'component.globalHeader.search.example3' }),
+            formatMessage({ id: 'component.globalHeader.search.example3' })
           ]}
           onSearch={value => {
-            console.log('input', value); // eslint-disable-line
+            console.log('input', value) // eslint-disable-line
           }}
           onPressEnter={value => {
-            console.log('enter', value); // eslint-disable-line
+            console.log('enter', value) // eslint-disable-line
           }}
         />
         <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
@@ -65,6 +65,6 @@ export default class GlobalHeaderRight extends PureComponent {
         </HeaderDropdown>
         <SelectLang className={styles.action} />
       </div>
-    );
+    )
   }
 }

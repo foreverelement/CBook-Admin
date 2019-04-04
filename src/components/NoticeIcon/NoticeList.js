@@ -1,9 +1,9 @@
-import React from 'react';
-import { Avatar, List, Skeleton } from 'antd';
-import classNames from 'classnames';
-import styles from './NoticeList.less';
+import React from 'react'
+import { Avatar, List, Skeleton } from 'antd'
+import classNames from 'classnames'
+import styles from './NoticeList.less'
 
-let ListElement = null;
+let ListElement = null
 
 export default function NoticeList({
   data = [],
@@ -20,7 +20,7 @@ export default function NoticeList({
   scrollToLoad = true,
   showClear = true,
   skeletonCount = 5,
-  skeletonProps = {},
+  skeletonProps = {}
 }) {
   if (data.length === 0) {
     return (
@@ -28,9 +28,9 @@ export default function NoticeList({
         {emptyImage ? <img src={emptyImage} alt="not found" /> : null}
         <div>{emptyText || locale.emptyText}</div>
       </div>
-    );
+    )
   }
-  const loadingList = Array.from({ length: loading ? skeletonCount : 0 }).map(() => ({ loading }));
+  const loadingList = Array.from({ length: loading ? skeletonCount : 0 }).map(() => ({ loading }))
   const LoadMore = loadedAll ? (
     <div className={classNames(styles.loadMore, styles.loadedAll)}>
       <span>{locale.loadedAll}</span>
@@ -39,21 +39,21 @@ export default function NoticeList({
     <div className={styles.loadMore} onClick={onLoadMore}>
       <span>{locale.loadMore}</span>
     </div>
-  );
+  )
   const onScroll = event => {
-    if (!scrollToLoad || loading || loadedAll) return;
-    if (typeof onLoadMore !== 'function') return;
-    const { currentTarget: t } = event;
+    if (!scrollToLoad || loading || loadedAll) return
+    if (typeof onLoadMore !== 'function') return
+    const { currentTarget: t } = event
     if (t.scrollHeight - t.scrollTop - t.clientHeight <= 40) {
-      onLoadMore(event);
-      ListElement = t;
+      onLoadMore(event)
+      ListElement = t
     }
-  };
+  }
   if (!visible && ListElement) {
     try {
-      ListElement.scrollTo(null, 0);
+      ListElement.scrollTo(null, 0)
     } catch (err) {
-      ListElement = null;
+      ListElement = null
     }
   }
   return (
@@ -61,8 +61,8 @@ export default function NoticeList({
       <List className={styles.list} loadMore={LoadMore} onScroll={onScroll}>
         {[...data, ...loadingList].map((item, i) => {
           const itemCls = classNames(styles.item, {
-            [styles.read]: item.read,
-          });
+            [styles.read]: item.read
+          })
           // eslint-disable-next-line no-nested-ternary
           const leftIcon = item.avatar ? (
             typeof item.avatar === 'string' ? (
@@ -70,7 +70,7 @@ export default function NoticeList({
             ) : (
               <span className={styles.iconElement}>{item.avatar}</span>
             )
-          ) : null;
+          ) : null
 
           return (
             <List.Item className={itemCls} key={item.key || i} onClick={() => onClick(item)}>
@@ -95,7 +95,7 @@ export default function NoticeList({
                 />
               </Skeleton>
             </List.Item>
-          );
+          )
         })}
       </List>
       {showClear ? (
@@ -104,5 +104,5 @@ export default function NoticeList({
         </div>
       ) : null}
     </div>
-  );
+  )
 }

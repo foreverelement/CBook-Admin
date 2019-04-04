@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import { formatMessage } from 'umi/locale';
-import { Switch, List } from 'antd';
+import React, { Component, Fragment } from 'react'
+import { formatMessage } from 'umi/locale'
+import { Switch, List } from 'antd'
 
 class NotificationView extends Component {
   getData = () => {
@@ -10,25 +10,25 @@ class NotificationView extends Component {
         unCheckedChildren={formatMessage({ id: 'app.settings.close' })}
         defaultChecked
       />
-    );
+    )
     return [
       {
         title: formatMessage({ id: 'app.settings.notification.password' }, {}),
         description: formatMessage({ id: 'app.settings.notification.password-description' }, {}),
-        actions: [Action],
+        actions: [Action]
       },
       {
         title: formatMessage({ id: 'app.settings.notification.messages' }, {}),
         description: formatMessage({ id: 'app.settings.notification.messages-description' }, {}),
-        actions: [Action],
+        actions: [Action]
       },
       {
         title: formatMessage({ id: 'app.settings.notification.todo' }, {}),
         description: formatMessage({ id: 'app.settings.notification.todo-description' }, {}),
-        actions: [Action],
-      },
-    ];
-  };
+        actions: [Action]
+      }
+    ]
+  }
 
   render() {
     return (
@@ -43,8 +43,8 @@ class NotificationView extends Component {
           )}
         />
       </Fragment>
-    );
+    )
   }
 }
 
-export default NotificationView;
+export default NotificationView

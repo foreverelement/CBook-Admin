@@ -1,7 +1,7 @@
-import React from 'react';
-import { Tooltip } from 'antd';
+import React from 'react'
+import { Tooltip } from 'antd'
 
-import styles from './index.less';
+import styles from './index.less'
 
 const MiniProgress = ({ target, color = 'rgb(19, 194, 194)', strokeWidth, percent }) => (
   <div className={styles.miniProgress}>
@@ -17,11 +17,11 @@ const MiniProgress = ({ target, color = 'rgb(19, 194, 194)', strokeWidth, percen
         style={{
           backgroundColor: color || null,
           width: percent ? `${percent}%` : null,
-          height: strokeWidth || null,
+          height: strokeWidth || null
         }}
       />
     </div>
   </div>
-);
+)
 
-export default MiniProgress;
+export default MiniProgress

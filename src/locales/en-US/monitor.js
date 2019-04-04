@@ -14,5 +14,5 @@ export default {
   'app.monitor.waiting-for-implementation': 'Waiting for implementation',
   'app.monitor.popular-searches': 'Popular Searches',
   'app.monitor.resource-surplus': 'Resource Surplus',
-  'app.monitor.fund-surplus': 'Fund Surplus',
-};
+  'app.monitor.fund-surplus': 'Fund Surplus'
+}

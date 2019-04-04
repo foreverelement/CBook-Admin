@@ -32,5 +32,5 @@ export default {
   'validation.confirm-password.required': 'Por favor confirme sua senha!',
   'validation.phone-number.required': 'Por favor insira seu telefone!',
   'validation.phone-number.wrong-format': 'Formato de telefone errado!',
-  'validation.verification-code.required': 'Por favor insira seu código de verificação!',
-};
+  'validation.verification-code.required': 'Por favor insira seu código de verificação!'
+}

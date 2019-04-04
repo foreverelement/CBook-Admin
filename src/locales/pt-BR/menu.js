@@ -34,5 +34,5 @@ export default {
   'menu.account.center': 'Central da Conta',
   'menu.account.settings': 'Configurar Conta',
   'menu.account.trigger': 'Disparar Erro',
-  'menu.account.logout': 'Sair',
-};
+  'menu.account.logout': 'Sair'
+}

@@ -24,5 +24,5 @@ export default {
   'app.result.success.step4-title': 'Terminar',
   'app.result.success.btn-return': 'Voltar a lista',
   'app.result.success.btn-project': 'Ver projeto',
-  'app.result.success.btn-print': 'imprimir',
-};
+  'app.result.success.btn-print': 'imprimir'
+}

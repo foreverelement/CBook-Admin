@@ -1,9 +1,9 @@
-import React from 'react';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Button } from 'antd';
-import Link from 'umi/link';
-import Result from '@/components/Result';
-import styles from './RegisterResult.less';
+import React from 'react'
+import { formatMessage, FormattedMessage } from 'umi/locale'
+import { Button } from 'antd'
+import Link from 'umi/link'
+import Result from '@/components/Result'
+import styles from './RegisterResult.less'
 
 const actions = (
   <div className={styles.actions}>
@@ -18,7 +18,7 @@ const actions = (
       </Button>
     </Link>
   </div>
-);
+)
 
 const RegisterResult = ({ location }) => (
   <Result
@@ -36,6 +36,6 @@ const RegisterResult = ({ location }) => (
     actions={actions}
     style={{ marginTop: 56 }}
   />
-);
+)
 
-export default RegisterResult;
+export default RegisterResult

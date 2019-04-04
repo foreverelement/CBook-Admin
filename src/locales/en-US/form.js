@@ -34,5 +34,5 @@ export default {
   'form.publicUsers.placeholder': 'Open to',
   'form.publicUsers.option.A': 'Colleague A',
   'form.publicUsers.option.B': 'Colleague B',
-  'form.publicUsers.option.C': 'Colleague C',
-};
+  'form.publicUsers.option.C': 'Colleague C'
+}

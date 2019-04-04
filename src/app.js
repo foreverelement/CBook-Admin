@@ -3,35 +3,35 @@
 export const dva = {
   config: {
     onError(err) {
-      err.preventDefault();
-    },
-  },
-};
+      err.preventDefault()
+    }
+  }
+}
 
-let authRoutes = {};
+let authRoutes = {}
 
 function ergodicRoutes(routes, authKey, authority) {
   routes.forEach(element => {
     if (element.path === authKey) {
-      if (!element.authority) element.authority = []; // eslint-disable-line
-      Object.assign(element.authority, authority || []);
+      if (!element.authority) element.authority = [] // eslint-disable-line
+      Object.assign(element.authority, authority || [])
     } else if (element.routes) {
-      ergodicRoutes(element.routes, authKey, authority);
+      ergodicRoutes(element.routes, authKey, authority)
     }
-    return element;
-  });
+    return element
+  })
 }
 
 export function patchRoutes(routes) {
   Object.keys(authRoutes).map(authKey =>
     ergodicRoutes(routes, authKey, authRoutes[authKey].authority)
-  );
-  window.g_routes = routes;
+  )
+  window.g_routes = routes
 }
 
 export function render(oldRender) {
-  authRoutes = {"/form/advanced-form":{"authority":["admin","user"]}};
-  oldRender();
+  authRoutes = { '/form/advanced-form': { authority: ['admin', 'user'] } }
+  oldRender()
   // fetch('/api/auth_routes')
   //   .then(res => res.json())
   //   .then(

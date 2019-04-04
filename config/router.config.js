@@ -7,8 +7,8 @@ export default [
       { path: '/user', redirect: '/user/login' },
       { path: '/user/login', component: './User/Login' },
       { path: '/user/register', component: './User/Register' },
-      { path: '/user/register-result', component: './User/RegisterResult' },
-    ],
+      { path: '/user/register-result', component: './User/RegisterResult' }
+    ]
   },
   // app
   {
@@ -33,31 +33,31 @@ export default [
         routes: [
           {
             path: '/orders',
-            redirect: '/orders/recycle/list',
+            redirect: '/orders/recycle/list'
           },
           {
             path: '/orders/recycle/list',
             name: 'recycle-list',
-            component: './Orders/Recycle/List',
+            component: './Orders/Recycle/List'
           },
           {
             path: '/orders/recycle/detail/:orderCode',
             name: 'recycle-detail',
             hideInMenu: true,
-            component: './Orders/Recycle/Detail',
+            component: './Orders/Recycle/Detail'
           },
           {
             path: '/orders/buy/list',
             name: 'buy-list',
-            component: './Orders/Buy/List',
+            component: './Orders/Buy/List'
           },
           {
             path: '/orders/buy/detail/:orderCode',
             name: 'buy-detail',
             hideInMenu: true,
-            component: './Orders/Buy/Detail',
-          },
-        ],
+            component: './Orders/Buy/Detail'
+          }
+        ]
       },
       // books
       {
@@ -104,8 +104,8 @@ export default [
         component: './BookStack/List'
       },
       {
-        component: '404',
-      },
-    ],
-  },
-];
+        component: '404'
+      }
+    ]
+  }
+]

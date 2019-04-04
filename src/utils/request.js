@@ -1,7 +1,7 @@
-import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import fetch from 'dva/fetch'
+import { notification } from 'antd'
 
-const serverUrl = process.env.NODE_ENV !== 'production' ? '/api' : 'https://www.muyin.com/serverapi';
+const serverUrl = process.env.NODE_ENV !== 'production' ? '/api' : 'https://www.muyin.com/serverapi'
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -17,38 +17,38 @@ const codeMessage = {
   500: '服务器发生错误，请检查服务器。',
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
-  504: '网关超时。',
-};
+  504: '网关超时。'
+}
 
 const getToken = () =>
   // eslint-disable-next-line
-  window.g_app._store.getState().login.token || localStorage.getItem('__TOKEN');
+  window.g_app._store.getState().login.token || localStorage.getItem('__TOKEN')
 
 const parseParams = (params = {}) => {
   const result = Object.keys(params).map(key => {
-    if (params[key] === undefined) return '';
-    return `${key}=${encodeURIComponent(params[key])}`;
-  });
-  return result.join('&');
-};
+    if (params[key] === undefined) return ''
+    return `${key}=${encodeURIComponent(params[key])}`
+  })
+  return result.join('&')
+}
 
 const logout = () => {
   /* eslint-disable no-underscore-dangle */
   window.g_app._store.dispatch({
-    type: 'login/logout',
-  });
-};
+    type: 'login/logout'
+  })
+}
 
 const checkStatus = response => {
   if (response.status >= 200 && response.status < 300) {
-    return response;
+    return response
   }
-  const errortext = codeMessage[response.status] || response.statusText;
-  const error = new Error(errortext);
-  error.name = response.status;
-  error.response = response;
-  throw error;
-};
+  const errortext = codeMessage[response.status] || response.statusText
+  const error = new Error(errortext)
+  error.name = response.status
+  error.response = response
+  throw error
+}
 
 /**
  * Requests a URL, returning a promise.
@@ -61,10 +61,10 @@ export default function request(url, options = {}) {
   const defaultOptions = {
     // credentials: 'include',
     headers: {
-      token: getToken(),
-    },
-  };
-  const newOptions = { ...defaultOptions, ...options };
+      token: getToken()
+    }
+  }
+  const newOptions = { ...defaultOptions, ...options }
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||
@@ -73,31 +73,31 @@ export default function request(url, options = {}) {
     if (newOptions.body instanceof FormData) {
       newOptions.headers = {
         Accept: 'application/json',
-        ...newOptions.headers,
-      };
+        ...newOptions.headers
+      }
     } else {
       newOptions.headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        ...newOptions.headers,
-      };
-      newOptions.body = JSON.stringify(newOptions.body);
+        ...newOptions.headers
+      }
+      newOptions.body = JSON.stringify(newOptions.body)
     }
   } else if (newOptions.method === 'GET' && newOptions.body) {
-    const params = parseParams(newOptions.body);
+    const params = parseParams(newOptions.body)
     if (params) {
       if (url.indexOf('?') > -1) {
         /* eslint-disable-next-line */
-        url += `&${params}`;
+        url += `&${params}`
       } else {
         /* eslint-disable-next-line */
-        url += `?${params}`;
+        url += `?${params}`
       }
     }
-    delete newOptions.body;
+    delete newOptions.body
   }
 
-  const reqUrl = /^https?:\/\//.test(url) ? url : `${serverUrl}${url}`;
+  const reqUrl = /^https?:\/\//.test(url) ? url : `${serverUrl}${url}`
 
   return fetch(reqUrl, newOptions)
     .then(checkStatus)
@@ -105,38 +105,38 @@ export default function request(url, options = {}) {
       // DELETE and 204 do not return data by default
       // using .json will report an error.
       if (newOptions.method === 'DELETE' || response.status === 204) {
-        return response.text();
+        return response.text()
       }
-      return response.json();
+      return response.json()
     })
     .then(response => {
       if (response.code === 0) {
-        return response.datas;
+        return response.datas
       }
       if (response.code === 98) {
         // token过期
-        logout();
+        logout()
       } else {
         notification.error({
           message: `提示信息`,
-          description: response.msg,
-        });
+          description: response.msg
+        })
       }
-      return undefined;
+      return undefined
     })
     .catch(e => {
-      const status = e.name;
+      const status = e.name
       if (status === 401) {
-        logout();
+        logout()
       } else {
         notification.error({
           message: `请求错误 ${status}: ${url}`,
-          description: e.message || e.stack,
-        });
+          description: e.message || e.stack
+        })
       }
-    });
+    })
 }
 
-request.get = (url, body) => request(url, { body, method: 'GET' });
+request.get = (url, body) => request(url, { body, method: 'GET' })
 
-request.post = (url, body) => request(url, { body, method: 'POST' });
+request.post = (url, body) => request(url, { body, method: 'POST' })

@@ -30,5 +30,5 @@ export default {
   'app.analysis.table.rank': '排名',
   'app.analysis.table.search-keyword': '搜索關鍵詞',
   'app.analysis.table.users': '用戶數',
-  'app.analysis.table.weekly-range': '周漲幅',
-};
+  'app.analysis.table.weekly-range': '周漲幅'
+}

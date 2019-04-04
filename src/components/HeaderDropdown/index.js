@@ -1,13 +1,17 @@
-import React, { PureComponent } from 'react';
-import { Dropdown } from 'antd';
-import classNames from 'classnames';
-import styles from './index.less';
+import React, { PureComponent } from 'react'
+import { Dropdown } from 'antd'
+import classNames from 'classnames'
+import styles from './index.less'
 
 export default class HeaderDropdown extends PureComponent {
   render() {
-    const { overlayClassName, ...props } = this.props;
+    const { overlayClassName, ...props } = this.props
     return (
-      <Dropdown overlayClassName={classNames(styles.container, overlayClassName)} trigger={['click','hover']} {...props} />
-    );
+      <Dropdown
+        overlayClassName={classNames(styles.container, overlayClassName)}
+        trigger={['click', 'hover']}
+        {...props}
+      />
+    )
   }
 }

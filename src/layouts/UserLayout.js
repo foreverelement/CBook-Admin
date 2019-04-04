@@ -1,18 +1,18 @@
-import React, { Fragment, memo } from 'react';
-import DocumentTitle from 'react-document-title';
-import Link from 'umi/link';
-import { Icon } from 'antd';
-import GlobalFooter from '@/components/GlobalFooter';
-import SelectLang from '@/components/SelectLang';
-import { title } from '../defaultSettings';
-import styles from './UserLayout.less';
-import logo from '../assets/logo.png';
+import React, { Fragment, memo } from 'react'
+import DocumentTitle from 'react-document-title'
+import Link from 'umi/link'
+import { Icon } from 'antd'
+import GlobalFooter from '@/components/GlobalFooter'
+import SelectLang from '@/components/SelectLang'
+import { title } from '../defaultSettings'
+import styles from './UserLayout.less'
+import logo from '../assets/logo.png'
 
 const copyright = (
   <Fragment>
     Copyright <Icon type="copyright" /> 2019 {title}
   </Fragment>
-);
+)
 
 const UserLayout = memo(({ children }) => (
   <DocumentTitle title={`登录 - ${title}`}>
@@ -35,6 +35,6 @@ const UserLayout = memo(({ children }) => (
       <GlobalFooter copyright={copyright} />
     </div>
   </DocumentTitle>
-));
+))
 
-export default UserLayout;
+export default UserLayout

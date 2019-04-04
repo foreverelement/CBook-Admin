@@ -1,21 +1,21 @@
-import React, { createElement, PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import router from 'umi/router';
-import { Button, Icon } from 'antd';
-import styles from './index.less';
-import CustomIcon from '@/icons';
+import React, { createElement, PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import router from 'umi/router'
+import { Button, Icon } from 'antd'
+import styles from './index.less'
+import CustomIcon from '@/icons'
 
 class EditableLinkGroup extends PureComponent {
   static propTypes = {
-    links: PropTypes.array,
-  };
+    links: PropTypes.array
+  }
 
   static defaultProps = {
-    links: [],
-  };
+    links: []
+  }
 
   render() {
-    const { links } = this.props;
+    const { links } = this.props
     return (
       <div className={styles.linkGroup}>
         {links.map(link => (
@@ -28,14 +28,14 @@ class EditableLinkGroup extends PureComponent {
           >
             {createElement(link.custom ? CustomIcon : Icon, {
               type: link.icon,
-              style: { fontSize: 18 },
+              style: { fontSize: 18 }
             })}
             {link.title}
           </Button>
         ))}
       </div>
-    );
+    )
   }
 }
 
-export default EditableLinkGroup;
+export default EditableLinkGroup

@@ -1,7 +1,7 @@
-import React, { Component, PureComponent } from 'react';
-import { connect } from 'dva';
-import router from 'umi/router';
-import moment from 'moment';
+import React, { Component, PureComponent } from 'react'
+import { connect } from 'dva'
+import router from 'umi/router'
+import moment from 'moment'
 import {
   Form,
   Input,
@@ -13,49 +13,52 @@ import {
   Modal,
   Spin,
   Select,
-  notification,
-} from 'antd';
-import DescriptionList from '@/components/DescriptionList';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './Detail.less';
+  notification
+} from 'antd'
+import DescriptionList from '@/components/DescriptionList'
+import PageHeaderWrapper from '@/components/PageHeaderWrapper'
+import styles from './Detail.less'
 
-const { Item: FormItem } = Form;
-const { Description } = DescriptionList;
-const { Option } = Select;
+const { Item: FormItem } = Form
+const { Description } = DescriptionList
+const { Option } = Select
 
 const statusMap = {
   1001: '入库',
   1002: '上架',
   1003: '卖出',
-  2000: '作废',
-};
+  2000: '作废'
+}
 
-const toFixed = val => typeof val === 'number' ? val.toFixed(2) : val;
+const toFixed = val => (typeof val === 'number' ? val.toFixed(2) : val)
 
 @Form.create()
 class UpdateForm extends PureComponent {
-  constructor (props) {
-    super(props);
+  constructor(props) {
+    super(props)
 
     this.state = {
-      loading: false,
-    };
-    this.statusList = Object.keys(statusMap).map(key => ({text: statusMap[key], value: Number(key)}));
+      loading: false
+    }
+    this.statusList = Object.keys(statusMap).map(key => ({
+      text: statusMap[key],
+      value: Number(key)
+    }))
   }
 
   render() {
-    const { loading } = this.state;
-    const { visible, form, handleUpdate, handleModalVisible, data } = this.props;
+    const { loading } = this.state
+    const { visible, form, handleUpdate, handleModalVisible, data } = this.props
     const okHandle = () => {
       form.validateFields((err, fieldsValue) => {
-        if (err) return;
-        this.setState({ loading: true });
+        if (err) return
+        this.setState({ loading: true })
         handleUpdate(fieldsValue).then(() => {
-          this.setState({ loading: false });
-          handleModalVisible(false);
-        });
-      });
-    };
+          this.setState({ loading: false })
+          handleModalVisible(false)
+        })
+      })
+    }
     return (
       <Modal
         destroyOnClose
@@ -67,42 +70,32 @@ class UpdateForm extends PureComponent {
       >
         <FormItem key="name" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="书名">
           {form.getFieldDecorator('name', {
-            initialValue: data.name,
+            initialValue: data.name
           })(<Input placeholder="请填写" />)}
         </FormItem>
         <FormItem key="author" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="作者">
           {form.getFieldDecorator('author', {
-            initialValue: data.author,
+            initialValue: data.author
           })(<Input placeholder="请填写" />)}
         </FormItem>
         <FormItem key="press" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="出版社">
           {form.getFieldDecorator('press', {
-            initialValue: data.press,
+            initialValue: data.press
           })(<Input placeholder="请填写" />)}
         </FormItem>
         <FormItem key="bookDesc" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书描述">
           {form.getFieldDecorator('bookDesc', {
-            initialValue: data.bookDesc,
+            initialValue: data.bookDesc
           })(<Input placeholder="请填写" />)}
         </FormItem>
-        <FormItem
-          key="sellPrice"
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 15 }}
-          label="售卖价格"
-        >
+        <FormItem key="sellPrice" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="售卖价格">
           {form.getFieldDecorator('sellPrice', {
-            initialValue: data.sellPrice,
+            initialValue: data.sellPrice
           })(<InputNumber min={0} placeholder="请填写" />)}
         </FormItem>
-        <FormItem
-          key="starPrice"
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 15 }}
-          label="星币价格"
-        >
+        <FormItem key="starPrice" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="星币价格">
           {form.getFieldDecorator('starPrice', {
-            initialValue: data.starPrice,
+            initialValue: data.starPrice
           })(<InputNumber min={0} placeholder="请填写" />)}
         </FormItem>
         <FormItem
@@ -112,27 +105,25 @@ class UpdateForm extends PureComponent {
           label="发行日期"
         >
           {form.getFieldDecorator('publishDate', {
-            initialValue: moment(data.publishDate, 'YYYY-MM-DD'),
+            initialValue: moment(data.publishDate, 'YYYY-MM-DD')
           })(<DatePicker />)}
         </FormItem>
         <FormItem key="status" labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图书状态">
           {form.getFieldDecorator('status', {
-            initialValue: data.status,
+            initialValue: data.status
           })(
             <Select placeholder="请选择" style={{ width: '100px' }}>
               <Option value="">请选择</Option>
-              {
-                this.statusList.map(status => (
-                  <Option key={status.value} value={status.value}>
-                    {status.text}
-                  </Option>
-                ))
-              }
+              {this.statusList.map(status => (
+                <Option key={status.value} value={status.value}>
+                  {status.text}
+                </Option>
+              ))}
             </Select>
           )}
         </FormItem>
       </Modal>
-    );
+    )
   }
 }
 
@@ -143,76 +134,76 @@ class UpdateForm extends PureComponent {
 }))
 class BookDetail extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      updateModalVisible: false,
-    };
+      updateModalVisible: false
+    }
 
-    this.bookCode = null;
+    this.bookCode = null
   }
 
   componentDidMount() {
     const {
       match: {
-        params: { bookCode },
-      },
-    } = this.props;
+        params: { bookCode }
+      }
+    } = this.props
 
-    this.bookCode = bookCode;
-    this.fetchOrder(this.bookCode);
+    this.bookCode = bookCode
+    this.fetchOrder(this.bookCode)
   }
 
   handleUpdateModalVisible = bool => {
     this.setState({
-      updateModalVisible: bool,
-    });
-  };
+      updateModalVisible: bool
+    })
+  }
 
   handleUpdate = fields => {
     return this.updateOrder({
       ...fields,
       publishDate: fields.publishDate.format('YYYY-MM-DD'),
       bookCode: this.bookCode
-    });
-  };
+    })
+  }
 
   fetchOrder(bookCode) {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
 
     return dispatch({
       type: 'bookDetail/fetch',
       payload: {
-        bookCode,
+        bookCode
       }
     })
   }
 
   updateOrder(payload) {
-    const { dispatch } = this.props;
+    const { dispatch } = this.props
     return dispatch({
       type: 'bookDetail/update',
       payload,
       callback: () => {
         notification.success({
           message: '提示信息',
-          description: '更新成功！',
-        });
-      },
-    });
+          description: '更新成功！'
+        })
+      }
+    })
   }
 
   render() {
     const {
       bookDetail: { data },
       loading
-    } = this.props;
+    } = this.props
 
-    const { updateModalVisible } = this.state;
+    const { updateModalVisible } = this.state
     const updateMethods = {
       handleUpdate: this.handleUpdate,
-      handleModalVisible: this.handleUpdateModalVisible,
-    };
+      handleModalVisible: this.handleUpdateModalVisible
+    }
 
     return (
       <PageHeaderWrapper
@@ -247,8 +238,8 @@ class BookDetail extends Component {
         </Card>
         <UpdateForm data={data} {...updateMethods} visible={updateModalVisible} />
       </PageHeaderWrapper>
-    );
+    )
   }
 }
 
-export default BookDetail;
+export default BookDetail

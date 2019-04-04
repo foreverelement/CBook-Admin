@@ -30,5 +30,5 @@ export default {
   'app.analysis.table.rank': 'Rank',
   'app.analysis.table.search-keyword': 'Keyword',
   'app.analysis.table.users': 'Users',
-  'app.analysis.table.weekly-range': 'Weekly Range',
-};
+  'app.analysis.table.weekly-range': 'Weekly Range'
+}

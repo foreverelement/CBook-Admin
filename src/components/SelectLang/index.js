@@ -1,31 +1,31 @@
-import React, { PureComponent } from 'react';
-import { formatMessage, setLocale, getLocale } from 'umi/locale';
-import { Menu, Icon } from 'antd';
-import classNames from 'classnames';
-import HeaderDropdown from '../HeaderDropdown';
-import styles from './index.less';
+import React, { PureComponent } from 'react'
+import { formatMessage, setLocale, getLocale } from 'umi/locale'
+import { Menu, Icon } from 'antd'
+import classNames from 'classnames'
+import HeaderDropdown from '../HeaderDropdown'
+import styles from './index.less'
 
 export default class SelectLang extends PureComponent {
   changeLang = ({ key }) => {
-    setLocale(key);
-  };
+    setLocale(key)
+  }
 
   render() {
-    const { className } = this.props;
-    const selectedLang = getLocale();
-    const locales = ['zh-CN', 'zh-TW', 'en-US', 'pt-BR'];
+    const { className } = this.props
+    const selectedLang = getLocale()
+    const locales = ['zh-CN', 'zh-TW', 'en-US', 'pt-BR']
     const languageLabels = {
       'zh-CN': '简体中文',
       'zh-TW': '繁体中文',
       'en-US': 'English',
-      'pt-BR': 'Português',
-    };
+      'pt-BR': 'Português'
+    }
     const languageIcons = {
       'zh-CN': '🇨🇳',
       'zh-TW': '🇭🇰',
       'en-US': '🇬🇧',
-      'pt-BR': '🇧🇷',
-    };
+      'pt-BR': '🇧🇷'
+    }
     const langMenu = (
       <Menu className={styles.menu} selectedKeys={[selectedLang]} onClick={this.changeLang}>
         {locales.map(locale => (
@@ -37,13 +37,13 @@ export default class SelectLang extends PureComponent {
           </Menu.Item>
         ))}
       </Menu>
-    );
+    )
     return (
       <HeaderDropdown overlay={langMenu} placement="bottomRight">
         <span className={classNames(styles.dropDown, className)}>
           <Icon type="global" title={formatMessage({ id: 'navBar.lang' })} />
         </span>
       </HeaderDropdown>
-    );
+    )
   }
 }

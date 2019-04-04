@@ -1,22 +1,24 @@
-import React, { Fragment, PureComponent } from 'react';
-import { connect } from 'dva';
-import router from 'umi/router';
-import { Row, Col, Card, Form, Input, Select, Button, Badge } from 'antd';
-import StandardTable from '@/components/StandardTable';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import React, { Fragment, PureComponent } from 'react'
+import { connect } from 'dva'
+import router from 'umi/router'
+import { Row, Col, Card, Form, Input, Select, Button, Badge } from 'antd'
+import StandardTable from '@/components/StandardTable'
+import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 
-import styles from './List.less';
+import styles from './List.less'
 
-const FormItem = Form.Item;
-const { Option } = Select;
-const statusMap = [{
-  value: 1000,
-  text: '已上架',
-},
-{
-  value: 1001,
-  text: '未上架'
-}];
+const FormItem = Form.Item
+const { Option } = Select
+const statusMap = [
+  {
+    value: 1000,
+    text: '已上架'
+  },
+  {
+    value: 1001,
+    text: '未上架'
+  }
+]
 const filterMap = [
   {
     key: 'name',
@@ -30,132 +32,132 @@ const filterMap = [
     key: 'bookCode',
     text: '商品编码'
   }
-];
+]
 const columns = [
   {
     title: '名称',
-    dataIndex: 'name',
+    dataIndex: 'name'
   },
   {
     title: 'isbn',
-    dataIndex: 'isbn',
+    dataIndex: 'isbn'
   },
   {
     title: '作者',
-    dataIndex: 'author',
+    dataIndex: 'author'
   },
   {
     title: '商品状态',
     dataIndex: 'status',
     render(val) {
-      return <Badge text={val ? '已上架' : '未上架'} status={val ? 'success' : 'warning'} />;
+      return <Badge text={val ? '已上架' : '未上架'} status={val ? 'success' : 'warning'} />
     }
   },
   {
     title: '出版社',
-    dataIndex: 'press',
+    dataIndex: 'press'
   },
   {
     title: '销量',
     dataIndex: 'sales',
-    sorter: (a, b) => a.sales - b.sales,
+    sorter: (a, b) => a.sales - b.sales
   },
   {
     title: '价格',
     dataIndex: 'price',
     sorter: (a, b) => a.price - b.price,
     render(val) {
-      return `￥${val.toFixed(2)}`;
-    },
+      return `￥${val.toFixed(2)}`
+    }
   },
   {
     title: '星币价',
     dataIndex: 'starPrice',
     sorter: (a, b) => a.starPrice - b.starPrice,
     render(val) {
-      return `￥${val.toFixed(2)}`;
-    },
+      return `￥${val.toFixed(2)}`
+    }
   },
   {
     title: '星币抵扣',
     dataIndex: 'starDeduction',
     sorter: (a, b) => a.starDeduction - b.starDeduction,
     render(val) {
-      return `￥${val.toFixed(2)}`;
-    },
+      return `￥${val.toFixed(2)}`
+    }
   },
   {
     title: '库存',
     dataIndex: 'stockNumber',
-    sorter: (a, b) => a.stockNumber - b.stockNumber,
-  },
-];
+    sorter: (a, b) => a.stockNumber - b.stockNumber
+  }
+]
 
-const showTableTotal = total => `共${total}条数据`;
-const PAGE_SIZE = 10;
+const showTableTotal = total => `共${total}条数据`
+const PAGE_SIZE = 10
 
 /* eslint react/no-multi-comp:0 */
 @connect(({ goodsList, loading }) => ({
   goodsList,
-  loading: loading.models.goodsList,
+  loading: loading.models.goodsList
 }))
 @Form.create()
 class List extends PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       searchKey: 'name',
       searchStatus: '',
       searchValue: '',
       offset: 1,
-      limit: PAGE_SIZE,
-    };
+      limit: PAGE_SIZE
+    }
   }
 
   componentDidMount() {
-    this.handleRefresh();
+    this.handleRefresh()
   }
 
   handleSearch = e => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const { form } = this.props;
-    const formValues = form.getFieldsValue();
-    const { searchKey, searchStatus, searchValue } = formValues;
-    this.fetchOrders(searchKey, searchStatus, searchValue, 1);
-  };
+    const { form } = this.props
+    const formValues = form.getFieldsValue()
+    const { searchKey, searchStatus, searchValue } = formValues
+    this.fetchOrders(searchKey, searchStatus, searchValue, 1)
+  }
 
   handleFormReset = () => {
-    const { form } = this.props;
-    form.resetFields();
-    this.fetchOrders('name','', '', 1);
-  };
+    const { form } = this.props
+    form.resetFields()
+    this.fetchOrders('name', '', '', 1)
+  }
 
   handleRefresh = () => {
-    const { searchKey, searchStatus, searchValue, offset } = this.state;
-    this.fetchOrders(searchKey, searchStatus, searchValue, offset);
-  };
+    const { searchKey, searchStatus, searchValue, offset } = this.state
+    this.fetchOrders(searchKey, searchStatus, searchValue, offset)
+  }
 
   handlePageChange = pagination => {
-    const { searchKey, searchStatus, searchValue } = this.state;
-    this.fetchOrders(searchKey, searchStatus, searchValue, pagination);
-  };
+    const { searchKey, searchStatus, searchValue } = this.state
+    this.fetchOrders(searchKey, searchStatus, searchValue, pagination)
+  }
 
   handleRow = row => ({
     // eslint-disable-next-line
     onClick: event => {
-      router.push(`/goods/detail/${row.goodsId}`);
-    },
-  });
+      router.push(`/goods/detail/${row.goodsId}`)
+    }
+  })
 
   fetchOrders(searchKey, searchStatus, searchValue, offset) {
-    const { dispatch } = this.props;
-    const { limit } = this.state;
-    const filter = !searchValue ? [] : [{key: searchKey, values: [searchValue]}];
+    const { dispatch } = this.props
+    const { limit } = this.state
+    const filter = !searchValue ? [] : [{ key: searchKey, values: [searchValue] }]
 
     if (searchStatus) {
-      filter.push({ key: 'status', values: [searchStatus] });
+      filter.push({ key: 'status', values: [searchStatus] })
     }
 
     this.setState({
@@ -163,7 +165,7 @@ class List extends PureComponent {
       searchKey,
       searchStatus,
       searchValue
-    });
+    })
     dispatch({
       type: 'goodsList/fetch',
       payload: {
@@ -171,16 +173,16 @@ class List extends PureComponent {
         limit,
         filter,
         sort: []
-      },
-    });
+      }
+    })
   }
 
   renderForm() {
     const {
-      form: { getFieldDecorator },
-    } = this.props;
+      form: { getFieldDecorator }
+    } = this.props
 
-    const { searchKey } = this.state;
+    const { searchKey } = this.state
 
     return (
       <Form onSubmit={this.handleSearch}>
@@ -204,7 +206,9 @@ class List extends PureComponent {
             <FormItem label="上架状态" className="nowrap">
               {getFieldDecorator('searchStatus')(
                 <Select placeholder="请选择">
-                  <Option value={0} key={0}>全部</Option>
+                  <Option value={0} key={0}>
+                    全部
+                  </Option>
                   {statusMap.map(item => (
                     <Option value={item.value} key={item.value}>
                       {item.text}
@@ -234,30 +238,28 @@ class List extends PureComponent {
           </Col>
         </Row>
       </Form>
-    );
+    )
   }
 
   render() {
     const {
       goodsList: { data },
-      loading,
-    } = this.props;
+      loading
+    } = this.props
 
     data.pagination = {
       ...data.pagination,
       defaultPageSize: PAGE_SIZE,
       showTotal: showTableTotal,
       onChange: this.handlePageChange,
-      showSizeChanger: false,
-    };
+      showSizeChanger: false
+    }
 
     return (
       <PageHeaderWrapper title="商品列表">
         <Card>
           <Fragment>
-            <div className={styles.tableListForm}>
-              { this.renderForm() }
-            </div>
+            <div className={styles.tableListForm}>{this.renderForm()}</div>
             <StandardTable
               rowKey="goodsId"
               size="middle"
@@ -265,7 +267,7 @@ class List extends PureComponent {
               selectedRows={[]}
               showAlert={false}
               rowSelection={null}
-              scroll={{x: 970}}
+              scroll={{ x: 970 }}
               loading={loading}
               data={data}
               columns={columns}
@@ -274,8 +276,8 @@ class List extends PureComponent {
           </Fragment>
         </Card>
       </PageHeaderWrapper>
-    );
+    )
   }
 }
 
-export default List;
+export default List

@@ -1,18 +1,18 @@
-import React, { PureComponent } from 'react';
-import { List, Card, Icon, Dropdown, Menu, Avatar, Tooltip } from 'antd';
-import numeral from 'numeral';
-import { connect } from 'dva';
-import { formatWan } from '@/utils/utils';
-import stylesApplications from './Applications.less';
+import React, { PureComponent } from 'react'
+import { List, Card, Icon, Dropdown, Menu, Avatar, Tooltip } from 'antd'
+import numeral from 'numeral'
+import { connect } from 'dva'
+import { formatWan } from '@/utils/utils'
+import stylesApplications from './Applications.less'
 
 @connect(({ list }) => ({
-  list,
+  list
 }))
 class Center extends PureComponent {
   render() {
     const {
-      list: { list },
-    } = this.props;
+      list: { list }
+    } = this.props
     const itemMenu = (
       <Menu>
         <Menu.Item>
@@ -31,7 +31,7 @@ class Center extends PureComponent {
           </a>
         </Menu.Item>
       </Menu>
-    );
+    )
     const CardInfo = ({ activeUser, newUser }) => (
       <div className={stylesApplications.cardInfo}>
         <div>
@@ -43,7 +43,7 @@ class Center extends PureComponent {
           <p>{newUser}</p>
         </div>
       </div>
-    );
+    )
     return (
       <List
         rowKey="id"
@@ -67,7 +67,7 @@ class Center extends PureComponent {
                 </Tooltip>,
                 <Dropdown overlay={itemMenu}>
                   <Icon type="ellipsis" />
-                </Dropdown>,
+                </Dropdown>
               ]}
             >
               <Card.Meta avatar={<Avatar size="small" src={item.avatar} />} title={item.title} />
@@ -81,8 +81,8 @@ class Center extends PureComponent {
           </List.Item>
         )}
       />
-    );
+    )
   }
 }
 
-export default Center;
+export default Center

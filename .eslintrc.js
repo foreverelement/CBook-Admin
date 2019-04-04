@@ -32,6 +32,9 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
+    'comma-dangle': [2, 'never'],
+    'quotes': [1, 'single'],
+    'semi': [2, 'never']
   },
   settings: {
     polyfills: ['fetch', 'promises', 'url'],

@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import Link from 'umi/link';
-import router from 'umi/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
-import styles from './Register.less';
+import React, { Component } from 'react'
+import { connect } from 'dva'
+import { formatMessage, FormattedMessage } from 'umi/locale'
+import Link from 'umi/link'
+import router from 'umi/router'
+import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd'
+import styles from './Register.less'
 
-const FormItem = Form.Item;
-const { Option } = Select;
-const InputGroup = Input.Group;
+const FormItem = Form.Item
+const { Option } = Select
+const InputGroup = Input.Group
 
 const passwordStatusMap = {
   ok: (
@@ -25,18 +25,18 @@ const passwordStatusMap = {
     <div className={styles.error}>
       <FormattedMessage id="validation.password.strength.short" />
     </div>
-  ),
-};
+  )
+}
 
 const passwordProgressMap = {
   ok: 'success',
   pass: 'normal',
-  poor: 'exception',
-};
+  poor: 'exception'
+}
 
 @connect(({ register, loading }) => ({
   register,
-  submitting: loading.effects['register/submit'],
+  submitting: loading.effects['register/submit']
 }))
 @Form.create()
 class Register extends Component {
@@ -45,121 +45,121 @@ class Register extends Component {
     confirmDirty: false,
     visible: false,
     help: '',
-    prefix: '86',
-  };
+    prefix: '86'
+  }
 
   componentDidUpdate() {
-    const { form, register } = this.props;
-    const account = form.getFieldValue('mail');
+    const { form, register } = this.props
+    const account = form.getFieldValue('mail')
     if (register.status === 'ok') {
       router.push({
         pathname: '/user/register-result',
         state: {
-          account,
-        },
-      });
+          account
+        }
+      })
     }
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.interval)
   }
 
   onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count });
+    let count = 59
+    this.setState({ count })
     this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
+      count -= 1
+      this.setState({ count })
       if (count === 0) {
-        clearInterval(this.interval);
+        clearInterval(this.interval)
       }
-    }, 1000);
-  };
+    }, 1000)
+  }
 
   getPasswordStatus = () => {
-    const { form } = this.props;
-    const value = form.getFieldValue('password');
+    const { form } = this.props
+    const value = form.getFieldValue('password')
     if (value && value.length > 9) {
-      return 'ok';
+      return 'ok'
     }
     if (value && value.length > 5) {
-      return 'pass';
+      return 'pass'
     }
-    return 'poor';
-  };
+    return 'poor'
+  }
 
   handleSubmit = e => {
-    e.preventDefault();
-    const { form, dispatch } = this.props;
+    e.preventDefault()
+    const { form, dispatch } = this.props
     form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        const { prefix } = this.state;
+        const { prefix } = this.state
         dispatch({
           type: 'register/submit',
           payload: {
             ...values,
-            prefix,
-          },
-        });
+            prefix
+          }
+        })
       }
-    });
-  };
+    })
+  }
 
   handleConfirmBlur = e => {
-    const { value } = e.target;
-    const { confirmDirty } = this.state;
-    this.setState({ confirmDirty: confirmDirty || !!value });
-  };
+    const { value } = e.target
+    const { confirmDirty } = this.state
+    this.setState({ confirmDirty: confirmDirty || !!value })
+  }
 
   checkConfirm = (rule, value, callback) => {
-    const { form } = this.props;
+    const { form } = this.props
     if (value && value !== form.getFieldValue('password')) {
-      callback(formatMessage({ id: 'validation.password.twice' }));
+      callback(formatMessage({ id: 'validation.password.twice' }))
     } else {
-      callback();
+      callback()
     }
-  };
+  }
 
   checkPassword = (rule, value, callback) => {
-    const { visible, confirmDirty } = this.state;
+    const { visible, confirmDirty } = this.state
     if (!value) {
       this.setState({
         help: formatMessage({ id: 'validation.password.required' }),
-        visible: !!value,
-      });
-      callback('error');
+        visible: !!value
+      })
+      callback('error')
     } else {
       this.setState({
-        help: '',
-      });
+        help: ''
+      })
       if (!visible) {
         this.setState({
-          visible: !!value,
-        });
+          visible: !!value
+        })
       }
       if (value.length < 6) {
-        callback('error');
+        callback('error')
       } else {
-        const { form } = this.props;
+        const { form } = this.props
         if (value && confirmDirty) {
-          form.validateFields(['confirm'], { force: true });
+          form.validateFields(['confirm'], { force: true })
         }
-        callback();
+        callback()
       }
     }
-  };
+  }
 
   changePrefix = value => {
     this.setState({
-      prefix: value,
-    });
-  };
+      prefix: value
+    })
+  }
 
   renderPasswordProgress = () => {
-    const { form } = this.props;
-    const value = form.getFieldValue('password');
-    const passwordStatus = this.getPasswordStatus();
+    const { form } = this.props
+    const value = form.getFieldValue('password')
+    const passwordStatus = this.getPasswordStatus()
     return value && value.length ? (
       <div className={styles[`progress-${passwordStatus}`]}>
         <Progress
@@ -170,13 +170,13 @@ class Register extends Component {
           showInfo={false}
         />
       </div>
-    ) : null;
-  };
+    ) : null
+  }
 
   render() {
-    const { form, submitting } = this.props;
-    const { getFieldDecorator } = form;
-    const { count, prefix, help, visible } = this.state;
+    const { form, submitting } = this.props
+    const { getFieldDecorator } = form
+    const { count, prefix, help, visible } = this.state
     return (
       <div className={styles.main}>
         <h3>
@@ -188,13 +188,13 @@ class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
+                  message: formatMessage({ id: 'validation.email.required' })
                 },
                 {
                   type: 'email',
-                  message: formatMessage({ id: 'validation.email.wrong-format' }),
-                },
-              ],
+                  message: formatMessage({ id: 'validation.email.wrong-format' })
+                }
+              ]
             })(
               <Input size="large" placeholder={formatMessage({ id: 'form.email.placeholder' })} />
             )}
@@ -218,9 +218,9 @@ class Register extends Component {
               {getFieldDecorator('password', {
                 rules: [
                   {
-                    validator: this.checkPassword,
-                  },
-                ],
+                    validator: this.checkPassword
+                  }
+                ]
               })(
                 <Input
                   size="large"
@@ -235,12 +235,12 @@ class Register extends Component {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.confirm-password.required' }),
+                  message: formatMessage({ id: 'validation.confirm-password.required' })
                 },
                 {
-                  validator: this.checkConfirm,
-                },
-              ],
+                  validator: this.checkConfirm
+                }
+              ]
             })(
               <Input
                 size="large"
@@ -264,13 +264,13 @@ class Register extends Component {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.phone-number.required' }),
+                    message: formatMessage({ id: 'validation.phone-number.required' })
                   },
                   {
                     pattern: /^\d{11}$/,
-                    message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
-                  },
-                ],
+                    message: formatMessage({ id: 'validation.phone-number.wrong-format' })
+                  }
+                ]
               })(
                 <Input
                   size="large"
@@ -287,9 +287,9 @@ class Register extends Component {
                   rules: [
                     {
                       required: true,
-                      message: formatMessage({ id: 'validation.verification-code.required' }),
-                    },
-                  ],
+                      message: formatMessage({ id: 'validation.verification-code.required' })
+                    }
+                  ]
                 })(
                   <Input
                     size="large"
@@ -327,8 +327,8 @@ class Register extends Component {
           </FormItem>
         </Form>
       </div>
-    );
+    )
   }
 }
 
-export default Register;
+export default Register

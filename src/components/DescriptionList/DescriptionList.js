@@ -1,7 +1,7 @@
-import React from 'react';
-import classNames from 'classnames';
-import { Row } from 'antd';
-import styles from './index.less';
+import React from 'react'
+import classNames from 'classnames'
+import { Row } from 'antd'
+import styles from './index.less'
 
 const DescriptionList = ({
   className,
@@ -15,9 +15,9 @@ const DescriptionList = ({
 }) => {
   const clsString = classNames(styles.descriptionList, styles[layout], className, {
     [styles.small]: size === 'small',
-    [styles.large]: size === 'large',
-  });
-  const column = col > 4 ? 4 : col;
+    [styles.large]: size === 'large'
+  })
+  const column = col > 4 ? 4 : col
   return (
     <div className={clsString} {...restProps}>
       {title ? <div className={styles.title}>{title}</div> : null}
@@ -27,7 +27,7 @@ const DescriptionList = ({
         )}
       </Row>
     </div>
-  );
-};
+  )
+}
 
-export default DescriptionList;
+export default DescriptionList

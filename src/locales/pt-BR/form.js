@@ -35,5 +35,5 @@ export default {
   'form.publicUsers.placeholder': 'Aberto para',
   'form.publicUsers.option.A': 'Colega A',
   'form.publicUsers.option.B': 'Colega B',
-  'form.publicUsers.option.C': 'Colega C',
-};
+  'form.publicUsers.option.C': 'Colega C'
+}

@@ -14,5 +14,5 @@ export default {
   'component.noticeIcon.cleared': '清空了',
   'component.noticeIcon.empty': '暂无数据',
   'component.noticeIcon.loaded': '加载完毕',
-  'component.noticeIcon.loading-more': '加载更多',
-};
+  'component.noticeIcon.loading-more': '加载更多'
+}

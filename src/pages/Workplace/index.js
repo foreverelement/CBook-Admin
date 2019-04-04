@@ -1,21 +1,21 @@
-import React, { memo } from 'react';
-import { Row, Col, Card } from 'antd';
+import React, { memo } from 'react'
+import { Row, Col, Card } from 'antd'
 
-import EditableLinkGroup from '@/components/EditableLinkGroup';
-import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import EditableLinkGroup from '@/components/EditableLinkGroup'
+import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 
 const links = [
   {
     title: '回收订单管理',
     href: '/orders/recycle/list',
     icon: 'recycle',
-    custom: true,
+    custom: true
   },
   {
     title: '买书订单管理',
     href: '/orders/buy/list',
     icon: 'order',
-    custom: true,
+    custom: true
   },
   {
     title: '图书管理',
@@ -31,8 +31,8 @@ const links = [
     title: '书盒列表',
     href: '/bookstack',
     icon: 'inbox'
-  },
-];
+  }
+]
 
 const Index = memo(() => (
   <PageHeaderWrapper>
@@ -44,6 +44,6 @@ const Index = memo(() => (
       </Col>
     </Row>
   </PageHeaderWrapper>
-));
+))
 
-export default Index;
+export default Index

@@ -1,35 +1,35 @@
-import React from 'react';
-import { Card } from 'antd';
-import classNames from 'classnames';
+import React from 'react'
+import { Card } from 'antd'
+import classNames from 'classnames'
 
-import styles from './index.less';
+import styles from './index.less'
 
 const renderTotal = total => {
-  let totalDom;
+  let totalDom
   switch (typeof total) {
     case 'undefined':
-      totalDom = null;
-      break;
+      totalDom = null
+      break
     case 'function':
-      totalDom = <div className={styles.total}>{total()}</div>;
-      break;
+      totalDom = <div className={styles.total}>{total()}</div>
+      break
     default:
-      totalDom = <div className={styles.total}>{total}</div>;
+      totalDom = <div className={styles.total}>{total}</div>
   }
-  return totalDom;
-};
+  return totalDom
+}
 
 class ChartCard extends React.PureComponent {
   renderConnet = () => {
-    const { contentHeight, title, avatar, action, total, footer, children, loading } = this.props;
+    const { contentHeight, title, avatar, action, total, footer, children, loading } = this.props
     if (loading) {
-      return false;
+      return false
     }
     return (
       <div className={styles.chartCard}>
         <div
           className={classNames(styles.chartTop, {
-            [styles.chartTopMargin]: !children && !footer,
+            [styles.chartTopMargin]: !children && !footer
           })}
         >
           <div className={styles.avatar}>{avatar}</div>
@@ -49,15 +49,15 @@ class ChartCard extends React.PureComponent {
         {footer && (
           <div
             className={classNames(styles.footer, {
-              [styles.footerMargin]: !children,
+              [styles.footerMargin]: !children
             })}
           >
             {footer}
           </div>
         )}
       </div>
-    );
-  };
+    )
+  }
 
   render() {
     const {
@@ -70,13 +70,13 @@ class ChartCard extends React.PureComponent {
       footer,
       children,
       ...rest
-    } = this.props;
+    } = this.props
     return (
       <Card loading={loading} bodyStyle={{ padding: '20px 24px 8px 24px' }} {...rest}>
         {this.renderConnet()}
       </Card>
-    );
+    )
   }
 }
 
-export default ChartCard;
+export default ChartCard

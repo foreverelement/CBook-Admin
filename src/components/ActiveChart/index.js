@@ -1,36 +1,36 @@
-import React, { Component } from 'react';
-import { MiniArea } from '../Charts';
-import NumberInfo from '../NumberInfo';
+import React, { Component } from 'react'
+import { MiniArea } from '../Charts'
+import NumberInfo from '../NumberInfo'
 
-import styles from './index.less';
+import styles from './index.less'
 
 function fixedZero(val) {
-  return val * 1 < 10 ? `0${val}` : val;
+  return val * 1 < 10 ? `0${val}` : val
 }
 
 function getActiveData() {
-  const activeData = [];
+  const activeData = []
   for (let i = 0; i < 24; i += 1) {
     activeData.push({
       x: `${fixedZero(i)}:00`,
-      y: Math.floor(Math.random() * 200) + i * 50,
-    });
+      y: Math.floor(Math.random() * 200) + i * 50
+    })
   }
-  return activeData;
+  return activeData
 }
 
 export default class ActiveChart extends Component {
   state = {
-    activeData: getActiveData(),
-  };
+    activeData: getActiveData()
+  }
 
   componentDidMount() {
-    this.loopData();
+    this.loopData()
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timer);
-    cancelAnimationFrame(this.requestRef);
+    clearTimeout(this.timer)
+    cancelAnimationFrame(this.requestRef)
   }
 
   loopData = () => {
@@ -38,18 +38,18 @@ export default class ActiveChart extends Component {
       this.timer = setTimeout(() => {
         this.setState(
           {
-            activeData: getActiveData(),
+            activeData: getActiveData()
           },
           () => {
-            this.loopData();
+            this.loopData()
           }
-        );
-      }, 1000);
-    });
-  };
+        )
+      }, 1000)
+    })
+  }
 
   render() {
-    const { activeData = [] } = this.state;
+    const { activeData = [] } = this.state
 
     return (
       <div className={styles.activeChart}>
@@ -62,14 +62,14 @@ export default class ActiveChart extends Component {
             height={84}
             scale={{
               y: {
-                tickCount: 3,
-              },
+                tickCount: 3
+              }
             }}
             yAxis={{
               tickLine: false,
               label: false,
               title: false,
-              line: false,
+              line: false
             }}
             data={activeData}
           />
@@ -96,6 +96,6 @@ export default class ActiveChart extends Component {
           </div>
         )}
       </div>
-    );
+    )
   }
 }

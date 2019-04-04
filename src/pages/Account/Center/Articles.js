@@ -1,23 +1,23 @@
-import React, { PureComponent } from 'react';
-import { List, Icon, Tag } from 'antd';
-import { connect } from 'dva';
-import ArticleListContent from '@/components/ArticleListContent';
-import styles from './Articles.less';
+import React, { PureComponent } from 'react'
+import { List, Icon, Tag } from 'antd'
+import { connect } from 'dva'
+import ArticleListContent from '@/components/ArticleListContent'
+import styles from './Articles.less'
 
 @connect(({ list }) => ({
-  list,
+  list
 }))
 class Center extends PureComponent {
   render() {
     const {
-      list: { list },
-    } = this.props;
+      list: { list }
+    } = this.props
     const IconText = ({ type, text }) => (
       <span>
         <Icon type={type} style={{ marginRight: 8 }} />
         {text}
       </span>
-    );
+    )
     return (
       <List
         size="large"
@@ -31,7 +31,7 @@ class Center extends PureComponent {
             actions={[
               <IconText type="star-o" text={item.star} />,
               <IconText type="like-o" text={item.like} />,
-              <IconText type="message" text={item.message} />,
+              <IconText type="message" text={item.message} />
             ]}
           >
             <List.Item.Meta
@@ -52,8 +52,8 @@ class Center extends PureComponent {
           </List.Item>
         )}
       />
-    );
+    )
   }
 }
 
-export default Center;
+export default Center

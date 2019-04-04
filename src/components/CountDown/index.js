@@ -1,121 +1,121 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 function fixedZero(val) {
-  return val * 1 < 10 ? `0${val}` : val;
+  return val * 1 < 10 ? `0${val}` : val
 }
 const initTime = props => {
-  let lastTime = 0;
-  let targetTime = 0;
+  let lastTime = 0
+  let targetTime = 0
   try {
     if (Object.prototype.toString.call(props.target) === '[object Date]') {
-      targetTime = props.target.getTime();
+      targetTime = props.target.getTime()
     } else {
-      targetTime = new Date(props.target).getTime();
+      targetTime = new Date(props.target).getTime()
     }
   } catch (e) {
-    throw new Error('invalid target prop', e);
+    throw new Error('invalid target prop', e)
   }
 
-  lastTime = targetTime - new Date().getTime();
+  lastTime = targetTime - new Date().getTime()
   return {
-    lastTime: lastTime < 0 ? 0 : lastTime,
-  };
-};
+    lastTime: lastTime < 0 ? 0 : lastTime
+  }
+}
 
 class CountDown extends Component {
-  timer = 0;
+  timer = 0
 
-  interval = 1000;
+  interval = 1000
 
   constructor(props) {
-    super(props);
-    const { lastTime } = initTime(props);
+    super(props)
+    const { lastTime } = initTime(props)
     this.state = {
-      lastTime,
-    };
+      lastTime
+    }
   }
 
   static getDerivedStateFromProps(nextProps, preState) {
-    const { lastTime } = initTime(nextProps);
+    const { lastTime } = initTime(nextProps)
     if (preState.lastTime !== lastTime) {
       return {
-        lastTime,
-      };
+        lastTime
+      }
     }
-    return null;
+    return null
   }
 
   componentDidMount() {
-    this.tick();
+    this.tick()
   }
 
   componentDidUpdate(prevProps) {
-    const { target } = this.props;
+    const { target } = this.props
     if (target !== prevProps.target) {
-      clearTimeout(this.timer);
-      this.tick();
+      clearTimeout(this.timer)
+      this.tick()
     }
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timer);
+    clearTimeout(this.timer)
   }
 
   // defaultFormat = time => (
   //  <span>{moment(time).format('hh:mm:ss')}</span>
   // );
   defaultFormat = time => {
-    const hours = 60 * 60 * 1000;
-    const minutes = 60 * 1000;
+    const hours = 60 * 60 * 1000
+    const minutes = 60 * 1000
 
-    const h = Math.floor(time / hours);
-    const m = Math.floor((time - h * hours) / minutes);
-    const s = Math.floor((time - h * hours - m * minutes) / 1000);
+    const h = Math.floor(time / hours)
+    const m = Math.floor((time - h * hours) / minutes)
+    const s = Math.floor((time - h * hours - m * minutes) / 1000)
     return (
       <span>
         {fixedZero(h)}:{fixedZero(m)}:{fixedZero(s)}
       </span>
-    );
-  };
+    )
+  }
 
   tick = () => {
-    const { onEnd } = this.props;
-    let { lastTime } = this.state;
+    const { onEnd } = this.props
+    let { lastTime } = this.state
 
     this.timer = setTimeout(() => {
       if (lastTime < this.interval) {
-        clearTimeout(this.timer);
+        clearTimeout(this.timer)
         this.setState(
           {
-            lastTime: 0,
+            lastTime: 0
           },
           () => {
             if (onEnd) {
-              onEnd();
+              onEnd()
             }
           }
-        );
+        )
       } else {
-        lastTime -= this.interval;
+        lastTime -= this.interval
         this.setState(
           {
-            lastTime,
+            lastTime
           },
           () => {
-            this.tick();
+            this.tick()
           }
-        );
+        )
       }
-    }, this.interval);
-  };
+    }, this.interval)
+  }
 
   render() {
-    const { format = this.defaultFormat, onEnd, ...rest } = this.props;
-    const { lastTime } = this.state;
-    const result = format(lastTime);
+    const { format = this.defaultFormat, onEnd, ...rest } = this.props
+    const { lastTime } = this.state
+    const result = format(lastTime)
 
-    return <span {...rest}>{result}</span>;
+    return <span {...rest}>{result}</span>
   }
 }
 
-export default CountDown;
+export default CountDown

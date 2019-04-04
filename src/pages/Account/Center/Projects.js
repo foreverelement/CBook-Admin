@@ -1,18 +1,18 @@
-import React, { PureComponent } from 'react';
-import { List, Card } from 'antd';
-import moment from 'moment';
-import { connect } from 'dva';
-import AvatarList from '@/components/AvatarList';
-import stylesProjects from './Projects.less';
+import React, { PureComponent } from 'react'
+import { List, Card } from 'antd'
+import moment from 'moment'
+import { connect } from 'dva'
+import AvatarList from '@/components/AvatarList'
+import stylesProjects from './Projects.less'
 
 @connect(({ list }) => ({
-  list,
+  list
 }))
 class Center extends PureComponent {
   render() {
     const {
-      list: { list },
-    } = this.props;
+      list: { list }
+    } = this.props
     return (
       <List
         className={stylesProjects.coverCardList}
@@ -45,8 +45,8 @@ class Center extends PureComponent {
           </List.Item>
         )}
       />
-    );
+    )
   }
 }
 
-export default Center;
+export default Center

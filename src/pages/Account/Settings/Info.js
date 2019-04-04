@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import router from 'umi/router';
-import { FormattedMessage } from 'umi/locale';
-import { Menu } from 'antd';
-import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import styles from './Info.less';
+import React, { Component } from 'react'
+import { connect } from 'dva'
+import router from 'umi/router'
+import { FormattedMessage } from 'umi/locale'
+import { Menu } from 'antd'
+import GridContent from '@/components/PageHeaderWrapper/GridContent'
+import styles from './Info.less'
 
-const { Item } = Menu;
+const { Item } = Menu
 
 @connect(({ user }) => ({
-  currentUser: user.currentUser,
+  currentUser: user.currentUser
 }))
 class Info extends Component {
   constructor(props) {
-    super(props);
-    const { match, location } = props;
+    super(props)
+    const { match, location } = props
     const menuMap = {
       base: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
       security: (
@@ -28,83 +28,83 @@ class Info extends Component {
           id="app.settings.menuMap.notification"
           defaultMessage="New Message Notification"
         />
-      ),
-    };
-    const key = location.pathname.replace(`${match.path}/`, '');
+      )
+    }
+    const key = location.pathname.replace(`${match.path}/`, '')
     this.state = {
       mode: 'inline',
       menuMap,
-      selectKey: menuMap[key] ? key : 'base',
-    };
+      selectKey: menuMap[key] ? key : 'base'
+    }
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { match, location } = props;
-    let selectKey = location.pathname.replace(`${match.path}/`, '');
-    selectKey = state.menuMap[selectKey] ? selectKey : 'base';
+    const { match, location } = props
+    let selectKey = location.pathname.replace(`${match.path}/`, '')
+    selectKey = state.menuMap[selectKey] ? selectKey : 'base'
     if (selectKey !== state.selectKey) {
-      return { selectKey };
+      return { selectKey }
     }
-    return null;
+    return null
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.resize);
-    this.resize();
+    window.addEventListener('resize', this.resize)
+    this.resize()
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.resize);
+    window.removeEventListener('resize', this.resize)
   }
 
   getmenu = () => {
-    const { menuMap } = this.state;
-    return Object.keys(menuMap).map(item => <Item key={item}>{menuMap[item]}</Item>);
-  };
+    const { menuMap } = this.state
+    return Object.keys(menuMap).map(item => <Item key={item}>{menuMap[item]}</Item>)
+  }
 
   getRightTitle = () => {
-    const { selectKey, menuMap } = this.state;
-    return menuMap[selectKey];
-  };
+    const { selectKey, menuMap } = this.state
+    return menuMap[selectKey]
+  }
 
   selectKey = ({ key }) => {
-    router.push(`/account/settings/${key}`);
+    router.push(`/account/settings/${key}`)
     this.setState({
-      selectKey: key,
-    });
-  };
+      selectKey: key
+    })
+  }
 
   resize = () => {
     if (!this.main) {
-      return;
+      return
     }
     requestAnimationFrame(() => {
-      let mode = 'inline';
-      const { offsetWidth } = this.main;
+      let mode = 'inline'
+      const { offsetWidth } = this.main
       if (this.main.offsetWidth < 641 && offsetWidth > 400) {
-        mode = 'horizontal';
+        mode = 'horizontal'
       }
       if (window.innerWidth < 768 && offsetWidth > 400) {
-        mode = 'horizontal';
+        mode = 'horizontal'
       }
       this.setState({
-        mode,
-      });
-    });
-  };
+        mode
+      })
+    })
+  }
 
   render() {
-    const { children, currentUser } = this.props;
+    const { children, currentUser } = this.props
     if (!currentUser.userid) {
-      return '';
+      return ''
     }
-    const { mode, selectKey } = this.state;
+    const { mode, selectKey } = this.state
     return (
       <GridContent>
         <div
           className={styles.main}
           ref={ref => {
-            this.main = ref;
+            this.main = ref
           }}
         >
           <div className={styles.leftmenu}>
@@ -118,8 +118,8 @@ class Info extends Component {
           </div>
         </div>
       </GridContent>
-    );
+    )
   }
 }
 
-export default Info;
+export default Info

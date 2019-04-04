@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react';
-import { Tabs, Skeleton } from 'antd';
-import classNames from 'classnames';
-import styles from './index.less';
-import BreadcrumbView from './breadcrumb';
+import React, { PureComponent } from 'react'
+import { Tabs, Skeleton } from 'antd'
+import classNames from 'classnames'
+import styles from './index.less'
+import BreadcrumbView from './breadcrumb'
 
-const { TabPane } = Tabs;
+const { TabPane } = Tabs
 export default class PageHeader extends PureComponent {
   onChange = key => {
-    const { onTabChange } = this.props;
+    const { onTabChange } = this.props
     if (onTabChange) {
-      onTabChange(key);
+      onTabChange(key)
     }
-  };
+  }
 
   render() {
     const {
@@ -27,16 +27,16 @@ export default class PageHeader extends PureComponent {
       tabBarExtraContent,
       loading = false,
       wide = false,
-      hiddenBreadcrumb = false,
-    } = this.props;
+      hiddenBreadcrumb = false
+    } = this.props
 
-    const clsString = classNames(styles.pageHeader, className);
-    const activeKeyProps = {};
+    const clsString = classNames(styles.pageHeader, className)
+    const activeKeyProps = {}
     if (tabDefaultActiveKey !== undefined) {
-      activeKeyProps.defaultActiveKey = tabDefaultActiveKey;
+      activeKeyProps.defaultActiveKey = tabDefaultActiveKey
     }
     if (tabActiveKey !== undefined) {
-      activeKeyProps.activeKey = tabActiveKey;
+      activeKeyProps.activeKey = tabActiveKey
     }
     return (
       <div className={clsString}>
@@ -77,6 +77,6 @@ export default class PageHeader extends PureComponent {
           </Skeleton>
         </div>
       </div>
-    );
+    )
   }
 }

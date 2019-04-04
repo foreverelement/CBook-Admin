@@ -1,31 +1,31 @@
-import React, { PureComponent } from 'react';
-import { Button, Spin, Card } from 'antd';
-import { connect } from 'dva';
-import styles from './style.less';
+import React, { PureComponent } from 'react'
+import { Button, Spin, Card } from 'antd'
+import { connect } from 'dva'
+import styles from './style.less'
 
 @connect(state => ({
-  isloading: state.error.isloading,
+  isloading: state.error.isloading
 }))
 class TriggerException extends PureComponent {
   state = {
-    isloading: false,
-  };
+    isloading: false
+  }
 
   triggerError = code => {
     this.setState({
-      isloading: true,
-    });
-    const { dispatch } = this.props;
+      isloading: true
+    })
+    const { dispatch } = this.props
     dispatch({
       type: 'error/query',
       payload: {
-        code,
-      },
-    });
-  };
+        code
+      }
+    })
+  }
 
   render() {
-    const { isloading } = this.state;
+    const { isloading } = this.state
     return (
       <Card>
         <Spin spinning={isloading} wrapperClassName={styles.trigger}>
@@ -43,8 +43,8 @@ class TriggerException extends PureComponent {
           </Button>
         </Spin>
       </Card>
-    );
+    )
   }
 }
 
-export default TriggerException;
+export default TriggerException
