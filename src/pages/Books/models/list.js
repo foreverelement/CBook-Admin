@@ -19,9 +19,9 @@ export default {
         type: 'save',
         payload: {
           data: response,
-          current: payload.offset
-        },
-        formParams
+          current: payload.offset,
+          formParams
+        }
       })
     }
   },
