@@ -27,7 +27,7 @@ const getToken = () =>
 const parseParams = (params = {}) => {
   const result = Object.keys(params).map(key => {
     if (params[key] === undefined) {
-      return `${key}=''`
+      return `${key}=`
     }
     return `${key}=${encodeURIComponent(params[key])}`
   })
