@@ -116,7 +116,10 @@ class List extends PureComponent {
   }
 
   componentDidMount() {
-    this.handleRefresh()
+    const { goodsList: { formParams } } = this.props
+    this.setState(formParams, () => {
+      this.handleRefresh()
+    })
   }
 
   handleSearch = e => {
@@ -160,12 +163,15 @@ class List extends PureComponent {
       filter.push({ key: 'status', values: [searchStatus] })
     }
 
-    this.setState({
+    const formParams = {
       offset,
       searchKey,
       searchStatus,
       searchValue
-    })
+    }
+
+    this.setState(formParams)
+
     dispatch({
       type: 'goodsList/fetch',
       payload: {
@@ -173,7 +179,8 @@ class List extends PureComponent {
         limit,
         filter,
         sort: []
-      }
+      },
+      formParams
     })
   }
 
@@ -182,7 +189,7 @@ class List extends PureComponent {
       form: { getFieldDecorator }
     } = this.props
 
-    const { searchKey } = this.state
+    const { searchKey, searchStatus, searchValue } = this.state
 
     return (
       <Form onSubmit={this.handleSearch}>
@@ -204,9 +211,11 @@ class List extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="上架状态" className="nowrap">
-              {getFieldDecorator('searchStatus')(
+              {getFieldDecorator('searchStatus', {
+                initialValue: searchStatus
+              })(
                 <Select placeholder="请选择">
-                  <Option value={0} key={0}>
+                  <Option value="" key={0}>
                     全部
                   </Option>
                   {statusMap.map(item => (
@@ -220,7 +229,9 @@ class List extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="搜索商品" className="nowrap">
-              {getFieldDecorator('searchValue')(<Input placeholder="请输入" allowClear />)}
+              {getFieldDecorator('searchValue', {
+                initialValue: searchValue
+              })(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>

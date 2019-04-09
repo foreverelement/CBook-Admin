@@ -27,7 +27,8 @@ const statusMap = {
   1001: '入库',
   1002: '上架',
   1003: '卖出',
-  2000: '作废'
+  2000: '作废',
+  1004: '入盒'
 }
 
 const toFixed = val => (typeof val === 'number' ? val.toFixed(2) : val)
@@ -229,7 +230,7 @@ class BookDetail extends Component {
             <Description term="书盒编号">{data.bookstack}</Description>
             <Description term="价格">￥{toFixed(data.price)}</Description>
             <Description term="销售价格">￥{toFixed(data.sellPrice)}</Description>
-            <Description term="星币价格">￥{toFixed(data.starPrice)}</Description>
+            <Description term="星币价格">{toFixed(data.starPrice)}</Description>
             <Description term="发布时间">{data.publishDate}</Description>
             <Description term="图书状态">{statusMap[data.status]}</Description>
             <Description term="图书描述">{data.bookDesc}</Description>

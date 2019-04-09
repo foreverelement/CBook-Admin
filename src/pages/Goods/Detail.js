@@ -220,13 +220,13 @@ class UpdateForm extends Component {
           </Grid.Item>
           <Grid.Item>
             <FormItem
-              key="costPrice"
+              key="price"
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 18 }}
               label="售卖价格"
             >
-              {form.getFieldDecorator('costPrice', {
-                initialValue: data.costPrice
+              {form.getFieldDecorator('price', {
+                initialValue: data.price
               })(<InputNumber min={0} placeholder="请填写" />)}
             </FormItem>
           </Grid.Item>
@@ -537,11 +537,10 @@ class GoodDetail extends Component {
             <Description term="isbn">{data.isbn}</Description>
             <Description term="作者">{data.author}</Description>
             <Description term="出版社">{data.press}</Description>
-            <Description term="价格">￥{toFixed(data.price)}</Description>
-            <Description term="售卖价格">￥{toFixed(data.costPrice)}</Description>
-            <Description term="销量">￥{toFixed(data.sales)}</Description>
-            <Description term="星币价格">￥{toFixed(data.starPrice)}</Description>
-            <Description term="星币抵扣">￥{toFixed(data.starDeduction)}</Description>
+            <Description term="价格">￥{toFixed(data.costPrice)}</Description>
+            <Description term="售卖价格">￥{toFixed(data.price)}</Description>
+            <Description term="销量">{data.sales}</Description>
+            <Description term="星币价格">{toFixed(data.starPrice)}</Description>
             <Description term="库存">{data.stockNumber}</Description>
             <Description term="豆瓣评分">{data.doubanScore}</Description>
             <Description term="标签分类">

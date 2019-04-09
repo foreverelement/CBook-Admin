@@ -13,7 +13,8 @@ const statusMap = {
   1001: '图书入库',
   1002: '图书上架',
   1003: '图书卖出',
-  2000: '图书作废'
+  2000: '图书作废',
+  1004: '加入书盒'
 }
 const filterMap = [
   {
@@ -45,6 +46,10 @@ const columns = [
   {
     title: '作者',
     dataIndex: 'author'
+  },
+  {
+    title: '书盒编号',
+    dataIndex: 'bookstack'
   },
   {
     title: '图书状态',
@@ -111,7 +116,10 @@ class List extends PureComponent {
   }
 
   componentDidMount() {
-    this.handleRefresh()
+    const { bookList: { formParams } } = this.props
+    this.setState(formParams, () => {
+      this.handleRefresh()
+    })
   }
 
   handleSearch = e => {
@@ -155,12 +163,15 @@ class List extends PureComponent {
       filter.push({ key: 'status', values: [searchStatus] })
     }
 
-    this.setState({
+    const formParams = {
       offset,
       searchKey,
       searchStatus,
       searchValue
-    })
+    }
+
+    this.setState(formParams)
+
     dispatch({
       type: 'bookList/fetchBooks',
       payload: {
@@ -168,7 +179,8 @@ class List extends PureComponent {
         limit,
         filter,
         sort: []
-      }
+      },
+      formParams
     })
   }
 
@@ -177,7 +189,7 @@ class List extends PureComponent {
       form: { getFieldDecorator }
     } = this.props
 
-    const { searchKey } = this.state
+    const { searchKey, searchStatus, searchValue } = this.state
 
     return (
       <Form onSubmit={this.handleSearch}>
@@ -199,9 +211,11 @@ class List extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="图书状态" className="nowrap">
-              {getFieldDecorator('searchStatus')(
+              {getFieldDecorator('searchStatus', {
+                initialValue: searchStatus
+              })(
                 <Select placeholder="请选择">
-                  <Option value={0} key={0}>
+                  <Option value="" key={0}>
                     全部
                   </Option>
                   {this.statusList.map(item => (
@@ -215,7 +229,9 @@ class List extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="搜索图书" className="nowrap">
-              {getFieldDecorator('searchValue')(<Input placeholder="请输入" allowClear />)}
+              {getFieldDecorator('searchValue', {
+                initialValue: searchValue
+              })(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
           <Col md={6} sm={24}>

@@ -85,7 +85,10 @@ class List extends PureComponent {
   }
 
   componentDidMount() {
-    this.handleRefresh()
+    const { buyOrder: { formParams } } = this.props
+    this.setState(formParams, () => {
+      this.handleRefresh()
+    })
   }
 
   handleSearch = e => {
@@ -129,11 +132,12 @@ class List extends PureComponent {
       if (status) {
         filter = [{ key: 'orderStatus', values: [status] }]
       }
-      this.setState({
+      const formParams = {
         orderCode,
         status,
         offset
-      })
+      }
+      this.setState(formParams)
       dispatch({
         type: 'buyOrder/searchOrders',
         payload: {
@@ -141,20 +145,23 @@ class List extends PureComponent {
           offset,
           limit,
           filter
-        }
+        },
+        formParams
       })
     } else {
-      this.setState({
+      const formParams = {
         orderCode: '',
         status: '',
         offset
-      })
+      }
+      this.setState(formParams)
       dispatch({
         type: 'buyOrder/fetchOrders',
         payload: {
           offset,
           limit
-        }
+        },
+        formParams
       })
     }
   }
@@ -163,19 +170,26 @@ class List extends PureComponent {
     const {
       form: { getFieldDecorator }
     } = this.props
+
+    const { orderCode, status } = this.state
+
     return (
       <Form onSubmit={this.handleSearch}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="搜索订单" className="nowrap">
-              {getFieldDecorator('orderCode')(<Input placeholder="请输入" allowClear />)}
+              {getFieldDecorator('orderCode', {
+                initialValue: orderCode
+              })(<Input placeholder="请输入" allowClear />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="订单状态" className="nowrap">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('status', {
+                initialValue: status
+              })(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value={0} key={0}>
+                  <Option value="" key={0}>
                     全部
                   </Option>
                   {this.orderStautsList.map(item => (
