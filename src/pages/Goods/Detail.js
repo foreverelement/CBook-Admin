@@ -300,6 +300,7 @@ class UpdateForm extends Component {
           </Grid.Item>
         </Grid>
         {imags.map((item, i) => (
+          // eslint-disable-next-line
           <Grid col={6} gutter={0} key={`${item}${i}`}>
             <Grid.Item>
               <FormItem
@@ -468,12 +469,10 @@ class GoodDetail extends Component {
     })
   }
 
-  handleUpdate = fields => {
-    return this.updateGood({
+  handleUpdate = fields => this.updateGood({
       ...fields,
       goodsId: this.goodsId
     })
-  }
 
   fetchGood(goodsId) {
     const { dispatch } = this.props
@@ -581,7 +580,7 @@ class GoodDetail extends Component {
                   img && (
                     <img
                       className={styles.imageItem}
-                      key={`${img}${i}`}
+                      key={`${img}${i}`}  // eslint-disable-line
                       src={img}
                       alt="商品插画"
                       onClick={() => window.open(img)}

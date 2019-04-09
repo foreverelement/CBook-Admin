@@ -26,7 +26,9 @@ const getToken = () =>
 
 const parseParams = (params = {}) => {
   const result = Object.keys(params).map(key => {
-    if (params[key] === undefined) return ''
+    if (params[key] === undefined) {
+      return `${key}=''`
+    }
     return `${key}=${encodeURIComponent(params[key])}`
   })
   return result.join('&')
@@ -118,7 +120,7 @@ export default function request(url, options = {}) {
         logout()
       } else {
         notification.error({
-          message: `提示信息`,
+          message: '提示信息',
           description: response.msg
         })
       }

@@ -7,7 +7,6 @@ import StandardTable from '@/components/StandardTable'
 import PageHeaderWrapper from '@/components/PageHeaderWrapper'
 
 import styles from './List.less'
-import printIcon from '@/assets/print_icon.png'
 
 const FormItem = Form.Item
 const { Option } = Select

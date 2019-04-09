@@ -313,6 +313,7 @@ class UpdateForm extends PureComponent {
   }
 }
 
+/* eslint-disable react/no-unescaped-entities */
 const BarcodeForm = memo(props => {
   let prentContent = null
   let printRef = null
@@ -353,8 +354,7 @@ const BarcodeForm = memo(props => {
             <div className={styles.printFooterText}>
               <p>
                 关注：<strong>"星月童书绘本"</strong>
-              </p>{' '}
-              {/*eslint-disable-line*/}
+              </p>
               <p>公众号获取更多信息</p>
             </div>
           </div>
@@ -454,9 +454,9 @@ class RecycleDetail extends Component {
     })
   }
 
-  handleReject = fields => {
-    return this.updateOrder({ ...fields, orderCode: this.orderCode, status: 2001 }) // 审核不通过
-  }
+  handleReject = fields =>
+     this.updateOrder({ ...fields, orderCode: this.orderCode, status: 2001 }) // 审核不通过
+
 
   handleDeny = fields => {
     const { selectRow } = this.state
@@ -488,9 +488,7 @@ class RecycleDetail extends Component {
     )
   }
 
-  handleOrderStatusUpdate = fields => {
-    return this.updateOrderStatus(fields.orderStatus)
-  }
+  handleOrderStatusUpdate = fields => this.updateOrderStatus(fields.orderStatus)
 
   handleBookItem = (key, currentItem, index) => {
     this.bookIndex = index

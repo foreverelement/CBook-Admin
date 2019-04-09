@@ -186,9 +186,7 @@ class buyDetail extends Component {
     })
   }
 
-  handleOrderStatusUpdate = fields => {
-    return this.updateOrderStatus(fields.orderStatus)
-  }
+  handleOrderStatusUpdate = fields => this.updateOrderStatus(fields.orderStatus)
 
   updateOrderStatus(status) {
     return this.updateOrder({ orderCode: this.orderCode, status })

@@ -1,7 +1,7 @@
-import { parse } from 'url';
+import { parse } from 'url'
 
 // mock tableListDataSource
-let tableListDataSource = [];
+let tableListDataSource = []
 for (let i = 0; i < 46; i += 1) {
   tableListDataSource.push({
     key: i,
@@ -9,7 +9,7 @@ for (let i = 0; i < 46; i += 1) {
     href: 'https://ant.design',
     avatar: [
       'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-      'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
+      'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png'
     ][i % 2],
     name: `TradeCode ${i}`,
     title: `一个任务名称 ${i}`,
@@ -19,48 +19,48 @@ for (let i = 0; i < 46; i += 1) {
     status: Math.floor(Math.random() * 10) % 4,
     updatedAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
     createdAt: new Date(`2017-07-${Math.floor(i / 2) + 1}`),
-    progress: Math.ceil(Math.random() * 100),
-  });
+    progress: Math.ceil(Math.random() * 100)
+  })
 }
 
 function getRule(req, res, u) {
-  let url = u;
+  let url = u
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
   }
 
-  const params = parse(url, true).query;
+  const params = parse(url, true).query
 
-  let dataSource = tableListDataSource;
+  let dataSource = tableListDataSource
 
   if (params.sorter) {
-    const s = params.sorter.split('_');
+    const s = params.sorter.split('_')
     dataSource = dataSource.sort((prev, next) => {
       if (s[1] === 'descend') {
-        return next[s[0]] - prev[s[0]];
+        return next[s[0]] - prev[s[0]]
       }
-      return prev[s[0]] - next[s[0]];
-    });
+      return prev[s[0]] - next[s[0]]
+    })
   }
 
   if (params.status) {
-    const status = params.status.split(',');
-    let filterDataSource = [];
+    const status = params.status.split(',')
+    let filterDataSource = []
     status.forEach(s => {
       filterDataSource = filterDataSource.concat(
         dataSource.filter(data => parseInt(data.status, 10) === parseInt(s[0], 10))
-      );
-    });
-    dataSource = filterDataSource;
+      )
+    })
+    dataSource = filterDataSource
   }
 
   if (params.name) {
-    dataSource = dataSource.filter(data => data.name.indexOf(params.name) > -1);
+    dataSource = dataSource.filter(data => data.name.indexOf(params.name) > -1)
   }
 
-  let pageSize = 10;
+  let pageSize = 10
   if (params.pageSize) {
-    pageSize = params.pageSize * 1;
+    pageSize = params.pageSize * 1
   }
 
   const result = {
@@ -68,35 +68,35 @@ function getRule(req, res, u) {
     pagination: {
       total: dataSource.length,
       pageSize,
-      current: parseInt(params.currentPage, 10) || 1,
-    },
-  };
+      current: parseInt(params.currentPage, 10) || 1
+    }
+  }
 
-  return res.json(result);
+  return res.json(result)
 }
 
 function postRule(req, res, u, b) {
-  let url = u;
+  let url = u
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
   }
 
-  const body = (b && b.body) || req.body;
-  const { method, name, desc, key } = body;
+  const body = (b && b.body) || req.body
+  const { method, name, desc, key } = body
 
   switch (method) {
     /* eslint no-case-declarations:0 */
     case 'delete':
-      tableListDataSource = tableListDataSource.filter(item => key.indexOf(item.key) === -1);
-      break;
+      tableListDataSource = tableListDataSource.filter(item => key.indexOf(item.key) === -1)
+      break
     case 'post':
-      const i = Math.ceil(Math.random() * 10000);
+      const i = Math.ceil(Math.random() * 10000)
       tableListDataSource.unshift({
         key: i,
         href: 'https://ant.design',
         avatar: [
           'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-          'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
+          'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png'
         ][i % 2],
         name: `TradeCode ${i}`,
         title: `一个任务名称 ${i}`,
@@ -106,26 +106,26 @@ function postRule(req, res, u, b) {
         status: Math.floor(Math.random() * 10) % 2,
         updatedAt: new Date(),
         createdAt: new Date(),
-        progress: Math.ceil(Math.random() * 100),
-      });
-      break;
+        progress: Math.ceil(Math.random() * 100)
+      })
+      break
     case 'update':
       tableListDataSource = tableListDataSource.map(item => {
         if (item.key === key) {
-          Object.assign(item, { desc, name });
-          return item;
+          Object.assign(item, { desc, name })
+          return item
         }
-        return item;
-      });
-      break;
+        return item
+      })
+      break
     default:
-      break;
+      break
   }
 
-  return getRule(req, res, u);
+  return getRule(req, res, u)
 }
 
 export default {
   'GET /api/rule': getRule,
-  'POST /api/rule': postRule,
-};
+  'POST /api/rule': postRule
+}

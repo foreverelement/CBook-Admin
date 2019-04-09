@@ -1,4 +1,4 @@
-import mockjs from 'mockjs';
+import mockjs from 'mockjs'
 
 const titles = [
   'Alipay',
@@ -8,8 +8,8 @@ const titles = [
   'Bootstrap',
   'React',
   'Vue',
-  'Webpack',
-];
+  'Webpack'
+]
 const avatars = [
   'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png', // Alipay
   'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
@@ -18,8 +18,8 @@ const avatars = [
   'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png', // Bootstrap
   'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png', // React
   'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png', // Vue
-  'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png', // Webpack
-];
+  'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png' // Webpack
+]
 
 const avatars2 = [
   'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
@@ -31,22 +31,22 @@ const avatars2 = [
   'https://gw.alipayobjects.com/zos/rmsportal/psOgztMplJMGpVEqfcgF.png',
   'https://gw.alipayobjects.com/zos/rmsportal/ZpBqSxLxVEXfcUNoPKrz.png',
   'https://gw.alipayobjects.com/zos/rmsportal/laiEnJdGHVOhJrUShBaJ.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/UrQsqscbKEpNuJcvBZBu.png',
-];
+  'https://gw.alipayobjects.com/zos/rmsportal/UrQsqscbKEpNuJcvBZBu.png'
+]
 
 const covers = [
   'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
   'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
   'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
-];
+  'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png'
+]
 const desc = [
   '那是一种内在的东西， 他们到达不了，也无法触及的',
   '希望是一个好东西，也许是最好的，好东西是不会消亡的',
   '生命就像一盒巧克力，结果往往出人意料',
   '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
-  '那时候我只会想自己想要什么，从不想自己拥有什么',
-];
+  '那时候我只会想自己想要什么，从不想自己拥有什么'
+]
 
 const user = [
   '付小小',
@@ -58,11 +58,11 @@ const user = [
   '鱼酱',
   '乐哥',
   '谭小仪',
-  '仲尼',
-];
+  '仲尼'
+]
 
 function fakeList(count) {
-  const list = [];
+  const list = []
   for (let i = 0; i < count; i += 1) {
     list.push({
       id: `fake-list-${i}`,
@@ -90,67 +90,67 @@ function fakeList(count) {
         {
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
           name: '曲丽丽',
-          id: 'member1',
+          id: 'member1'
         },
         {
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png',
           name: '王昭君',
-          id: 'member2',
+          id: 'member2'
         },
         {
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png',
           name: '董娜娜',
-          id: 'member3',
-        },
-      ],
-    });
+          id: 'member3'
+        }
+      ]
+    })
   }
 
-  return list;
+  return list
 }
 
-let sourceData;
+let sourceData
 
 function getFakeList(req, res) {
-  const params = req.query;
+  const params = req.query
 
-  const count = params.count * 1 || 20;
+  const count = params.count * 1 || 20
 
-  const result = fakeList(count);
-  sourceData = result;
-  return res.json(result);
+  const result = fakeList(count)
+  sourceData = result
+  return res.json(result)
 }
 
 function postFakeList(req, res) {
-  const { /* url = '', */ body } = req;
+  const { /* url = '', */ body } = req
   // const params = getUrlParams(url);
-  const { method, id } = body;
+  const { method, id } = body
   // const count = (params.count * 1) || 20;
-  let result = sourceData;
+  let result = sourceData
 
   switch (method) {
     case 'delete':
-      result = result.filter(item => item.id !== id);
-      break;
+      result = result.filter(item => item.id !== id)
+      break
     case 'update':
       result.forEach((item, i) => {
         if (item.id === id) {
-          result[i] = Object.assign(item, body);
+          result[i] = Object.assign(item, body)
         }
-      });
-      break;
+      })
+      break
     case 'post':
       result.unshift({
         body,
         id: `fake-list-${result.length}`,
-        createdAt: new Date().getTime(),
-      });
-      break;
+        createdAt: new Date().getTime()
+      })
+      break
     default:
-      break;
+      break
   }
 
-  return res.json(result);
+  return res.json(result)
 }
 
 const getNotice = [
@@ -162,7 +162,7 @@ const getNotice = [
     updatedAt: new Date(),
     member: '科学搬砖组',
     href: '',
-    memberLink: '',
+    memberLink: ''
   },
   {
     id: 'xxx2',
@@ -172,7 +172,7 @@ const getNotice = [
     updatedAt: new Date('2017-07-24'),
     member: '全组都是吴彦祖',
     href: '',
-    memberLink: '',
+    memberLink: ''
   },
   {
     id: 'xxx3',
@@ -182,7 +182,7 @@ const getNotice = [
     updatedAt: new Date(),
     member: '中二少女团',
     href: '',
-    memberLink: '',
+    memberLink: ''
   },
   {
     id: 'xxx4',
@@ -192,7 +192,7 @@ const getNotice = [
     updatedAt: new Date('2017-07-23'),
     member: '程序员日常',
     href: '',
-    memberLink: '',
+    memberLink: ''
   },
   {
     id: 'xxx5',
@@ -202,7 +202,7 @@ const getNotice = [
     updatedAt: new Date('2017-07-23'),
     member: '高逼格设计天团',
     href: '',
-    memberLink: '',
+    memberLink: ''
   },
   {
     id: 'xxx6',
@@ -212,9 +212,9 @@ const getNotice = [
     updatedAt: new Date('2017-07-23'),
     member: '骗你来学计算机',
     href: '',
-    memberLink: '',
-  },
-];
+    memberLink: ''
+  }
+]
 
 const getActivities = [
   {
@@ -222,115 +222,115 @@ const getActivities = [
     updatedAt: new Date(),
     user: {
       name: '曲丽丽',
-      avatar: avatars2[0],
+      avatar: avatars2[0]
     },
     group: {
       name: '高逼格设计天团',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
     project: {
       name: '六月迭代',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 新建项目 @{project}'
   },
   {
     id: 'trend-2',
     updatedAt: new Date(),
     user: {
       name: '付小小',
-      avatar: avatars2[1],
+      avatar: avatars2[1]
     },
     group: {
       name: '高逼格设计天团',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
     project: {
       name: '六月迭代',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 新建项目 @{project}'
   },
   {
     id: 'trend-3',
     updatedAt: new Date(),
     user: {
       name: '林东东',
-      avatar: avatars2[2],
+      avatar: avatars2[2]
     },
     group: {
       name: '中二少女团',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
     project: {
       name: '六月迭代',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
-    template: '在 @{group} 新建项目 @{project}',
+    template: '在 @{group} 新建项目 @{project}'
   },
   {
     id: 'trend-4',
     updatedAt: new Date(),
     user: {
       name: '周星星',
-      avatar: avatars2[4],
+      avatar: avatars2[4]
     },
     project: {
       name: '5 月日常迭代',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
-    template: '将 @{project} 更新至已发布状态',
+    template: '将 @{project} 更新至已发布状态'
   },
   {
     id: 'trend-5',
     updatedAt: new Date(),
     user: {
       name: '朱偏右',
-      avatar: avatars2[3],
+      avatar: avatars2[3]
     },
     project: {
       name: '工程效能',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
     comment: {
       name: '留言',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
-    template: '在 @{project} 发布了 @{comment}',
+    template: '在 @{project} 发布了 @{comment}'
   },
   {
     id: 'trend-6',
     updatedAt: new Date(),
     user: {
       name: '乐哥',
-      avatar: avatars2[5],
+      avatar: avatars2[5]
     },
     group: {
       name: '程序员日常',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
     project: {
       name: '品牌迭代',
-      link: 'http://github.com/',
+      link: 'http://github.com/'
     },
-    template: '在 @{group} 新建项目 @{project}',
-  },
-];
+    template: '在 @{group} 新建项目 @{project}'
+  }
+]
 
 function getFakeCaptcha(req, res) {
-  return res.json('captcha-xxx');
+  return res.json('captcha-xxx')
 }
 
 export default {
   'GET /api/project/notice': getNotice,
   'GET /api/activities': getActivities,
   'POST /api/forms': (req, res) => {
-    res.send({ message: 'Ok' });
+    res.send({ message: 'Ok' })
   },
   'GET /api/tags': mockjs.mock({
-    'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }],
+    'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }]
   }),
   'GET /api/fake_list': getFakeList,
   'POST /api/fake_list': postFakeList,
-  'GET /api/captcha': getFakeCaptcha,
-};
+  'GET /api/captcha': getFakeCaptcha
+}

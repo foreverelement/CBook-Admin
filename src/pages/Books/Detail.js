@@ -161,13 +161,11 @@ class BookDetail extends Component {
     })
   }
 
-  handleUpdate = fields => {
-    return this.updateOrder({
+  handleUpdate = fields => this.updateOrder({
       ...fields,
       publishDate: fields.publishDate.format('YYYY-MM-DD'),
       bookCode: this.bookCode
     })
-  }
 
   fetchOrder(bookCode) {
     const { dispatch } = this.props
