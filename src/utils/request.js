@@ -34,11 +34,15 @@ const parseParams = (params = {}) => {
   return result.join('&')
 }
 
+let isLogout = false
+
 const logout = () => {
+  if (isLogout) return
   /* eslint-disable no-underscore-dangle */
   window.g_app._store.dispatch({
     type: 'login/logout'
   })
+  isLogout = true
 }
 
 const checkStatus = response => {

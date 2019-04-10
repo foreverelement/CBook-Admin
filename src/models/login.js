@@ -48,9 +48,7 @@ export default {
       yield call(getFakeCaptcha, payload)
     },
 
-    *logout(_, { put, select }) {
-      const currentAuthority = yield select(state => state.login.currentAuthority)
-      if (currentAuthority === 'guest') return
+    *logout(_, { put }) {
       yield put({
         type: 'changeLoginStatus',
         payload: {
