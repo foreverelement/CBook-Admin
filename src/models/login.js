@@ -9,7 +9,8 @@ export default {
   namespace: 'login',
 
   state: {
-    currentAuthority: 'guest'
+    currentAuthority: 'guest',
+    token: ''
   },
 
   effects: {
@@ -47,7 +48,9 @@ export default {
       yield call(getFakeCaptcha, payload)
     },
 
-    *logout(_, { put }) {
+    *logout(_, { put, select }) {
+      const currentAuthority = yield select(state => state.login.currentAuthority)
+      if (currentAuthority === 'guest') return
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -68,11 +71,12 @@ export default {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority)
+    changeLoginStatus(state, { payload: { currentAuthority, token } }) {
+      setAuthority(currentAuthority)
       return {
         ...state,
-        token: payload.token
+        currentAuthority,
+        token
       }
     }
   }
