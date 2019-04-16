@@ -34,15 +34,13 @@ const parseParams = (params = {}) => {
   return result.join('&')
 }
 
-let isLogout = false
-
 const logout = () => {
-  if (isLogout) return
+  if (sessionStorage.getItem('__ISLOGOUT')) return
   /* eslint-disable no-underscore-dangle */
   window.g_app._store.dispatch({
     type: 'login/logout'
   })
-  isLogout = true
+  sessionStorage.setItem('__ISLOGOUT', '1')
 }
 
 const checkStatus = response => {
@@ -104,8 +102,6 @@ export default function request(url, options = {}) {
   }
 
   const reqUrl = /^https?:\/\//.test(url) ? url : `${serverUrl}${url}`
-
-  isLogout = false
 
   return fetch(reqUrl, newOptions)
     .then(checkStatus)
