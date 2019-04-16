@@ -105,6 +105,8 @@ export default function request(url, options = {}) {
 
   const reqUrl = /^https?:\/\//.test(url) ? url : `${serverUrl}${url}`
 
+  isLogout = false
+
   return fetch(reqUrl, newOptions)
     .then(checkStatus)
     .then(response => {
