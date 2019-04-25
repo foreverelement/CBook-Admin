@@ -34,13 +34,14 @@ const parseParams = (params = {}) => {
   return result.join('&')
 }
 
+let isLogout = false
 const logout = () => {
-  if (sessionStorage.getItem('__ISLOGOUT')) return
+  if (isLogout) return
   /* eslint-disable no-underscore-dangle */
   window.g_app._store.dispatch({
     type: 'login/logout'
   })
-  sessionStorage.setItem('__ISLOGOUT', '1')
+  isLogout = true
 }
 
 const checkStatus = response => {
@@ -115,6 +116,7 @@ export default function request(url, options = {}) {
     })
     .then(response => {
       if (response.code === 0) {
+        isLogout = false
         return response.datas
       }
       if (response.code === 98) {

@@ -25,7 +25,6 @@ export default {
       if (response.token) {
         reloadAuthorized()
         localStorage.setItem('__TOKEN', response.token)
-        sessionStorage.removeItem('__ISLOGOUT')
         const urlParams = new URL(window.location.href)
         const params = getPageQuery()
         let { redirect } = params
