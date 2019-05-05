@@ -136,12 +136,14 @@ const ExpressForm = memo(props => {
   )
 })
 
-const ListItemDesc = ({ author, press, price, bookStatus }) => (
+const ListItemDesc = ({ author, press, price, bookStatus, bookCode, bookStack }) => (
   <Fragment>
     <div className={styles.descItem}>作者：{author}</div>
     <div className={styles.descItem}>出版社：{press}</div>
     <div className={styles.descItem}>价格：￥{toFixed(price)}</div>
     <div className={styles.descItem}>图书状态：{BOOK_STATUS_MAP[bookStatus]}</div>
+    <div className={styles.descItem}>图书编号：{bookCode}</div>
+    <div className={styles.descItem}>盒子编号：{bookStack}</div>
   </Fragment>
 )
 
