@@ -1,4 +1,5 @@
 import React, { Component, PureComponent, Fragment, memo } from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'dva'
 import router from 'umi/router'
 import {
@@ -313,14 +314,62 @@ class UpdateForm extends PureComponent {
   }
 }
 
+class PrintTmpl extends PureComponent {
+  render() {
+    const { value } = this.props
+    return (
+      <div className={styles.printWrapper}>
+        <Barcode font="Arial" value={value} />
+        <div className={styles.printFooter}>
+          <img src={printIcon} alt="" />
+          <div className={styles.printFooterText}>
+            <p>
+              关注：<strong>"星月童书绘本"</strong>
+            </p>
+            <p>公众号获取更多信息</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+class LongPrintTmpl extends PureComponent {
+  render() {
+    const { values } = this.props
+    return (
+      <Fragment>
+        {
+          values.map(value =>
+            <PrintTmpl key={value} value={value} />
+          )
+        }
+      </Fragment>
+    )
+  }
+}
+
 /* eslint-disable react/no-unescaped-entities */
 const BarcodeForm = memo(props => {
-  let prentContent = null
+  let printContent = null
   let printRef = null
-  const { visible, handleModalVisible, value } = props
+  const { visible, handleModalVisible, getLongPrintData, value } = props
   const handlePrint = () => {
     if (printRef) {
       printRef.handlePrint()
+      printContent = null
+    }
+  }
+  const handleLongPrint = () => {
+    const printData = getLongPrintData()
+    printContent = document.createElement('div')
+    ReactDOM.render(
+      <LongPrintTmpl values={printData} />,
+      printContent
+    )
+    if (printRef) {
+      printRef.handlePrint()
+      printContent = null
     }
   }
   return (
@@ -330,34 +379,35 @@ const BarcodeForm = memo(props => {
         title="打印条码"
         visible={visible}
         bodyStyle={{ textAlign: 'center' }}
-        okText="打印"
-        onOk={handlePrint}
-        onCancel={() => handleModalVisible(false)}
+        footer={
+          <Fragment>
+            <Button onClick={() => handleModalVisible(false)}>取消</Button>
+            <Button type="primary" ghost onClick={handleLongPrint}>连打</Button>
+            <Button type="primary" onClick={handlePrint}>打印</Button>
+          </Fragment>
+        }
       >
         <ReactToPrint
           trigger={() => <Fragment />}
-          content={() => prentContent}
+          content={() => printContent}
           bodyClass={styles.printBody}
           ref={el => {
             printRef = el
           }}
         />
-        <div
-          className={styles.printWrapper}
+        {/* <PrintTmpl
+          value={value}
           ref={el => {
-            prentContent = el
+            printContent = el
+          }}
+        /> */}
+        <div ref={el => {
+            printContent = el
           }}
         >
-          <Barcode font="Arial" value={value} />
-          <div className={styles.printFooter}>
-            <img src={printIcon} alt="" />
-            <div className={styles.printFooterText}>
-              <p>
-                关注：<strong>"星月童书绘本"</strong>
-              </p>
-              <p>公众号获取更多信息</p>
-            </div>
-          </div>
+          <LongPrintTmpl
+            values={getLongPrintData()}
+          />
         </div>
       </Modal>
     )
@@ -505,6 +555,14 @@ class RecycleDetail extends Component {
     })
   }
 
+  getLongPrintData = () => {
+    const {
+      recycleDetail: { order }
+    } = this.props
+
+    return order.bookInfos.map(item => item.bookCode)
+  }
+
   handlePrint(currentItem) {
     this.setState({ selectRow: currentItem }, () => {
       this.handlePrintModalVisible(true)
@@ -614,7 +672,8 @@ class RecycleDetail extends Component {
       handleModalVisible: this.handleUpdateModalVisible
     }
     const printMethods = {
-      handleModalVisible: this.handlePrintModalVisible
+      handleModalVisible: this.handlePrintModalVisible,
+      getLongPrintData: this.getLongPrintData
     }
 
     let orderActions = null
