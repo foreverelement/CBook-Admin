@@ -395,20 +395,12 @@ const BarcodeForm = memo(props => {
             printRef = el
           }}
         />
-        {/* <PrintTmpl
+        <PrintTmpl
           value={value}
           ref={el => {
             printContent = el
           }}
-        /> */}
-        <div ref={el => {
-            printContent = el
-          }}
-        >
-          <LongPrintTmpl
-            values={getLongPrintData()}
-          />
-        </div>
+        />
       </Modal>
     )
   )
