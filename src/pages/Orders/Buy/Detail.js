@@ -111,7 +111,7 @@ const ExpressForm = memo(props => {
   return (
     <Modal
       destroyOnClose
-      title="打印条码"
+      title="打印快递面单"
       visible={visible}
       bodyStyle={{ textAlign: 'center' }}
       okText="打印"
