@@ -115,8 +115,8 @@ export default function request(url, options = {}) {
       return response.json()
     })
     .then(response => {
+      isLogout = false
       if (response.code === 0) {
-        isLogout = false
         return response.datas
       }
       if (response.code === 98) {
